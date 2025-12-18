@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class PolicyRule {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique=true)
     private String ruleCode;
@@ -21,6 +21,7 @@ public class PolicyRule {
 
     public PolicyRule(String ruleCode, String description,
                       String severity, String conditionsJson) {
+        this.id=id;
         this.ruleCode = ruleCode;
         this.description = description;
         this.severity = severity;

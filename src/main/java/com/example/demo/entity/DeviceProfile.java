@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class DeviceProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column(unique=true)
@@ -30,6 +30,7 @@ public class DeviceProfile {
 
     public DeviceProfile(Long userId, String deviceId,
                          String deviceType, String osVersion) {
+        this.id=id;
         this.userId = userId;
         this.deviceId = deviceId;
         this.deviceType = deviceType;

@@ -39,6 +39,7 @@ public class UserAccount {
 
     public UserAccount(String employeeId, String username, String email,
                        String password, String role) {
+        this.id=id;
         this.employeeId = employeeId;
         this.username = username;
         this.email = email;
