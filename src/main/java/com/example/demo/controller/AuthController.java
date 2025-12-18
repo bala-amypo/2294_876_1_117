@@ -21,6 +21,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login() {
-        return "JWT Token"; // actual JWT logic handled elsewhere
+        return "JWT Token"; 
     }
 }
