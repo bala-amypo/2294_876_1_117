@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class LoginEvent {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
     private String ipAddress;
@@ -22,6 +22,7 @@ public class LoginEvent {
 
     public LoginEvent(Long userId, String ipAddress, String location,
                       String deviceId, String loginStatus) {
+        this.id=id;
         this.userId = userId;
         this.ipAddress = ipAddress;
         this.location = location;

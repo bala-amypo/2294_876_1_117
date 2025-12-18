@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class ViolationRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
     private Long policyRuleId;
@@ -23,6 +23,7 @@ public class ViolationRecord {
 
     public ViolationRecord(Long userId, Long policyRuleId, Long eventId,
                            String violationType, String details, String severity) {
+        this.id=id;
         this.userId = userId;
         this.policyRuleId = policyRuleId;
         this.eventId = eventId;
