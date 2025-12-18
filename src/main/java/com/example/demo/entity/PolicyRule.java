@@ -12,10 +12,8 @@ public class PolicyRule {
     private String ruleCode;
     private String description;
     private String severity;
-
     @Column(columnDefinition = "TEXT")
     private String conditionsJson;
-
     private Boolean active = true;
 
     public PolicyRule() {
