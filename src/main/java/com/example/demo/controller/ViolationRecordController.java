@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,15 +11,12 @@ import java.util.List;
 @RequestMapping("/api/violations")
 public class ViolationRecordController {
 
-    private final ViolationRecordService service;
+    @Autowired
+    private ViolationRecordService service;
 
-    public ViolationRecordController(ViolationRecordService service) {
-        this.service = service;
-    }
-
-    @PostMapping("/")
-    public ViolationRecord log(@RequestBody ViolationRecord violation) {
-        return service.log(violation);
+    @PostMapping
+    public ViolationRecord log(@RequestBody ViolationRecord record) {
+        return service.log(record);
     }
 
     @GetMapping("/user/{userId}")
@@ -27,16 +25,11 @@ public class ViolationRecordController {
     }
 
     @PutMapping("/{id}/resolve")
-    public void resolve(@PathVariable Long id) {
-        service.resolve(id);
+    public ViolationRecord resolve(@PathVariable Long id) {
+        return service.resolve(id);
     }
 
-    @GetMapping("/unresolved")
-    public List<ViolationRecord> unresolved() {
-        return service.unresolved();
-    }
-
-    @GetMapping("/")
+    @GetMapping
     public List<ViolationRecord> all() {
         return service.all();
     }
