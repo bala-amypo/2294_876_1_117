@@ -47,13 +47,13 @@ public class UserAccount {
         this.status = "ACTIVE";
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        if (this.status == null) {
-            this.status = "ACTIVE";
-        }
-    }
+    // @PrePersist
+    // protected void onCreate() {
+    //     this.createdAt = LocalDateTime.now();
+    //     if (this.status == null) {
+    //         this.status = "ACTIVE";
+    //     }
+    // }
 
     public Long getId() {
         return id;
