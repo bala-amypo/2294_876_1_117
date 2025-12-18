@@ -14,10 +14,11 @@ public class AuthController {
         this.userAccountService = userAccountService;
     }
 
-    @PostMapping("/register")
-    public UserAccount register(@RequestBody UserAccount user) {
-        return userAccountService.createUser(user);
-    }
+@PostMapping("/register")
+public UserAccount register(@RequestBody UserAccount user) {
+    return userAccountService.create(user);
+}
+
 
     @PostMapping("/login")
     public String login() {

@@ -28,9 +28,14 @@ public class PolicyRule {
         this.conditionsJson = conditionsJson;
     }
 
+
+
     public Long getId() {
         return id;
     }
+    public Long setId(Long id) {
+    this.id = id;
+}
 
     public String getRuleCode() {
         return ruleCode;

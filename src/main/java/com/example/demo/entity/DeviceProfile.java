@@ -25,6 +25,10 @@ public class DeviceProfile {
 
     private Boolean isTrusted = false;
 
+    public void setTrusted(boolean trusted) {
+    this.trusted = trusted;
+}
+
     public DeviceProfile() {
     }
 
