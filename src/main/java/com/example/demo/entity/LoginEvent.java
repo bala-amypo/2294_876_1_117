@@ -9,22 +9,13 @@ public class LoginEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private Long userId;
-
-    @Column(nullable = false)
     private String ipAddress;
-
     private String location;
-
-    @Column(nullable = false)
     private String deviceId;
-
-    @Column(nullable = false)
     private String loginStatus;
-
     private LocalDateTime timestamp;
+
 
     public LoginEvent() {
     }
@@ -38,10 +29,10 @@ public class LoginEvent {
         this.loginStatus = loginStatus;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.timestamp = LocalDateTime.now();
-    }
+    // @PrePersist
+    // protected void onCreate() {
+    //     this.timestamp = LocalDateTime.now();
+    // }
 
     
     public Long getId() {

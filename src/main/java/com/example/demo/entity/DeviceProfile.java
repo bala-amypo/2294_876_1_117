@@ -14,7 +14,7 @@ public class DeviceProfile {
     @Column(unique=true)
     private Long userId;
 
-    @Column(nullable = false,unique=true)
+    @Column(unique=true)
     private String deviceId;
 
     private String deviceType;
@@ -36,11 +36,11 @@ public class DeviceProfile {
         this.osVersion = osVersion;
     }
 
-    @PrePersist
-    @PreUpdate
-    protected void updateLastSeen() {
-        this.lastSeen = LocalDateTime.now();
-    }
+    // @PrePersist
+    // @PreUpdate
+    // protected void updateLastSeen() {
+    //     this.lastSeen = LocalDateTime.now();
+    // }
 
     public Long getId() {
         return id;
