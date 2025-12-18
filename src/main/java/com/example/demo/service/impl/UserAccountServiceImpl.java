@@ -4,7 +4,6 @@ import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,43 +11,31 @@ import java.util.List;
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository repository;
-    private final PasswordEncoder passwordEncoder;
-
-  
-    public UserAccountServiceImpl(UserAccountRepository repository,
-                                  PasswordEncoder passwordEncoder) {
-        this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private UserAccountRepository repository;
 
     @Override
-    public UserAccount createUser(UserAccount user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public UserAccount create(UserAccount user) {
         return repository.save(user);
     }
 
     @Override
-    public UserAccount getUserById(Long id) {
+    public UserAccount getUser(Long id) {
         return repository.findById(id).orElse(null);
     }
 
     @Override
-    public void updateUserStatus(Long id, String status) {
-        UserAccount user = getUserById(id);
+    public UserAccount updateStatus(Long id, String status) {
+        UserAccount user = repository.findById(id).orElse(null);
         if (user != null) {
             user.setStatus(status);
-            repository.save(user);
+            return repository.save(user);
         }
+        return null;
     }
 
     @Override
-    public List<UserAccount> getAllUsers() {
+    public List<UserAccount> getAll() {
         return repository.findAll();
-    }
-
-    @Override
-    public UserAccount findByUsername(String username) {
-        return repository.findByUsername(username).orElse(null);
     }
 }

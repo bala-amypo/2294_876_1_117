@@ -3,7 +3,8 @@ package com.example.demo.repository;
 import com.example.demo.entity.DeviceProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DeviceProfileRepository extends JpaRepository<DeviceProfile, Long> {
+import java.util.List;
 
-    DeviceProfile findByDeviceId(String deviceId);
+public interface DeviceProfileRepository extends JpaRepository<DeviceProfile, Long> {
+    List<DeviceProfile> findByUserId(Long userId);
 }

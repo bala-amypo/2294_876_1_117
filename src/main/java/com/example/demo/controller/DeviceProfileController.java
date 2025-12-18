@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.service.DeviceProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,30 +11,21 @@ import java.util.List;
 @RequestMapping("/api/devices")
 public class DeviceProfileController {
 
-    private final DeviceProfileService service;
+    @Autowired
+    private DeviceProfileService service;
 
-    public DeviceProfileController(DeviceProfileService service) {
-        this.service = service;
-    }
-
-    @PostMapping("/")
+    @PostMapping
     public DeviceProfile register(@RequestBody DeviceProfile device) {
         return service.register(device);
     }
 
     @PutMapping("/{id}/trust")
-    public void updateTrust(@PathVariable Long id,
-                            @RequestParam boolean trust) {
-        service.updateTrust(id, trust);
+    public DeviceProfile updateTrust(@PathVariable Long id, @RequestParam boolean trusted) {
+        return service.updateTrust(id, trusted);
     }
 
     @GetMapping("/user/{userId}")
-    public List<DeviceProfile> getByUser(@PathVariable Long userId) {
+    public List<DeviceProfile> byUser(@PathVariable Long userId) {
         return service.byUser(userId);
-    }
-
-    @GetMapping("/lookup/{deviceId}")
-    public DeviceProfile findByDevice(@PathVariable String deviceId) {
-        return service.findByDeviceId(deviceId);
     }
 }
