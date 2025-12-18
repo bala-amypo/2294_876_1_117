@@ -13,7 +13,6 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
 
     private final DeviceProfileRepository repository;
 
-    @Autowired
     public DeviceProfileServiceImpl(DeviceProfileRepository repository) {
         this.repository = repository;
     }

@@ -15,7 +15,7 @@ public class LoginEventServiceImpl implements LoginEventService {
     private final LoginEventRepository repository;
     private final RuleEvaluationUtil ruleEvaluationUtil;
 
-    @Autowired
+   
     public LoginEventServiceImpl(LoginEventRepository repository,
                                  RuleEvaluationUtil ruleEvaluationUtil) {
         this.repository = repository;

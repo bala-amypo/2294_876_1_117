@@ -13,7 +13,7 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
 
     private final PolicyRuleRepository repository;
 
-    @Autowired
+   
     public PolicyRuleServiceImpl(PolicyRuleRepository repository) {
         this.repository = repository;
     }
