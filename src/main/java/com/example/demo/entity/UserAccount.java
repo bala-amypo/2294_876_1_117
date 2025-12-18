@@ -4,26 +4,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-    name = "user_accounts",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = "employeeId"),
-        @UniqueConstraint(columnNames = "username"),
-        @UniqueConstraint(columnNames = "email")
-    }
-)
+
 public class UserAccount {
 
-    // =========================
-    // Primary Key
-    // =========================
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // =========================
-    // User Identity Fields
-    // =========================
     @Column(nullable = false, unique = true)
     private String employeeId;
 
@@ -33,9 +20,6 @@ public class UserAccount {
     @Column(nullable = false, unique = true)
     private String email;
 
-    // =========================
-    // Authentication Fields
-    // =========================
     @Column(nullable = false)
     private String password;
 
@@ -47,17 +31,12 @@ public class UserAccount {
     @Column(nullable = false)
     private String status = "ACTIVE";
 
-    // =========================
     // Audit Fields
-    // =========================
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    // =========================
-    // Constructors
-    // =========================
     public UserAccount() {
-        // Default constructor required by JPA
+
     }
 
     public UserAccount(String employeeId, String username, String email,
@@ -70,9 +49,6 @@ public class UserAccount {
         this.status = "ACTIVE";
     }
 
-    // =========================
-    // JPA Lifecycle Callback
-    // =========================
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -81,9 +57,6 @@ public class UserAccount {
         }
     }
 
-    // =========================
-    // Getters and Setters
-    // =========================
     public Long getId() {
         return id;
     }

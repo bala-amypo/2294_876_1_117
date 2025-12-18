@@ -4,11 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"userId", "deviceId"})
-    }
-)
+
 public class DeviceProfile {
 
     @Id
@@ -18,7 +14,7 @@ public class DeviceProfile {
     @Column(unique=true)
     private Long userId;
 
-    @Column(nullable = false,unique =true)
+    @Column(nullable = false,unique=true)
     private String deviceId;
 
     private String deviceType;
@@ -40,18 +36,12 @@ public class DeviceProfile {
         this.osVersion = osVersion;
     }
 
-    // =========================
-    // JPA Callbacks
-    // =========================
     @PrePersist
     @PreUpdate
     protected void updateLastSeen() {
         this.lastSeen = LocalDateTime.now();
     }
 
-    // =========================
-    // Getters & Setters
-    // =========================
     public Long getId() {
         return id;
     }

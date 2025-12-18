@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "violation_records")
 public class ViolationRecord {
 
     @Id
@@ -21,16 +20,12 @@ public class ViolationRecord {
 
     private String details;
 
-    // Inherited from PolicyRule
     private String severity;
 
     private LocalDateTime detectedAt;
 
     private Boolean resolved = false;
 
-    // =========================
-    // Constructors
-    // =========================
     public ViolationRecord() {
     }
 
@@ -44,9 +39,6 @@ public class ViolationRecord {
         this.severity = severity;
     }
 
-    // =========================
-    // JPA Callback
-    // =========================
     @PrePersist
     protected void onDetect() {
         this.detectedAt = LocalDateTime.now();
@@ -55,9 +47,6 @@ public class ViolationRecord {
         }
     }
 
-    // =========================
-    // Getters & Setters
-    // =========================
     public Long getId() {
         return id;
     }
