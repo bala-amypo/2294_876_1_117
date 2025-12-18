@@ -3,24 +3,17 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(
-    name = "policy_rules",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = "ruleCode")
-    }
-)
 public class PolicyRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique=true)
     private String ruleCode;
 
     private String description;
 
-    // LOW / MEDIUM / HIGH / CRITICAL
     private String severity;
 
     @Column(columnDefinition = "TEXT")
@@ -28,9 +21,6 @@ public class PolicyRule {
 
     private Boolean active = true;
 
-    // =========================
-    // Constructors
-    // =========================
     public PolicyRule() {
     }
 
@@ -42,9 +32,6 @@ public class PolicyRule {
         this.conditionsJson = conditionsJson;
     }
 
-    // =========================
-    // Getters & Setters
-    // =========================
     public Long getId() {
         return id;
     }

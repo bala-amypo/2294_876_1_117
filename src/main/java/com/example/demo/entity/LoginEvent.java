@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "login_events")
 public class LoginEvent {
 
     @Id
@@ -22,15 +21,11 @@ public class LoginEvent {
     @Column(nullable = false)
     private String deviceId;
 
-    // SUCCESS / FAILED
     @Column(nullable = false)
     private String loginStatus;
 
     private LocalDateTime timestamp;
 
-    // =========================
-    // Constructors
-    // =========================
     public LoginEvent() {
     }
 
@@ -43,17 +38,12 @@ public class LoginEvent {
         this.loginStatus = loginStatus;
     }
 
-    // =========================
-    // JPA Callback
-    // =========================
     @PrePersist
     protected void onCreate() {
         this.timestamp = LocalDateTime.now();
     }
 
-    // =========================
-    // Getters & Setters
-    // =========================
+    
     public Long getId() {
         return id;
     }

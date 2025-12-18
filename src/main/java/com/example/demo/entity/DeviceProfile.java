@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-    name = "device_profiles",
     uniqueConstraints = {
         @UniqueConstraint(columnNames = {"userId", "deviceId"})
     }
@@ -15,10 +14,11 @@ public class DeviceProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @Column(unique=true)
     private Long userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique =true)
     private String deviceId;
 
     private String deviceType;
@@ -29,9 +29,6 @@ public class DeviceProfile {
 
     private Boolean isTrusted = false;
 
-    // =========================
-    // Constructors
-    // =========================
     public DeviceProfile() {
     }
 
