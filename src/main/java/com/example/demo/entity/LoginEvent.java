@@ -9,15 +9,12 @@ public class LoginEvent {
 
     @Id
     private Long id;
-
-    // Logical relation to UserAccount
     private Long userId;
 
     private String ipAddress;
     private String location;
     private String deviceId;
 
-    // SUCCESS / FAILED
     private String loginStatus;
 
     private LocalDateTime timestamp;
@@ -31,8 +28,6 @@ public class LoginEvent {
             this.timestamp = LocalDateTime.now();
         }
     }
-
-    // -------- Getters and Setters --------
 
     public Long getId() {
         return id;
