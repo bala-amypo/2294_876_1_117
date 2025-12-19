@@ -1,31 +1,79 @@
-package com.example.demo.controller;
+package com.example.demo.entity;
 
-import com.example.demo.entity.DeviceProfile;
-import com.example.demo.service.DeviceProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
-import java.util.List;
+@Entity
+public class DeviceProfile {
 
-@RestController
-@RequestMapping("/api/devices")
-public class DeviceProfileController {
+    @Id
+    private Long id;
+    
+    private Long userId;
 
-    @Autowired
-    private DeviceProfileService service;
+    private String deviceId;
+    private String deviceType;
+    private String osVersion;
 
-    @PostMapping
-    public DeviceProfile register(@RequestBody DeviceProfile device) {
-        return service.register(device);
+    private Boolean isTrusted;
+    private LocalDateTime lastSeen;
+
+    public DeviceProfile() {
     }
 
-    @PutMapping("/{id}/trust")
-    public DeviceProfile updateTrust(@PathVariable Long id, @RequestParam boolean trusted) {
-        return service.updateTrust(id, trusted);
+    public Long getId() {
+        return id;
     }
-
-    @GetMapping("/user/{userId}")
-    public List<DeviceProfile> byUser(@PathVariable Long userId) {
-        return service.byUser(userId);
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    public Long getUserId() {
+        return userId;
+    }
+    
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+    
+    public String getDeviceId() {
+        return deviceId;
+    }
+    
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+    
+    public String getDeviceType() {
+        return deviceType;
+    }
+    
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+    
+    public String getOsVersion() {
+        return osVersion;
+    }
+    
+    public void setOsVersion(String osVersion) {
+        this.osVersion = osVersion;
+    }
+    
+    public Boolean getIsTrusted() {
+        return isTrusted;
+    }
+    
+    public void setIsTrusted(Boolean isTrusted) {
+        this.isTrusted = isTrusted;
+    }
+    
+    public LocalDateTime getLastSeen() {
+        return lastSeen;
+    }
+    
+    public void setLastSeen(LocalDateTime lastSeen) {
+        this.lastSeen = lastSeen;
     }
 }

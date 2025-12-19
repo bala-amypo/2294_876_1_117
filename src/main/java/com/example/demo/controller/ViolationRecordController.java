@@ -4,13 +4,11 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "violation_record")
 public class ViolationRecord {
 
     @Id
     private Long id;
 
-    // Logical relationships
     private Long userId;
     private Long policyRuleId;
     private Long eventId;
@@ -32,7 +30,6 @@ public class ViolationRecord {
             this.resolved = false;
         }
     }
-
 
     public Long getId() {
         return id;
