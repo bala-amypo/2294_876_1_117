@@ -8,7 +8,7 @@ public class DeviceProfile {
 
     @Id
     private Long id;
-    
+
     private Long userId;
 
     private String deviceId;
