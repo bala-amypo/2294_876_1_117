@@ -22,10 +22,8 @@ public class UserAccount {
     private String email;
     private String password;
 
-    // ADMIN / USER / AUDITOR
     private String role;
 
-    // ACTIVE / SUSPENDED
     private String status;
 
     private LocalDateTime createdAt;
@@ -44,7 +42,6 @@ public class UserAccount {
         }
     }
 
-    // -------- Getters and Setters --------
 
     public Long getId() {
         return id;
