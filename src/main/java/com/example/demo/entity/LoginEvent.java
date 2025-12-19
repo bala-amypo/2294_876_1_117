@@ -8,7 +8,7 @@ public class LoginEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Auto-generated ID
+    private Long id;
     private Long userId;
 
     private String ipAddress;
@@ -16,7 +16,7 @@ public class LoginEvent {
     private String deviceId;
 
     private String loginStatus;
-    private Boolean suspicious = false; // Track suspicious login
+    private Boolean suspicious = false;
 
     private LocalDateTime timestamp;
 
@@ -29,7 +29,6 @@ public class LoginEvent {
         }
     }
 
-    // Getters & Setters
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
