@@ -1,11 +1,15 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.DeviceProfile;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
@@ -18,20 +22,24 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
 
     @Override
     public DeviceProfile registerDevice(DeviceProfile device) {
-        deviceRepo.findByDeviceId(device.getDeviceId())
-                .ifPresent(d -> {
-                    throw new RuntimeException("Device already registered");
-                });
 
+        Optional<DeviceProfile> existing = deviceRepo.findByDeviceId(device.getDeviceId());
+        if (existing.isPresent()) {
+            throw new BadRequestException("Device already registered");
+        }
+
+        device.setLastSeen(LocalDateTime.now());
         return deviceRepo.save(device);
     }
 
     @Override
     public DeviceProfile updateTrustStatus(Long id, boolean trust) {
         DeviceProfile device = deviceRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Device not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Device not found"));
 
-        device.setTrusted(trust);
+        device.setIsTrusted(trust);   // ✅ CORRECT setter
+        device.setLastSeen(LocalDateTime.now());
+
         return deviceRepo.save(device);
     }
 

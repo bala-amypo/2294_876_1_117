@@ -18,6 +18,11 @@ public class DeviceProfile {
     private Boolean isTrusted;
     private LocalDateTime lastSeen;
 
+    public void setIsTrusted(Boolean isTrusted) {
+    this.isTrusted = isTrusted;
+}
+
+
     public DeviceProfile() {
     }
 
