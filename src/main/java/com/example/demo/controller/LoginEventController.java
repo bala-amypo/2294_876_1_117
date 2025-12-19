@@ -34,4 +34,6 @@ public class LoginEventController {
     public List<LoginEvent> getAllLogins() {
         return loginService.getAllEvents();
     }
+
+    
 }
