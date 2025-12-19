@@ -28,12 +28,12 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
 
      @Override
        public ViolationRecord markResolved(Long id) {
-    ViolationRecord v = violationRepo.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Violation not found"));
+             ViolationRecord v = violationRepo.findById(id)
+                             .orElseThrow(() -> new IllegalArgumentException("Violation not found"));
 
-    v.setResolved(true);
-    violationRepo.save(v);
-    return v;
+          v.setResolved(true);
+          violationRepo.save(v);
+          return v;
 }
 
 

@@ -1,17 +1,19 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.PolicyRule;
-import java.util.*;
+import java.util.List;
 
 public interface PolicyRuleService {
 
     PolicyRule createRule(PolicyRule rule);
 
-    PolicyRule updateRule(Long id, PolicyRule updatedRule);
+    PolicyRule updateRule(Long id, PolicyRule rule);
+
+    PolicyRule getRuleById(Long id);
+
+    List<PolicyRule> getAllRules();
 
     List<PolicyRule> getActiveRules();
 
-    Optional<PolicyRule> getRuleByCode(String ruleCode);
-
-    List<PolicyRule> getAllRules();
+    void deleteRule(Long id);
 }
