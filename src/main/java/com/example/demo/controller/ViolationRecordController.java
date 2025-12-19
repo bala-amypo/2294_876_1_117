@@ -1,36 +1,108 @@
-package com.example.demo.controller;
+package com.example.demo.entity;
 
-import com.example.demo.entity.ViolationRecord;
-import com.example.demo.service.ViolationRecordService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
-import java.util.List;
+@Entity
+@Table(name = "violation_record")
+public class ViolationRecord {
 
-@RestController
-@RequestMapping("/api/violations")
-public class ViolationRecordController {
+    @Id
+    private Long id;
 
-    @Autowired
-    private ViolationRecordService service;
+    // Logical relationships
+    private Long userId;
+    private Long policyRuleId;
+    private Long eventId;
 
-    @PostMapping
-    public ViolationRecord log(@RequestBody ViolationRecord record) {
-        return service.log(record);
+    private String violationType;
+    private String details;
+    private String severity;
+
+    private LocalDateTime detectedAt;
+    private Boolean resolved;
+
+    public ViolationRecord() {
     }
 
-    @GetMapping("/user/{userId}")
-    public List<ViolationRecord> byUser(@PathVariable Long userId) {
-        return service.byUser(userId);
+    @PrePersist
+    protected void onCreate() {
+        this.detectedAt = LocalDateTime.now();
+        if (this.resolved == null) {
+            this.resolved = false;
+        }
     }
 
-    @PutMapping("/{id}/resolve")
-    public ViolationRecord resolve(@PathVariable Long id) {
-        return service.resolve(id);
-    }
 
-    @GetMapping
-    public List<ViolationRecord> all() {
-        return service.all();
+    public Long getId() {
+        return id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    public Long getUserId() {
+        return userId;
+    }
+    
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+    
+    public Long getPolicyRuleId() {
+        return policyRuleId;
+    }
+    
+    public void setPolicyRuleId(Long policyRuleId) {
+        this.policyRuleId = policyRuleId;
+    }
+    
+    public Long getEventId() {
+        return eventId;
+    }
+    
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
+    
+    public String getViolationType() {
+        return violationType;
+    }
+    
+    public void setViolationType(String violationType) {
+        this.violationType = violationType;
+    }
+    
+    public String getDetails() {
+        return details;
+    }
+    
+    public void setDetails(String details) {
+        this.details = details;
+    }
+    
+    public String getSeverity() {
+        return severity;
+    }
+    
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+    
+    public LocalDateTime getDetectedAt() {
+        return detectedAt;
+    }
+    
+    public void setDetectedAt(LocalDateTime detectedAt) {
+        this.detectedAt = detectedAt;
+    }
+    
+    public Boolean getResolved() {
+        return resolved;
+    }
+    
+    public void setResolved(Boolean resolved) {
+        this.resolved = resolved;
     }
 }
