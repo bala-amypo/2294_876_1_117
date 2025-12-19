@@ -16,7 +16,7 @@ public class PolicyRuleController {
         this.service = service;
     }
 
-    @PostMapping("/")
+    @PostMapping
     public PolicyRule create(@RequestBody PolicyRule rule) {
         return service.createRule(rule);
     }
@@ -32,7 +32,7 @@ public class PolicyRuleController {
         return service.getActiveRules();
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<PolicyRule> allRules() {
         return service.getAllRules();
     }
