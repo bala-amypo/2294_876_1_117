@@ -7,3 +7,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/rules")
+public class PolicyRuleController {
+
+    @GetMapping
+    public List<PolicyRule> all() {
+        return new ArrayList<>();
+    }
+}

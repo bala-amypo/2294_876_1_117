@@ -4,10 +4,8 @@ import com.example.demo.entity.UserAccount;
 import java.util.List;
 
 public interface UserAccountService {
-    UserAccount createUser(UserAccount user);
-    UserAccount getUserById(Long id);
-    void updateUserStatus(Long id, String status);
-    void deleteUser(Long id);
-    UserAccount findByUsername(String username);
+    UserAccount create(UserAccount user);
+    Optional<UserAccount> getUserById(Long id);
     List<UserAccount> getAllUsers();
+    UserAccount updateUserStatus(Long id, String status);
 }
