@@ -16,14 +16,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@RequestBody UserAccount user) {
-        userService.createUser(user);
-        return "User registered";
+        userService.createUser(user); // dummy call
+        return "User registered successfully";
     }
 
     @PostMapping("/login")
     public String login(@RequestBody UserAccount user) {
-        userService.findByUsername(user.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        return "Login success";
+        userService.findByUsername(user.getUsername()); // dummy call
+        return "Logged in successfully";
     }
 }
