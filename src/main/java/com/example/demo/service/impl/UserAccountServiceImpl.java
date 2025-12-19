@@ -3,39 +3,54 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    @Autowired
-    private UserAccountRepository repository;
+    private final UserAccountRepository userRepo;
 
-    @Override
-    public UserAccount create(UserAccount user) {
-        return repository.save(user);
+    public UserAccountServiceImpl(UserAccountRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
     @Override
-    public UserAccount getUser(Long id) {
-        return repository.findById(id).orElse(null);
+    public UserAccount createUser(UserAccount user) {
+        userRepo.findByUsername(user.getUsername())
+                .ifPresent(u -> {
+                    throw new RuntimeException("Username already exists");
+                });
+
+        userRepo.findByEmail(user.getEmail())
+                .ifPresent(u -> {
+                    throw new RuntimeException("Email already exists");
+                });
+
+        return userRepo.save(user);
     }
 
     @Override
-    public UserAccount updateStatus(Long id, String status) {
-        UserAccount user = repository.findById(id).orElse(null);
-        if (user != null) {
-            user.setStatus(status);
-            return repository.save(user);
-        }
-        return null;
+    public UserAccount getUserById(Long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
-    public List<UserAccount> getAll() {
-        return repository.findAll();
+    public UserAccount updateUserStatus(Long id, String status) {
+        UserAccount user = getUserById(id);
+        user.setStatus(status);
+        return userRepo.save(user);
+    }
+
+    @Override
+    public List<UserAccount> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    @Override
+    public Optional<UserAccount> findByUsername(String username) {
+        return userRepo.findByUsername(username);
     }
 }

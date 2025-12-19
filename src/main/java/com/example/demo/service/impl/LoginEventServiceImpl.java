@@ -5,7 +5,7 @@ import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class LoginEventServiceImpl implements LoginEventService {
