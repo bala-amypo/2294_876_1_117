@@ -26,18 +26,16 @@ public class LoginEventServiceImpl implements LoginEventService {
         return loginRepo.findByUserId(userId);
     }
 
-    @Override
-    public List<LoginEvent> getSuspiciousLogins(Long userId) {
-        return loginRepo.findByUserIdAndSuspiciousTrue(userId);
-    }
 
     @Override
     public List<LoginEvent> getAllEvents() {
         return loginRepo.findAll();
     }
-      @Override
+
+   @Override
     public List<LoginEvent> getSuspiciousLogins(Long userId) {
-       return loginRepo.findByUserIdAndLoginStatus(userId, "FAILED");
+        return loginRepo.findAll();
 }
+
 
 }

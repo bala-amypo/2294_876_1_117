@@ -17,11 +17,7 @@ public class DeviceProfile {
 
     private Boolean isTrusted;
     private LocalDateTime lastSeen;
-
-    public void setIsTrusted(Boolean isTrusted) {
-    this.isTrusted = isTrusted;
-}
-
+    
 
     public DeviceProfile() {
     }
@@ -69,10 +65,10 @@ public class DeviceProfile {
     public Boolean getIsTrusted() {
         return isTrusted;
     }
-    
+
     public void setIsTrusted(Boolean isTrusted) {
         this.isTrusted = isTrusted;
-    }
+      }
     
     public LocalDateTime getLastSeen() {
         return lastSeen;
