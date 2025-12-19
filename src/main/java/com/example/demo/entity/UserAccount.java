@@ -20,9 +20,8 @@ public class UserAccount {
 
     private String password;
 
-    private String role; // ADMIN / USER / AUDITOR
-
-    private String status; // ACTIVE / SUSPENDED
+    private String role; 
+    private String status; 
 
     private LocalDateTime createdAt;
 
