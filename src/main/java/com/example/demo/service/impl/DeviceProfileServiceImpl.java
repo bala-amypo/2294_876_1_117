@@ -37,7 +37,7 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
         DeviceProfile device = deviceRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Device not found"));
 
-        device.setIsTrusted(trust);   // ✅ CORRECT setter
+        device.setIsTrusted(trust);
         device.setLastSeen(LocalDateTime.now());
 
         return deviceRepo.save(device);
