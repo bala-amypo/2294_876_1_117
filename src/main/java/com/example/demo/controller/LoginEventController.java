@@ -1,87 +1,37 @@
-package com.example.demo.entity;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import com.example.demo.entity.LoginEvent;
+import com.example.demo.service.LoginEventService;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Entity
-public class LoginEvent {
+@RestController
+@RequestMapping("/api/logins")
+public class LoginEventController {
 
-    @Id
-    private Long id;
+    private final LoginEventService loginService;
 
-    private Long userId;
-
-    private String ipAddress;
-    private String location;
-    private String deviceId;
-
-    private String loginStatus;
-
-    private LocalDateTime timestamp;
-
-    public LoginEvent() {
+    public LoginEventController(LoginEventService loginService) {
+        this.loginService = loginService;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        if (this.timestamp == null) {
-            this.timestamp = LocalDateTime.now();
-        }
+    @PostMapping("/record")
+    public LoginEvent recordLogin(@RequestBody LoginEvent event) {
+        return loginService.recordLogin(event);
     }
 
-    public Long getId() {
-        return id;
+    @GetMapping("/user/{userId}")
+    public List<LoginEvent> getLoginsByUser(@PathVariable Long userId) {
+        return loginService.getEventsByUser(userId);
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @GetMapping("/suspicious/{userId}")
+    public List<LoginEvent> getSuspiciousLogins(@PathVariable Long userId) {
+        return loginService.getSuspiciousLogins(userId);
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-    
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-    
-    public String getIpAddress() {
-        return ipAddress;
-    }
-    
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-    
-    public String getLocation() {
-        return location;
-    }
-    
-    public void setLocation(String location) {
-        this.location = location;
-    }
-    
-    public String getDeviceId() {
-        return deviceId;
-    }
-    
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-    
-    public String getLoginStatus() {
-        return loginStatus;
-    }
-    
-    public void setLoginStatus(String loginStatus) {
-        this.loginStatus = loginStatus;
-    }
-    
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-    
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    @GetMapping
+    public List<LoginEvent> getAllLogins() {
+        return loginService.getAllEvents();
     }
 }

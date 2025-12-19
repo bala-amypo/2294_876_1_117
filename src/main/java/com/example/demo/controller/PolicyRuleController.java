@@ -1,73 +1,38 @@
-package com.example.demo.entity;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
+import com.example.demo.entity.PolicyRule;
+import com.example.demo.service.PolicyRuleService;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Entity
-public class PolicyRule {
+@RestController
+@RequestMapping("/api/rules")
+public class PolicyRuleController {
 
-    @Id
-    private Long id;
-    @Column(unique=true)
-    private String ruleCode;
-    private String description;
+    private final PolicyRuleService ruleService;
 
-   
-    private String severity;
-
-    @Column(columnDefinition = "TEXT")
-    private String conditionsJson;
-
-    private Boolean active;
-
-    public PolicyRule() {
-        this.active = true;
+    public PolicyRuleController(PolicyRuleService ruleService) {
+        this.ruleService = ruleService;
     }
 
-    public Long getId() {
-        return id;
+    @PostMapping
+    public PolicyRule createRule(@RequestBody PolicyRule rule) {
+        return ruleService.createRule(rule);
     }
-    
-    public void setId(Long id) {
-        this.id = id;
+
+    @PutMapping("/{id}")
+    public PolicyRule updateRule(@PathVariable Long id,
+                                 @RequestBody PolicyRule rule) {
+        return ruleService.updateRule(id, rule);
     }
-    
-    public String getRuleCode() {
-        return ruleCode;
+
+    @GetMapping("/active")
+    public List<PolicyRule> getActiveRules() {
+        return ruleService.getActiveRules();
     }
-    
-    public void setRuleCode(String ruleCode) {
-        this.ruleCode = ruleCode;
-    }
-    
-    public String getDescription() {
-        return description;
-    }
-    
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
-    public String getSeverity() {
-        return severity;
-    }
-    
-    public void setSeverity(String severity) {
-        this.severity = severity;
-    }
-    
-    public String getConditionsJson() {
-        return conditionsJson;
-    }
-    
-    public void setConditionsJson(String conditionsJson) {
-        this.conditionsJson = conditionsJson;
-    }
-    
-    public Boolean getActive() {
-        return active;
-    }
-    
-    public void setActive(Boolean active) {
-        this.active = active;
+
+    @GetMapping
+    public List<PolicyRule> getAllRules() {
+        return ruleService.getAllRules();
     }
 }

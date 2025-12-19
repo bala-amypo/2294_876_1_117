@@ -1,79 +1,39 @@
-package com.example.demo.entity;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import com.example.demo.entity.DeviceProfile;
+import com.example.demo.service.DeviceProfileService;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Entity
-public class DeviceProfile {
+@RestController
+@RequestMapping("/api/devices")
+public class DeviceProfileController {
 
-    @Id
-    private Long id;
+    private final DeviceProfileService deviceService;
 
-    private Long userId;
-
-    private String deviceId;
-    private String deviceType;
-    private String osVersion;
-
-    private Boolean isTrusted;
-    private LocalDateTime lastSeen;
-
-    public DeviceProfile() {
+    public DeviceProfileController(DeviceProfileService deviceService) {
+        this.deviceService = deviceService;
     }
 
-    public Long getId() {
-        return id;
+    @PostMapping
+    public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
+        return deviceService.registerDevice(device);
     }
-    
-    public void setId(Long id) {
-        this.id = id;
+
+    @PutMapping("/{id}/trust")
+    public DeviceProfile updateTrust(@PathVariable Long id,
+                                     @RequestParam boolean trust) {
+        return deviceService.updateTrustStatus(id, trust);
     }
-    
-    public Long getUserId() {
-        return userId;
+
+    @GetMapping("/user/{userId}")
+    public List<DeviceProfile> getDevicesByUser(@PathVariable Long userId) {
+        return deviceService.getDevicesByUser(userId);
     }
-    
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-    
-    public String getDeviceId() {
-        return deviceId;
-    }
-    
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-    
-    public String getDeviceType() {
-        return deviceType;
-    }
-    
-    public void setDeviceType(String deviceType) {
-        this.deviceType = deviceType;
-    }
-    
-    public String getOsVersion() {
-        return osVersion;
-    }
-    
-    public void setOsVersion(String osVersion) {
-        this.osVersion = osVersion;
-    }
-    
-    public Boolean getIsTrusted() {
-        return isTrusted;
-    }
-    
-    public void setIsTrusted(Boolean isTrusted) {
-        this.isTrusted = isTrusted;
-    }
-    
-    public LocalDateTime getLastSeen() {
-        return lastSeen;
-    }
-    
-    public void setLastSeen(LocalDateTime lastSeen) {
-        this.lastSeen = lastSeen;
+
+    @GetMapping("/lookup/{deviceId}")
+    public DeviceProfile getByDeviceId(@PathVariable String deviceId) {
+        return deviceService.findByDeviceId(deviceId)
+                .orElseThrow(() -> new IllegalArgumentException("Device not found"));
     }
 }

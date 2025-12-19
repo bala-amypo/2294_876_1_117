@@ -1,105 +1,42 @@
-package com.example.demo.entity;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import com.example.demo.entity.ViolationRecord;
+import com.example.demo.service.ViolationRecordService;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Entity
-public class ViolationRecord {
+@RestController
+@RequestMapping("/api/violations")
+public class ViolationRecordController {
 
-    @Id
-    private Long id;
+    private final ViolationRecordService violationService;
 
-    private Long userId;
-    private Long policyRuleId;
-    private Long eventId;
-
-    private String violationType;
-    private String details;
-    private String severity;
-
-    private LocalDateTime detectedAt;
-    private Boolean resolved;
-
-    public ViolationRecord() {
+    public ViolationRecordController(ViolationRecordService violationService) {
+        this.violationService = violationService;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.detectedAt = LocalDateTime.now();
-        if (this.resolved == null) {
-            this.resolved = false;
-        }
+    @PostMapping
+    public ViolationRecord logViolation(@RequestBody ViolationRecord violation) {
+        return violationService.logViolation(violation);
     }
 
-    public Long getId() {
-        return id;
+    @GetMapping("/user/{userId}")
+    public List<ViolationRecord> getByUser(@PathVariable Long userId) {
+        return violationService.getViolationsByUser(userId);
     }
-    
-    public void setId(Long id) {
-        this.id = id;
+
+    @PutMapping("/{id}/resolve")
+    public ViolationRecord resolve(@PathVariable Long id) {
+        return violationService.markResolved(id);
     }
-    
-    public Long getUserId() {
-        return userId;
+
+    @GetMapping("/unresolved")
+    public List<ViolationRecord> getUnresolved() {
+        return violationService.getUnresolvedViolations();
     }
-    
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-    
-    public Long getPolicyRuleId() {
-        return policyRuleId;
-    }
-    
-    public void setPolicyRuleId(Long policyRuleId) {
-        this.policyRuleId = policyRuleId;
-    }
-    
-    public Long getEventId() {
-        return eventId;
-    }
-    
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
-    }
-    
-    public String getViolationType() {
-        return violationType;
-    }
-    
-    public void setViolationType(String violationType) {
-        this.violationType = violationType;
-    }
-    
-    public String getDetails() {
-        return details;
-    }
-    
-    public void setDetails(String details) {
-        this.details = details;
-    }
-    
-    public String getSeverity() {
-        return severity;
-    }
-    
-    public void setSeverity(String severity) {
-        this.severity = severity;
-    }
-    
-    public LocalDateTime getDetectedAt() {
-        return detectedAt;
-    }
-    
-    public void setDetectedAt(LocalDateTime detectedAt) {
-        this.detectedAt = detectedAt;
-    }
-    
-    public Boolean getResolved() {
-        return resolved;
-    }
-    
-    public void setResolved(Boolean resolved) {
-        this.resolved = resolved;
+
+    @GetMapping
+    public List<ViolationRecord> getAll() {
+        return violationService.getAllViolations();
     }
 }
