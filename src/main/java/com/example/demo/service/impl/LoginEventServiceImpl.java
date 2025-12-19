@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.LoginEvent;
 import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,21 +10,29 @@ import java.util.List;
 @Service
 public class LoginEventServiceImpl implements LoginEventService {
 
-    @Autowired
-    private LoginEventRepository repository;
+    private final LoginEventRepository loginRepo;
 
-    @Override
-    public LoginEvent record(LoginEvent event) {
-        return repository.save(event);
+    public LoginEventServiceImpl(LoginEventRepository loginRepo) {
+        this.loginRepo = loginRepo;
     }
 
     @Override
-    public List<LoginEvent> suspicious(Long userId) {
-        return repository.findByUserId(userId);
+    public LoginEvent recordLogin(LoginEvent event) {
+        return loginRepo.save(event);
     }
 
     @Override
-    public List<LoginEvent> all() {
-        return repository.findAll();
+    public List<LoginEvent> getEventsByUser(Long userId) {
+        return loginRepo.findByUserId(userId);
+    }
+
+    @Override
+    public List<LoginEvent> getSuspiciousLogins(Long userId) {
+        return loginRepo.findByUserIdAndSuspiciousTrue(userId);
+    }
+
+    @Override
+    public List<LoginEvent> getAllEvents() {
+        return loginRepo.findAll();
     }
 }

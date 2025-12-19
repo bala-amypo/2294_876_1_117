@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.ViolationRecord;
-import java.util.List;
+import java.util.*;
 
 public interface ViolationRecordService {
 

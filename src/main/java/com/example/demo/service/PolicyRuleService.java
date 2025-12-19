@@ -1,8 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.PolicyRule;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public interface PolicyRuleService {
 

@@ -1,8 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.UserAccount;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public interface UserAccountService {
 

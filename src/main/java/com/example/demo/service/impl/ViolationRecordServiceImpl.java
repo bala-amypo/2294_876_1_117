@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,36 +10,38 @@ import java.util.List;
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
 
-    @Autowired
-    private ViolationRecordRepository repository;
+    private final ViolationRecordRepository violationRepo;
 
-    @Override
-    public ViolationRecord log(ViolationRecord record) {
-        return repository.save(record);
+    public ViolationRecordServiceImpl(ViolationRecordRepository violationRepo) {
+        this.violationRepo = violationRepo;
     }
 
     @Override
-    public List<ViolationRecord> byUser(Long userId) {
-        return repository.findByUserId(userId);
+    public ViolationRecord logViolation(ViolationRecord violation) {
+        return violationRepo.save(violation);
     }
 
     @Override
-    public ViolationRecord resolve(Long id) {
-        ViolationRecord record = repository.findById(id).orElse(null);
-        if (record != null) {
-            record.setResolved(true);
-            return repository.save(record);
-        }
-        return null;
+    public List<ViolationRecord> getViolationsByUser(Long userId) {
+        return violationRepo.findByUserId(userId);
     }
 
     @Override
-    public List<ViolationRecord> unresolved() {
-        return repository.findAll();
+    public ViolationRecord markResolved(Long id) {
+        ViolationRecord record = violationRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Violation not found"));
+
+        record.setResolved(true);
+        return violationRepo.save(record);
     }
 
     @Override
-    public List<ViolationRecord> all() {
-        return repository.findAll();
+    public List<ViolationRecord> getUnresolvedViolations() {
+        return violationRepo.findByResolvedFalse();
+    }
+
+    @Override
+    public List<ViolationRecord> getAllViolations() {
+        return violationRepo.findAll();
     }
 }
