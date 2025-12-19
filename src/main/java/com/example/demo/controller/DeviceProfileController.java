@@ -9,8 +9,31 @@ import java.util.List;
 @RequestMapping("/api/devices")
 public class DeviceProfileController {
 
-    @GetMapping("/lookup")
-    public DeviceProfile lookup(@RequestParam String deviceId) {
-        return new DeviceProfile();
+    private final DeviceProfileService deviceService;
+
+    public DeviceProfileController(DeviceProfileService deviceService) {
+        this.deviceService = deviceService;
+    }
+
+    @PostMapping
+    public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
+        return deviceService.registerDevice(device);
+    }
+
+    @PutMapping("/{id}/trust")
+    public DeviceProfile updateTrust(@PathVariable Long id,
+                                     @RequestParam boolean trust) {
+        return deviceService.updateTrustStatus(id, trust);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<DeviceProfile> getDevicesByUser(@PathVariable Long userId) {
+        return deviceService.getDevicesByUser(userId);
+    }
+
+    @GetMapping("/lookup/{deviceId}")
+    public DeviceProfile getByDeviceId(@PathVariable String deviceId) {
+        return deviceService.findByDeviceId(deviceId)
+                .orElseThrow(() -> new IllegalArgumentException("Device not found"));
     }
 }

@@ -10,23 +10,49 @@ import java.util.List;
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
+    private final List<UserAccount> dummyDB = new ArrayList<>();
+
     @Override
-    public UserAccount create(UserAccount user) {
+    public UserAccount createUser(UserAccount user) {
+        dummyDB.add(user);
         return user;
     }
 
     @Override
-    public Optional<UserAccount> getUserById(Long id) {
-        return Optional.of(new UserAccount());
+    public UserAccount getUserById(Long id) {
+        UserAccount user = new UserAccount();
+        user.setId(id);
+        user.setUsername("dummyUser");
+        user.setEmail("dummy@example.com");
+        user.setRole("USER");
+        user.setStatus("ACTIVE");
+        return user;
+    }
+
+    @Override
+    public void updateUserStatus(Long id, String status) {
+        
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        
+    }
+
+    @Override
+    public UserAccount findByUsername(String username) {
+
+        UserAccount user = new UserAccount();
+        user.setId(1L);
+        user.setUsername(username);
+        user.setEmail("dummy@example.com");
+        user.setRole("USER");
+        user.setStatus("ACTIVE");
+        return user;
     }
 
     @Override
     public List<UserAccount> getAllUsers() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public UserAccount updateUserStatus(Long id, String status) {
-        return new UserAccount();
+        return dummyDB;
     }
 }

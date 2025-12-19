@@ -5,23 +5,29 @@ import com.example.demo.service.UserAccountService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserAccountController {
 
-    @PostMapping
-    public UserAccount create(@RequestBody UserAccount user) {
-        return user; // dummy return
+    private final UserAccountService userService;
+
+    public UserAccountController(UserAccountService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/{id}")
-    public UserAccount getUserById(@PathVariable Long id) {
-        return new UserAccount();
+    public UserAccount getUser(@PathVariable Long id) {
+        return userService.getUserById(id); // dummy method in service
     }
 
     @PutMapping("/{id}/status")
-    public UserAccount updateUserStatus(
-            @PathVariable Long id,
-            @RequestParam String status) {
-        return new UserAccount();
+    public String updateStatus(@PathVariable Long id, @RequestParam String status) {
+        userService.updateUserStatus(id, status); // dummy call
+        return "Status updated";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id); // dummy call
+        return "User deleted";
     }
 }
