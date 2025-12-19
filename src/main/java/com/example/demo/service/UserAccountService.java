@@ -11,4 +11,8 @@ public interface UserAccountService {
     Optional<UserAccount> findByUsername(String username);
 
     List<UserAccount> getAllUsers();
+
+    Optional<UserAccount> getUserById(Long id);
+
+    String updateUserStatus(Long id, String status);
 }
