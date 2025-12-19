@@ -4,13 +4,11 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "device_profile")
 public class DeviceProfile {
 
     @Id
     private Long id;
 
-    // Logical relation to UserAccount
     private Long userId;
 
     private String deviceId;
@@ -22,8 +20,6 @@ public class DeviceProfile {
 
     public DeviceProfile() {
     }
-
-    // -------- Getters and Setters --------
 
     public Long getId() {
         return id;
