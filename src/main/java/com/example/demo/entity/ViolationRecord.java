@@ -32,13 +32,13 @@ public class ViolationRecord {
         this.severity = severity;
     }
 
-    // @PrePersist
-    // protected void onDetect() {
-    //     this.detectedAt = LocalDateTime.now();
-    //     if (this.resolved == null) {
-    //         this.resolved = false;
-    //     }
-    // }
+    @PrePersist
+    protected void onDetect() {
+        this.detectedAt = LocalDateTime.now();
+        if (this.resolved == null) {
+            this.resolved = false;
+        }
+    }
 
     public Long getId() {
         return id;

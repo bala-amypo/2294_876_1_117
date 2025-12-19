@@ -30,10 +30,10 @@ public class LoginEvent {
         this.loginStatus = loginStatus;
     }
 
-    // @PrePersist
-    // protected void onCreate() {
-    //     this.timestamp = LocalDateTime.now();
-    // }
+    @PrePersist
+    protected void onCreate() {
+        this.timestamp = LocalDateTime.now();
+    }
 
     
     public Long getId() {

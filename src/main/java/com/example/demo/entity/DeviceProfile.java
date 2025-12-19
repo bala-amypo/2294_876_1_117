@@ -42,11 +42,11 @@ public void setTrusted(boolean trusted) {
         this.osVersion = osVersion;
     }
 
-    // @PrePersist
-    // @PreUpdate
-    // protected void updateLastSeen() {
-    //     this.lastSeen = LocalDateTime.now();
-    // }
+    @PrePersist
+    @PreUpdate
+    protected void updateLastSeen() {
+        this.lastSeen = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
