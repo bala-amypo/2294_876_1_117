@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 public class LoginEvent {
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Auto-generated ID
     private Long userId;
 
     private String ipAddress;
@@ -15,11 +16,11 @@ public class LoginEvent {
     private String deviceId;
 
     private String loginStatus;
+    private Boolean suspicious = false; // Track suspicious login
 
     private LocalDateTime timestamp;
 
-    public LoginEvent() {
-    }
+    public LoginEvent() {}
 
     @PrePersist
     protected void onCreate() {
@@ -28,59 +29,29 @@ public class LoginEvent {
         }
     }
 
-    public Long getId() {
-        return id;
-    }
+    // Getters & Setters
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getUserId() {
-        return userId;
-    }
-    
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-    
-    public String getIpAddress() {
-        return ipAddress;
-    }
-    
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-    
-    public String getLocation() {
-        return location;
-    }
-    
-    public void setLocation(String location) {
-        this.location = location;
-    }
-    
-    public String getDeviceId() {
-        return deviceId;
-    }
-    
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-    
-    public String getLoginStatus() {
-        return loginStatus;
-    }
-    
-    public void setLoginStatus(String loginStatus) {
-        this.loginStatus = loginStatus;
-    }
-    
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-    
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+
+    public String getIpAddress() { return ipAddress; }
+    public void setIpAddress(String ipAddress) { this.ipAddress = ipAddress; }
+
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
+
+    public String getDeviceId() { return deviceId; }
+    public void setDeviceId(String deviceId) { this.deviceId = deviceId; }
+
+    public String getLoginStatus() { return loginStatus; }
+    public void setLoginStatus(String loginStatus) { this.loginStatus = loginStatus; }
+
+    public Boolean getSuspicious() { return suspicious; }
+    public void setSuspicious(Boolean suspicious) { this.suspicious = suspicious; }
+
+    public LocalDateTime getTimestamp() { return timestamp; }
+    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 }

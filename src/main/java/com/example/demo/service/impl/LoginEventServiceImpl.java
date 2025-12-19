@@ -4,7 +4,6 @@ import com.example.demo.entity.LoginEvent;
 import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
