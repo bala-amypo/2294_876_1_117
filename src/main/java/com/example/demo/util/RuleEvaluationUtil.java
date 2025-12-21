@@ -1,10 +1,12 @@
 package com.example.demo.util;
 
+import com.example.demo.entity.LoginEvent;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RuleEvaluationUtil {
-    public RuleEvaluationUtil() {
-        // empty constructor for tests
+
+    public void evaluateLoginEvent(LoginEvent event) {
+        // dummy implementation; in tests, this can just log or do nothing
     }
 }

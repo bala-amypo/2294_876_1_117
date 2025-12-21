@@ -1,18 +1,16 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.LoginEvent;
+
 import java.util.List;
 
 public interface LoginEventService {
 
-    LoginEvent logLogin(LoginEvent event);
+    void recordLogin(LoginEvent event);
 
-    List<LoginEvent> getLoginsByUser(Long userId);
+    List<LoginEvent> getEventsByUser(Long userId);  // Ensure Long not long
 
     List<LoginEvent> getSuspiciousLogins(Long userId);
 
-    List<LoginEvent> getAllLogins();
-
-    void recordLogin(LoginEvent event);
-List<LoginEvent> getEventsByUser(long userId);
+    List<LoginEvent> getAllEvents();
 }

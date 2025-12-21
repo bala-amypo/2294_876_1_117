@@ -23,7 +23,7 @@ public class LoginEventServiceImpl implements LoginEventService {
     @Override
     public void recordLogin(LoginEvent event) {
         if (event.getIpAddress() == null || event.getDeviceId() == null) {
-            throw new IllegalArgumentException("IP address and Device ID are required");
+            throw new IllegalArgumentException("IP and Device ID are required");
         }
 
         if (event.getTimestamp() == null) {
@@ -32,8 +32,7 @@ public class LoginEventServiceImpl implements LoginEventService {
 
         loginRepo.save(event);
 
-        // Evaluate rules for the login event
-        ruleEvaluator.evaluateLoginEvent(event);
+        ruleEvaluator.evaluateLoginEvent(event);  // now exists
     }
 
     @Override
