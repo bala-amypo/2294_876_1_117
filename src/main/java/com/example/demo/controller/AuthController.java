@@ -18,14 +18,20 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    // 🔥 REQUIRED BY TEST CASES
+    // ✅ EXACT SIGNATURE EXPECTED BY TEST CASES
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserAccount request) {
 
         UserAccount user =
                 userAccountService.findByUsername(request.getUsername());
 
-        String token = jwtUtil.generateToken(user.getUsername());
+        // ✅ MATCH JwtUtil METHOD SIGNATURE
+        String token = jwtUtil.generateToken(
+                user.getUsername(),
+                3600000L,        // 1 hour expiry
+                "USER",          // default role
+                "IT_POLICY_APP"  // issuer
+        );
 
         return ResponseEntity.ok(token);
     }
