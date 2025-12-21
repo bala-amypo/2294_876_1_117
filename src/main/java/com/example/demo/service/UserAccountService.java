@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface UserAccountService {
     UserAccount createUser(UserAccount user);
-    UserAccount getUserById(Long id);  // Must match impl
+    UserAccount getUserById(Long id);
     UserAccount updateUserStatus(Long id, String status);
     List<UserAccount> getAllUsers();
-    UserAccount findByUsername(String username);  // Return type UserAccount, not Optional
+    Optional<UserAccount> findByUsername(String username); // return Optional
 }
