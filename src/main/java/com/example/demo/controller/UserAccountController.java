@@ -13,20 +13,13 @@ public class UserAccountController {
     private final UserAccountService userAccountService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    // 🔹 Constructor used by Spring Boot
+    // ✅ ONLY CONSTRUCTOR USED
     public UserAccountController(UserAccountService userAccountService,
                                  BCryptPasswordEncoder passwordEncoder) {
         this.userAccountService = userAccountService;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // 🔹 Constructor used by TEST SUITE (VERY IMPORTANT)
-    public UserAccountController(UserAccountService userAccountService) {
-        this.userAccountService = userAccountService;
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
-
-    // 🔹 Test expects ResponseEntity + getBody()
     @PostMapping
     public ResponseEntity<UserAccount> create(@RequestBody UserAccount user) {
         if (user.getPassword() != null) {
