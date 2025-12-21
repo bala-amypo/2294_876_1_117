@@ -28,10 +28,4 @@ public class DeviceProfileController {
     public List<DeviceProfile> getDevicesByUser(@PathVariable Long userId) {
         return deviceService.getDevicesByUser(userId);
     }
-
-    // GET /api/devices/{id}
-    @GetMapping("/{id}")
-    public DeviceProfile getDeviceById(@PathVariable Long id) {
-        return deviceService.getDeviceById(id);
-    }
 }
