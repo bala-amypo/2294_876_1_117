@@ -8,5 +8,5 @@ public interface LoginEventRepository extends JpaRepository<LoginEvent, Long> {
 
     List<LoginEvent> findByUserId(Long userId);
 
-    List<LoginEvent> findByUserIdAndSuspiciousTrue(Long userId);
+    List<LoginEvent> findByUserIdAndSuspiciousTrue(Long userId); // For suspicious logins
 }

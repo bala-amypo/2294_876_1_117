@@ -7,17 +7,15 @@ import java.time.LocalDateTime;
 public class LoginEvent {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Auto-generated ID
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generate ID
+    private Long id;
 
+    private Long userId;
     private String ipAddress;
     private String location;
     private String deviceId;
-
     private String loginStatus;
-    private Boolean suspicious = false; // Track suspicious login
-
+    private Boolean suspicious = false; // Must exist for suspicious queries
     private LocalDateTime timestamp;
 
     public LoginEvent() {}
@@ -29,8 +27,7 @@ public class LoginEvent {
         }
     }
 
-    // Getters & Setters
-
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
