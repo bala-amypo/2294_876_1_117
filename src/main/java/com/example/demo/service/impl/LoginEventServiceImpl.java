@@ -12,4 +12,5 @@ public class LoginEventServiceImpl implements LoginEventService {
     public LoginEventServiceImpl(LoginEventRepository loginRepo) {
         this.loginRepo = loginRepo;
     }
+    
 }

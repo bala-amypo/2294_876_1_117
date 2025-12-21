@@ -31,3 +31,22 @@ public class UserAccountServiceImpl implements UserAccountService {
         return new ArrayList<>();
     }
 }
+@Override
+public UserAccount createUser(UserAccount user) {
+    return user; // dummy implementation
+}
+
+@Override
+public UserAccount findByUsername(String username) {
+    return new UserAccount(); // dummy
+}
+
+@Override
+public UserAccount createUser(UserAccount user) {
+    return user; // dummy implementation
+}
+
+@Override
+public UserAccount findByUsername(String username) {
+    return new UserAccount(); // dummy
+}

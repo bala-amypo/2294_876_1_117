@@ -15,5 +15,6 @@ public interface LoginEventService {
 
     void recordLogin(LoginEvent event);
 List<LoginEvent> getEventsByUser(long userId);
+   List<LoginEvent> getEventsByUser(long userId);
 
 }
