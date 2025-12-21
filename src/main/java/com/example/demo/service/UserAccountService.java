@@ -3,19 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.UserAccount;
 import java.util.List;
 
-public interface UserAccountService {
-
+ppublic interface UserAccountService {
     UserAccount createUser(UserAccount user);
-
-    UserAccount getUserById(Long id);
-
-    UserAccount findByUsername(String username);
-
-    List<UserAccount> getAllUsers();
-
-    UserAccount updateStatus(Long id, String status);
-    
-    void updateUserStatus(long userId, String status);
-
-    
+    void updateUserStatus(long id, String status);
 }

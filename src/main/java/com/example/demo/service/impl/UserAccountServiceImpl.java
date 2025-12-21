@@ -18,12 +18,11 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount updateUserStatus(long id, String status) {
+    public void updateUserStatus(long id, String status) {
         UserAccount user = repository.findById(id).orElse(null);
         if (user != null) {
             user.setStatus(status);
-            return repository.save(user);
+            repository.save(user);
         }
-        return null;
     }
 }
