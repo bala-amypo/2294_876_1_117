@@ -3,24 +3,11 @@ package com.example.demo.security;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtUtil {
-    public String generateToken(String subject, Long userId, String email, String role) {
-        return "dummy-token";
-    }
+public JwtUtil() {
+}
 
-    public boolean validateToken(String token) {
-        return true;
-    }
-
-    public String getEmail(String token) {
-        return "test@example.com";
-    }
-
-    public String getRole(String token) {
-        return "USER";
-    }
-
-    public Long getUserId(String token) {
-        return 1L;
-    }
+public JwtUtil(String secret, long expiration, boolean enabled) {
+    this.secret = secret;
+    this.expiration = expiration;
+    this.enabled = enabled;
 }

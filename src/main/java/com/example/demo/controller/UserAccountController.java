@@ -36,4 +36,9 @@ public class UserAccountController {
     public List<UserAccount> getAllUsers() {
         return userService.getAllUsers();
     }
+    @PostMapping("/create")
+   public UserAccount create(@RequestBody UserAccount user) {
+    return userService.save(user);
+}
+
 }
