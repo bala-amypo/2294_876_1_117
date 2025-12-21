@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.ViolationRecord;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.stereotype.Service;
@@ -19,21 +20,18 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
 
     @Override
     public ViolationRecord logViolation(ViolationRecord violation) {
-        if (violation.getDetectedAt() == null) {
-            violation.setDetectedAt(LocalDateTime.now());
-        }
-        if (violation.getResolved() == null) {
-            violation.setResolved(false);
-        }
+        violation.setDetectedAt(LocalDateTime.now());
+        violation.setResolved(false);
         return violationRepo.save(violation);
     }
 
     @Override
     public ViolationRecord markResolved(Long id) {
-        ViolationRecord record = violationRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Violation not found"));
-        record.setResolved(true);
-        return violationRepo.save(record);
+        ViolationRecord violation = violationRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Violation not found"));
+
+        violation.setResolved(true);
+        return violationRepo.save(violation);
     }
 
     @Override

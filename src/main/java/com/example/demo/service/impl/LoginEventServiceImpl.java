@@ -19,8 +19,13 @@ public class LoginEventServiceImpl implements LoginEventService {
 
     @Override
     public LoginEvent recordLogin(LoginEvent event) {
+
         if (event.getIpAddress() == null || event.getDeviceId() == null) {
-            throw new IllegalArgumentException("IP address and device ID are required");
+            throw new IllegalArgumentException("IP Address and Device ID are required");
+        }
+
+        if (event.getLoginStatus() == null) {
+            event.setLoginStatus("FAILED");
         }
 
         if (event.getTimestamp() == null) {
