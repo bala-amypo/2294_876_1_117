@@ -1,16 +1,17 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.UserAccount;
+import com.example.demo.entity.DeviceProfile;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface UserAccountService {
+public interface DeviceProfileService {
 
-    UserAccount save(UserAccount user);
+    DeviceProfile registerDevice(DeviceProfile device);
 
-    // ✅ required by AuthController
-    UserAccount createUser(UserAccount user);
+    DeviceProfile updateTrustStatus(Long id, boolean trust);
 
-    // ✅ required by AuthController
-    Optional<UserAccount> findByUsername(String username);
+    List<DeviceProfile> getDevicesByUser(Long userId);
+
+    Optional<DeviceProfile> findByDeviceId(String deviceId);
 }
