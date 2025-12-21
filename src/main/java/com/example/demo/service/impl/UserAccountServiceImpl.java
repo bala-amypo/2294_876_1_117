@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -33,12 +32,8 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
 
         // Set defaults
-        if (user.getRole() == null) {
-            user.setRole("USER");
-        }
-        if (user.getStatus() == null) {
-            user.setStatus("ACTIVE");
-        }
+        if (user.getRole() == null) user.setRole("USER");
+        if (user.getStatus() == null) user.setStatus("ACTIVE");
 
         // Hash password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -68,7 +63,8 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public Optional<UserAccount> findByUsername(String username) {
-        return userRepo.findByUsername(username);
+    public UserAccount findByUsername(String username) {
+        return userRepo.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
     }
 }
