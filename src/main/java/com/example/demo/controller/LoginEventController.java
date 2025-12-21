@@ -17,12 +17,12 @@ public class LoginEventController {
 
     @PostMapping("/record")
     public LoginEvent recordLogin(@RequestBody LoginEvent event) {
-        return loginService.recordLogin(event);
+        return loginService.logLogin(event);
     }
 
     @GetMapping("/user/{userId}")
     public List<LoginEvent> getLoginsByUser(@PathVariable Long userId) {
-        return loginService.getEventsByUser(userId);
+        return loginService.getLoginsByUser(userId);
     }
 
     @GetMapping("/suspicious/{userId}")
@@ -32,6 +32,6 @@ public class LoginEventController {
 
     @GetMapping
     public List<LoginEvent> getAllLogins() {
-        return loginService.getAllEvents();
+        return loginService.getAllLogins();
     }
 }

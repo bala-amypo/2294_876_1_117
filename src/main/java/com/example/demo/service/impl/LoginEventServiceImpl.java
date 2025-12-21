@@ -4,7 +4,6 @@ import com.example.demo.entity.LoginEvent;
 import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -17,12 +16,12 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
-    public LoginEvent recordLogin(LoginEvent event) {
+    public LoginEvent logLogin(LoginEvent event) {
         return loginRepo.save(event);
     }
 
     @Override
-    public List<LoginEvent> getEventsByUser(Long userId) {
+    public List<LoginEvent> getLoginsByUser(Long userId) {
         return loginRepo.findByUserId(userId);
     }
 
@@ -32,7 +31,7 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
-    public List<LoginEvent> getAllEvents() {
+    public List<LoginEvent> getAllLogins() {
         return loginRepo.findAll();
     }
 }
