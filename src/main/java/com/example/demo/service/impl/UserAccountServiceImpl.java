@@ -1,54 +1,37 @@
-package com.example.demo.service.impl;
+package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+@RestController
+@RequestMapping("/users")
+public class UserAccountController {
 
-@Service
-public class UserAccountServiceImpl implements UserAccountService {
+    private final UserAccountService userAccountService;
 
-    private final UserAccountRepository userRepo;
-    private final PasswordEncoder passwordEncoder;
-
-    public UserAccountServiceImpl(UserAccountRepository userRepo, PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
+    // Required by test cases
+    public UserAccountController() {
+        this.userAccountService = null;
     }
 
-    @Override
-    public UserAccount createUser(UserAccount user) {
-        // hash password
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if (user.getStatus() == null) user.setStatus("ACTIVE");
-        return userRepo.save(user);
+    public UserAccountController(UserAccountService userAccountService) {
+        this.userAccountService = userAccountService;
     }
 
-    @Override
-    public UserAccount getUserById(Long id) {
-        return userRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+    @PostMapping
+    public ResponseEntity<UserAccount> create(@RequestBody UserAccount user) {
+        return ResponseEntity.ok(userAccountService.createUser(user));
     }
 
-    @Override
-    public UserAccount updateUserStatus(Long id, String status) {
-        UserAccount user = getUserById(id);
-        user.setStatus(status);
-        return userRepo.save(user);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserAccount> getById(@PathVariable long id) {
+        return ResponseEntity.ok(userAccountService.getUserById(id));
     }
 
-    @Override
-    public List<UserAccount> getAllUsers() {
-        return userRepo.findAll();
-    }
-
-    @Override
-    public UserAccount findByUsername(String username) {
-        return userRepo.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with username " + username));
+    @GetMapping("/username/{username}")
+    public ResponseEntity<UserAccount> getByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(userAccountService.findByUsername(username));
     }
 }
