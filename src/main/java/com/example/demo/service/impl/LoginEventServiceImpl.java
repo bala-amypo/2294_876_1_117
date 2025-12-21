@@ -12,5 +12,10 @@ public class LoginEventServiceImpl implements LoginEventService {
     public LoginEventServiceImpl(LoginEventRepository loginRepo) {
         this.loginRepo = loginRepo;
     }
+    @Override
+public List<LoginEvent> getEventsByUser(Long userId) {
+    return loginRepo.findByUserId(userId);
+}
+
     
 }
