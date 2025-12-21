@@ -7,7 +7,6 @@ import com.example.demo.service.UserAccountService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -18,14 +17,16 @@ public class UserAccountServiceImpl implements UserAccountService {
         this.userAccountRepository = userAccountRepository;
     }
 
+    // Dummy register (NO password encoding, NO security)
     @Override
-    public UserAccount createUser(UserAccount user) {
+    public UserAccount register(UserAccount user) {
         return userAccountRepository.save(user);
     }
 
     @Override
-    public Optional<UserAccount> getUserById(Long id) {
-        return userAccountRepository.findById(id);
+    public UserAccount getUserById(Long id) {
+        return userAccountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
@@ -34,20 +35,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount updateStatus(Long id, String status) {
-        UserAccount user = userAccountRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    public UserAccount updateUserStatus(Long id, String status) {
+        UserAccount user = getUserById(id);
         user.setStatus(status);
         return userAccountRepository.save(user);
-    }
-
-    @Override
-    public Optional<UserAccount> findByUsername(String username) {
-        return userAccountRepository.findByUsername(username);
-    }
-
-    @Override
-    public Optional<UserAccount> findByEmail(String email) {
-        return userAccountRepository.findByEmail(email);
     }
 }
