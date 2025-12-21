@@ -1,33 +1,31 @@
 package com.example.demo.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
 public class UserAccountController {
 
-    private UserAccountService userAccountService;
+    private final UserAccountService userAccountService;
 
-    // REQUIRED by Spring
-    public UserAccountController() {
-    }
-
-    // REQUIRED by TEST CASES
     public UserAccountController(UserAccountService userAccountService) {
         this.userAccountService = userAccountService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<UserAccount> register(@RequestBody UserAccount user) {
-        return ResponseEntity.ok(user);
+    // 🔥 REQUIRED by Test Cases
+    @PostMapping
+    public ResponseEntity<UserAccount> create(@RequestBody UserAccount user) {
+        UserAccount savedUser = userAccountService.createUser(user);
+        return ResponseEntity.ok(savedUser);
     }
 
+    // 🔥 REQUIRED by Test Cases
     @GetMapping("/{id}")
-    public ResponseEntity<UserAccount> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok(new UserAccount());
+    public ResponseEntity<UserAccount> getUserById(@PathVariable Long id) {
+        UserAccount user = userAccountService.getUserById(id);
+        return ResponseEntity.ok(user);
     }
 }
