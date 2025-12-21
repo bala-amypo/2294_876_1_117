@@ -23,13 +23,17 @@ public class UserAccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserAccount> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    public ResponseEntity<UserAccount> getUser(@PathVariable Long id) {
+        UserAccount user = userService.getUserById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<UserAccount> updateUserStatus(@PathVariable Long id, @RequestParam String status) {
-        return ResponseEntity.ok(userService.updateUserStatus(id, status));
+    public ResponseEntity<UserAccount> updateStatus(
+            @PathVariable Long id,
+            @RequestParam String status) {
+        return ResponseEntity.ok(userService.updateStatus(id, status));
     }
 
     @GetMapping
