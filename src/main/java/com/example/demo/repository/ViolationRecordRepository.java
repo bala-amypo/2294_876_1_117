@@ -9,5 +9,5 @@ public interface ViolationRecordRepository extends JpaRepository<ViolationRecord
 
     List<ViolationRecord> findByUserId(Long userId);
 
-    List<ViolationRecord> findByResolved(Boolean resolved);
+    List<ViolationRecord> findByResolvedFalse();
 }

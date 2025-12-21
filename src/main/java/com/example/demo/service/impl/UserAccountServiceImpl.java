@@ -1,8 +1,11 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,22 +15,35 @@ import java.util.Optional;
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository userRepo;
+    private final PasswordEncoder encoder;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepo) {
+    public UserAccountServiceImpl(UserAccountRepository userRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
+        this.encoder = encoder;
     }
 
     @Override
     public UserAccount createUser(UserAccount user) {
+
         userRepo.findByUsername(user.getUsername())
                 .ifPresent(u -> {
-                    throw new RuntimeException("Username already exists");
+                    throw new BadRequestException("Username already exists");
                 });
 
         userRepo.findByEmail(user.getEmail())
                 .ifPresent(u -> {
-                    throw new RuntimeException("Email already exists");
+                    throw new BadRequestException("Email already exists");
                 });
+
+        user.setPassword(encoder.encode(user.getPassword()));
+
+        if (user.getStatus() == null) {
+            user.setStatus("ACTIVE");
+        }
+
+        if (user.getRole() == null) {
+            user.setRole("USER");
+        }
 
         return userRepo.save(user);
     }
@@ -35,7 +51,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount getUserById(Long id) {
         return userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
