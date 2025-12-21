@@ -44,4 +44,12 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
+    @Override
+public DeviceProfile updateProfile(Long id, DeviceProfile profile) {
+    DeviceProfile existing = getProfileById(id);
+    existing.setName(profile.getName());
+    existing.setDescription(profile.getDescription());
+    return repo.save(existing);
+}
+
 }
