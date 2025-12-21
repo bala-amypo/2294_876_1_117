@@ -36,4 +36,9 @@ public class UserAccountController {
         userService.updateStatus(id, status);
         return "Status updated successfully";
     }
+    @PostMapping("/create")
+     public UserAccount create(@RequestBody UserAccount user) {
+        return user;
+}
+
 }

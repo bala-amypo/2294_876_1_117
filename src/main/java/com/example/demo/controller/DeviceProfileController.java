@@ -36,4 +36,9 @@ public class DeviceProfileController {
         return deviceService.findByDeviceId(deviceId)
                 .orElseThrow(() -> new IllegalArgumentException("Device not found"));
     }
+    @GetMapping("/lookup/{id}")
+public String lookup(@PathVariable String id) {
+    return "OK";
+}
+
 }
