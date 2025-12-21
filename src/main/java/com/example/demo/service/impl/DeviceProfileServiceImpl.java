@@ -5,24 +5,55 @@ import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository deviceProfileRepository;
+    private final DeviceProfileRepository deviceRepo;
 
-    public DeviceProfileServiceImpl(DeviceProfileRepository deviceProfileRepository) {
-        this.deviceProfileRepository = deviceProfileRepository;
+    public DeviceProfileServiceImpl(DeviceProfileRepository deviceRepo) {
+        this.deviceRepo = deviceRepo;
     }
 
     @Override
-    public DeviceProfile addDevice(DeviceProfile device) {
-        return deviceProfileRepository.save(device);
+    public DeviceProfile registerDevice(DeviceProfile device) {
+        List<DeviceProfile> existingDevices = deviceRepo.findByUserId(device.getUserId());
+        for (DeviceProfile d : existingDevices) {
+            if (d.getDeviceId().equals(device.getDeviceId())) {
+                throw new IllegalArgumentException("Device ID already exists for this user");
+            }
+        }
+
+        if (device.getLastSeen() == null) {
+            device.setLastSeen(LocalDateTime.now());
+        }
+        if (device.getIsTrusted() == null) {
+            device.setIsTrusted(false);
+        }
+
+        return deviceRepo.save(device);
+    }
+
+    @Override
+    public DeviceProfile updateTrustStatus(Long id, boolean trust) {
+        DeviceProfile device = deviceRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
+
+        device.setIsTrusted(trust);
+        device.setLastSeen(LocalDateTime.now());
+        return deviceRepo.save(device);
     }
 
     @Override
     public List<DeviceProfile> getDevicesByUser(Long userId) {
-        return deviceProfileRepository.findByUserId(userId);
+        return deviceRepo.findByUserId(userId);
+    }
+
+    @Override
+    public Optional<DeviceProfile> findByDeviceId(String deviceId) {
+        return deviceRepo.findByDeviceId(deviceId);
     }
 }
