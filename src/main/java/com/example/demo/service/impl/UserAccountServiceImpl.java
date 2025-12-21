@@ -1,21 +1,19 @@
-package com.example.demo.controller;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-@RestController
-@RequestMapping("/api/users")
-public class UserAccountController {
+@Service
+public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountService service;
+    @Autowired
+    private UserAccountRepository repository;
 
-    public UserAccountController(UserAccountService service) {
-        this.service = service;
-    }
-
-    @PostMapping
-    public UserAccount create(UserAccount user) {
-        return service.createUser(user);
+    @Override
+    public UserAccount createUser(UserAccount user) {
+        return repository.save(user);
     }
 }
