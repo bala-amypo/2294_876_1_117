@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 public class LoginEvent {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generate ID
     private Long id;
 
     private Long userId;
@@ -15,13 +14,23 @@ public class LoginEvent {
     private String location;
     private String deviceId;
     private String loginStatus;
-    private Boolean suspicious = false; // Must exist for suspicious queries
     private LocalDateTime timestamp;
 
-    public LoginEvent() {}
+    public LoginEvent() {
+    }
+
+    public LoginEvent(Long id, Long userId, String ipAddress, String location,
+                      String deviceId, String loginStatus) {
+        this.id = id;
+        this.userId = userId;
+        this.ipAddress = ipAddress;
+        this.location = location;
+        this.deviceId = deviceId;
+        this.loginStatus = loginStatus;
+    }
 
     @PrePersist
-    protected void onCreate() {
+    public void onCreate() {
         if (this.timestamp == null) {
             this.timestamp = LocalDateTime.now();
         }
@@ -45,9 +54,6 @@ public class LoginEvent {
 
     public String getLoginStatus() { return loginStatus; }
     public void setLoginStatus(String loginStatus) { this.loginStatus = loginStatus; }
-
-    public Boolean getSuspicious() { return suspicious; }
-    public void setSuspicious(Boolean suspicious) { this.suspicious = suspicious; }
 
     public LocalDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }

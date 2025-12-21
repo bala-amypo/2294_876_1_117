@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class UserAccount {
@@ -8,27 +9,50 @@ public class UserAccount {
     @Id
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
+    private String employeeId;
+
+    @Column(unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(unique = true)
     private String email;
 
-    private String fullName;
+    private String password;
+    private String role;
+    private String status;
+    private LocalDateTime createdAt;
 
-    // Constructors
-    public UserAccount() {}
+    public UserAccount() {
+    }
 
-    public UserAccount(String username, String email, String fullName) {
-        this.id=id;
+    public UserAccount(Long id, String employeeId, String username, String email,
+                       String password, String role, String status) {
+        this.id = id;
+        this.employeeId = employeeId;
         this.username = username;
         this.email = email;
-        this.fullName = fullName;
+        this.password = password;
+        this.role = role;
+        this.status = status;
+    }
+
+    @PrePersist
+    public void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+        if (this.status == null) {
+            this.status = "ACTIVE";
+        }
     }
 
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public String getEmployeeId() { return employeeId; }
+    public void setEmployeeId(String employeeId) { this.employeeId = employeeId; }
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
@@ -36,6 +60,15 @@ public class UserAccount {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
