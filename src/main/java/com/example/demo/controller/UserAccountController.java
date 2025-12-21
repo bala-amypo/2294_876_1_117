@@ -4,6 +4,8 @@ import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserAccountController {
@@ -14,8 +16,24 @@ public class UserAccountController {
         this.userService = userService;
     }
 
-    @PostMapping("/create")
-    public UserAccount create(@RequestBody UserAccount user) {
-        return userService.save(user);
+    @PostMapping
+    public UserAccount createUser(@RequestBody UserAccount user) {
+        return userService.createUser(user);
+    }
+
+    @GetMapping("/{id}")
+    public UserAccount getUser(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+
+    @PutMapping("/{id}/status")
+    public UserAccount updateStatus(@PathVariable Long id,
+                                    @RequestParam String status) {
+        return userService.updateUserStatus(id, status);
+    }
+
+    @GetMapping
+    public List<UserAccount> getAllUsers() {
+        return userService.getAllUsers();
     }
 }

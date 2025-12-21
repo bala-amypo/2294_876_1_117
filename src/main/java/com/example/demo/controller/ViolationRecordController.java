@@ -40,9 +40,4 @@ public class ViolationRecordController {
     public List<ViolationRecord> all() {
         return violationService.getAllViolations();
     }
-    @PostMapping("/log")
-public ViolationRecord log(@RequestBody ViolationRecord record) {
-    return violationService.logViolation(record);
-}
-
 }
