@@ -1,40 +1,39 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.DeviceProfile;
-import com.example.demo.service.DeviceProfileService;
+import com.example.demo.entity.UserAccount;
+import com.example.demo.service.UserAccountService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/devices")
-public class DeviceProfileController {
+@RequestMapping("/users")
+public class UserAccountController {
 
-    private final DeviceProfileService deviceService;
+    private final UserAccountService userService;
 
-    public DeviceProfileController(DeviceProfileService deviceService) {
-        this.deviceService = deviceService;
+    public UserAccountController(UserAccountService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
-    public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
-        return deviceService.registerDevice(device);
+    public UserAccount createUser(@RequestBody UserAccount user) {
+        return userService.createUser(user);
     }
 
-    @PutMapping("/{id}/trust")
-    public DeviceProfile updateTrust(@PathVariable Long id,
-                                     @RequestParam boolean trusted) {
-        return deviceService.updateTrustStatus(id, trusted);
+    @GetMapping("/{id}")
+    public UserAccount getUser(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<DeviceProfile> getByUser(@PathVariable Long userId) {
-        return deviceService.getDevicesByUser(userId);
+    @PutMapping("/{id}/status")
+    public UserAccount updateStatus(@PathVariable Long id,
+                                    @RequestParam String status) {
+        return userService.updateUserStatus(id, status);
     }
 
-    @GetMapping("/lookup/{deviceId}")
-    public Optional<DeviceProfile> lookup(@PathVariable String deviceId) {
-        return deviceService.findByDeviceId(deviceId);
+    @GetMapping
+    public List<UserAccount> getAllUsers() {
+        return userService.getAllUsers();
     }
 }
