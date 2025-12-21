@@ -14,4 +14,8 @@ public interface UserAccountService {
     List<UserAccount> getAllUsers();
 
     UserAccount updateStatus(Long id, String status);
+    
+    void updateUserStatus(long userId, String status);
+
+    
 }

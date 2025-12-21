@@ -12,4 +12,8 @@ public interface LoginEventService {
     List<LoginEvent> getSuspiciousLogins(Long userId);
 
     List<LoginEvent> getAllLogins();
+
+    void recordLogin(LoginEvent event);
+List<LoginEvent> getEventsByUser(long userId);
+
 }

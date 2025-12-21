@@ -63,4 +63,8 @@ public class UserAccountServiceImpl implements UserAccountService {
         user.setStatus(status);
         return userRepo.save(user);
     }
+    @Override
+public void updateUserStatus(long userId, String status) {
+}
+
 }

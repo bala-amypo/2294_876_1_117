@@ -34,4 +34,14 @@ public class LoginEventServiceImpl implements LoginEventService {
     public List<LoginEvent> getAllLogins() {
         return loginRepo.findAll();
     }
+
+    @Override
+public void recordLogin(LoginEvent event) {
+}
+
+@Override
+public List<LoginEvent> getEventsByUser(long userId) {
+    return List.of();
+}
+
 }
