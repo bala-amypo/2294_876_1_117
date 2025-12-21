@@ -6,23 +6,43 @@ import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository deviceProfileRepository;
+    private final DeviceProfileRepository deviceRepo;
 
-    public DeviceProfileServiceImpl(DeviceProfileRepository deviceProfileRepository) {
-        this.deviceProfileRepository = deviceProfileRepository;
+    public DeviceProfileServiceImpl(DeviceProfileRepository deviceRepo) {
+        this.deviceRepo = deviceRepo;
     }
 
     @Override
-    public DeviceProfile addDevice(DeviceProfile device) {
-        return deviceProfileRepository.save(device);
+    public DeviceProfile registerDevice(DeviceProfile device) {
+        deviceRepo.findByDeviceId(device.getDeviceId())
+                .ifPresent(d -> {
+                    throw new RuntimeException("Device already registered");
+                });
+
+        return deviceRepo.save(device);
+    }
+
+    @Override
+    public DeviceProfile updateTrustStatus(Long id, boolean trust) {
+        DeviceProfile device = deviceRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
+
+        device.setTrusted(trust);
+        return deviceRepo.save(device);
     }
 
     @Override
     public List<DeviceProfile> getDevicesByUser(Long userId) {
-        return deviceProfileRepository.findByUserId(userId);
+        return deviceRepo.findByUserId(userId);
+    }
+
+    @Override
+    public Optional<DeviceProfile> findByDeviceId(String deviceId) {
+        return deviceRepo.findByDeviceId(deviceId);
     }
 }
