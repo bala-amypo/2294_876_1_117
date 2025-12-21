@@ -3,41 +3,29 @@ package com.example.demo.controller;
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/device-profiles")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/devices")
+@CrossOrigin
 public class DeviceProfileController {
 
-    private final DeviceProfileService service;
+    private final DeviceProfileService deviceService;
 
-    public DeviceProfileController(DeviceProfileService service) {
-        this.service = service;
+    public DeviceProfileController(DeviceProfileService deviceService) {
+        this.deviceService = deviceService;
     }
 
+    // POST /api/devices
     @PostMapping
-    public DeviceProfile create(@RequestBody DeviceProfile profile) {
-        return service.createProfile(profile);
+    public DeviceProfile addDevice(@RequestBody DeviceProfile device) {
+        return deviceService.addDevice(device);
     }
 
-    @GetMapping
-    public List<DeviceProfile> getAll() {
-        return service.getAllProfiles();
-    }
-
-    @GetMapping("/{id}")
-    public DeviceProfile getById(@PathVariable Long id) {
-        return service.getProfileById(id);
-    }
-
-    @PutMapping("/{id}")
-    public DeviceProfile update(@PathVariable Long id, @RequestBody DeviceProfile profile) {
-        return service.updateProfile(id, profile);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.deleteProfile(id);
+    // GET /api/devices/user/{userId}
+    @GetMapping("/user/{userId}")
+    public List<DeviceProfile> getDevicesByUser(@PathVariable Long userId) {
+        return deviceService.getDevicesByUser(userId);
     }
 }
