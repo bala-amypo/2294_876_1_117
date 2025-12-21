@@ -13,7 +13,7 @@ public class PolicyRuleController {
 
     private final PolicyRuleService policyRuleService;
 
-    // REQUIRED by tests
+    // REQUIRED for tests
     public PolicyRuleController() {
         this.policyRuleService = null;
     }
@@ -28,19 +28,17 @@ public class PolicyRuleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PolicyRule> update(
-            @PathVariable Long id,
-            @RequestBody PolicyRule rule) {
+    public ResponseEntity<PolicyRule> update(@PathVariable Long id, @RequestBody PolicyRule rule) {
         return ResponseEntity.ok(policyRuleService.updateRule(id, rule));
     }
 
     @GetMapping("/active")
-    public ResponseEntity<List<PolicyRule>> activeRules() {
+    public ResponseEntity<List<PolicyRule>> active() {
         return ResponseEntity.ok(policyRuleService.getActiveRules());
     }
 
     @GetMapping
-    public ResponseEntity<List<PolicyRule>> allRules() {
+    public ResponseEntity<List<PolicyRule>> all() {  // <-- name MUST match test
         return ResponseEntity.ok(policyRuleService.getAllRules());
     }
 }
