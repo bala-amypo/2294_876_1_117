@@ -7,6 +7,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "*")  // Allow Swagger / browser access
 public class UserAccountController {
 
     private final UserAccountService userService;
@@ -15,21 +16,21 @@ public class UserAccountController {
         this.userService = userService;
     }
 
-    // Create user (POST)
+    // Create a new user (POST)
     @PostMapping
     public UserAccount createUser(@RequestBody UserAccount user) {
         return userService.createUser(user);
-    }
-
-    // Get user by ID (GET)
-    @GetMapping("/{id}")
-    public UserAccount getUser(@PathVariable Long id) {
-        return userService.getUserById(id);
     }
 
     // Get all users (GET)
     @GetMapping
     public List<UserAccount> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    // Get user by ID (GET)
+    @GetMapping("/{id}")
+    public UserAccount getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 }
