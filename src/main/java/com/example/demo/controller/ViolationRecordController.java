@@ -2,13 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/violations")
+@CrossOrigin
 public class ViolationRecordController {
 
     private final ViolationRecordService violationService;
@@ -18,27 +18,12 @@ public class ViolationRecordController {
     }
 
     @PostMapping
-    public ResponseEntity<ViolationRecord> logViolation(@RequestBody ViolationRecord violation) {
-        return ResponseEntity.ok(violationService.logViolation(violation));
+    public ViolationRecord create(@RequestBody ViolationRecord record) {
+        return violationService.createViolation(record);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ViolationRecord>> getViolationsByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(violationService.getViolationsByUser(userId));
-    }
-
-    @PutMapping("/{id}/resolve")
-    public ResponseEntity<ViolationRecord> markResolved(@PathVariable Long id) {
-        return ResponseEntity.ok(violationService.markResolved(id));
-    }
-
-    @GetMapping("/unresolved")
-    public ResponseEntity<List<ViolationRecord>> getUnresolvedViolations() {
-        return ResponseEntity.ok(violationService.getUnresolvedViolations());
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ViolationRecord>> getAllViolations() {
-        return ResponseEntity.ok(violationService.getAllViolations());
+    public List<ViolationRecord> getByUser(@PathVariable Long userId) {
+        return violationService.getViolationsByUser(userId);
     }
 }

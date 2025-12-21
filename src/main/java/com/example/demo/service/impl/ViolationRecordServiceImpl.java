@@ -1,12 +1,28 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.ViolationRecord;
+import com.example.demo.repository.ViolationRecordRepository;
+import com.example.demo.service.ViolationRecordService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface ViolationRecordService {
+@Service
+public class ViolationRecordServiceImpl implements ViolationRecordService {
 
-    ViolationRecord createViolation(ViolationRecord record);
+    private final ViolationRecordRepository violationRecordRepository;
 
-    List<ViolationRecord> getViolationsByUser(Long userId);
+    public ViolationRecordServiceImpl(ViolationRecordRepository violationRecordRepository) {
+        this.violationRecordRepository = violationRecordRepository;
+    }
+
+    @Override
+    public ViolationRecord createViolation(ViolationRecord record) {
+        return violationRecordRepository.save(record);
+    }
+
+    @Override
+    public List<ViolationRecord> getViolationsByUser(Long userId) {
+        return violationRecordRepository.findByUserId(userId);
+    }
 }
