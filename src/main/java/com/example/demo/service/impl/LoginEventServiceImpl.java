@@ -4,10 +4,10 @@ import com.example.demo.entity.LoginEvent;
 import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
 import com.example.demo.util.RuleEvaluationUtil;
-
-import java.util.List;
-
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class LoginEventServiceImpl implements LoginEventService {
@@ -21,30 +21,29 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
-    public List<LoginEvent> getEventsByUser(long userId) {  // match primitive long
-        return loginRepo.findByUserId(userId);
-    }
-
-    @Override
-    public List<LoginEvent> getSuspiciousLogins(long userId) {
-        return loginRepo.findByUserIdAndLoginStatus(userId, "FAILED");
-    }
-
-    @Override
-    public LoginEvent recordLogin(LoginEvent event) {
+    public void recordLogin(LoginEvent event) {
         if (event.getIpAddress() == null || event.getDeviceId() == null) {
             throw new IllegalArgumentException("IP address and Device ID are required");
         }
 
         if (event.getTimestamp() == null) {
-            event.setTimestamp(java.time.LocalDateTime.now());
+            event.setTimestamp(LocalDateTime.now());
         }
 
-        LoginEvent saved = loginRepo.save(event);
+        loginRepo.save(event);
 
-        ruleEvaluator.evaluateLoginEvent(saved);
+        // Evaluate rules for the login event
+        ruleEvaluator.evaluateLoginEvent(event);
+    }
 
-        return saved;
+    @Override
+    public List<LoginEvent> getEventsByUser(Long userId) {
+        return loginRepo.findByUserId(userId);
+    }
+
+    @Override
+    public List<LoginEvent> getSuspiciousLogins(Long userId) {
+        return loginRepo.findByUserIdAndLoginStatus(userId, "FAILED");
     }
 
     @Override
