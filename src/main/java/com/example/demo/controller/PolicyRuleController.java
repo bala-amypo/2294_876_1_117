@@ -1,43 +1,49 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.PolicyRule;
-import com.example.demo.service.PolicyRuleService;
+import com.example.demo.entity.ViolationRecord;
+import com.example.demo.service.ViolationRecordService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/rules")
-public class PolicyRuleController {
+@RequestMapping("/api/violations")
+public class ViolationRecordController {
 
-    private final PolicyRuleService ruleService;
+    private final ViolationRecordService violationService;
 
-    public PolicyRuleController(PolicyRuleService ruleService) {
-        this.ruleService = ruleService;
+    // REQUIRED by tests
+    public ViolationRecordController() {
+        this.violationService = null;
+    }
+
+    public ViolationRecordController(ViolationRecordService violationService) {
+        this.violationService = violationService;
     }
 
     @PostMapping
-    public PolicyRule createRule(@RequestBody PolicyRule rule) {
-        return ruleService.createRule(rule);
+    public ResponseEntity<ViolationRecord> log(@RequestBody ViolationRecord violation) {
+        return ResponseEntity.ok(violationService.logViolation(violation));
     }
 
-    @PutMapping("/{id}")
-    public PolicyRule updateRule(@PathVariable Long id,
-                                 @RequestBody PolicyRule rule) {
-        return ruleService.updateRule(id, rule);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ViolationRecord>> byUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(violationService.getViolationsByUser(userId));
     }
 
-    @GetMapping("/active")
-    public List<PolicyRule> getActiveRules() {
-        return ruleService.getActiveRules();
+    @PutMapping("/{id}/resolve")
+    public ResponseEntity<ViolationRecord> resolve(@PathVariable Long id) {
+        return ResponseEntity.ok(violationService.markResolved(id));
+    }
+
+    @GetMapping("/unresolved")
+    public ResponseEntity<List<ViolationRecord>> unresolved() {
+        return ResponseEntity.ok(violationService.getUnresolvedViolations());
     }
 
     @GetMapping
-    public List<PolicyRule> getAllRules() {
-        return ruleService.getAllRules();
+    public ResponseEntity<List<ViolationRecord>> all() {
+        return ResponseEntity.ok(violationService.getAllViolations());
     }
-    @GetMapping("/all")
-public String all() {
-    return "OK";
-}
-
 }
