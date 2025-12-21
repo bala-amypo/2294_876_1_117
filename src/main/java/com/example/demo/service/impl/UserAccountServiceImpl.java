@@ -1,55 +1,43 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserAccount;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository userRepo;
+    private final UserAccountRepository userAccountRepository;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepo) {
-        this.userRepo = userRepo;
+    public UserAccountServiceImpl(UserAccountRepository userAccountRepository) {
+        this.userAccountRepository = userAccountRepository;
     }
 
+    // Dummy register (NO password encoding, NO security)
     @Override
-    public UserAccount createUser(UserAccount user) {
-        if (userRepo.findByUsername(user.getUsername()).isPresent()) {
-            throw new BadRequestException("Username already exists");
-        }
-        if (userRepo.findByEmail(user.getEmail()).isPresent()) {
-            throw new BadRequestException("Email already exists");
-        }
-        return userRepo.save(user);
+    public UserAccount register(UserAccount user) {
+        return userAccountRepository.save(user);
     }
 
     @Override
     public UserAccount getUserById(Long id) {
-        return userRepo.findById(id)
+        return userAccountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
     public List<UserAccount> getAllUsers() {
-        return userRepo.findAll();
+        return userAccountRepository.findAll();
     }
 
     @Override
-    public UserAccount findByUsername(String username) {
-        return userRepo.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    public UserAccount updateUserStatus(Long id, String status) {
+        UserAccount user = getUserById(id);
+        user.setStatus(status);
+        return userAccountRepository.save(user);
     }
-    @Override
-public DeviceProfile updateProfile(Long id, DeviceProfile profile) {
-    DeviceProfile existing = getProfileById(id);
-    existing.setName(profile.getName());
-    existing.setDescription(profile.getDescription());
-    return repo.save(existing);
-}
-
 }

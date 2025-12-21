@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.DeviceProfile;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
@@ -11,39 +10,19 @@ import java.util.List;
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository repo;
+    private final DeviceProfileRepository deviceProfileRepository;
 
-    public DeviceProfileServiceImpl(DeviceProfileRepository repo) {
-        this.repo = repo;
+    public DeviceProfileServiceImpl(DeviceProfileRepository deviceProfileRepository) {
+        this.deviceProfileRepository = deviceProfileRepository;
     }
 
     @Override
-    public DeviceProfile createProfile(DeviceProfile profile) {
-        return repo.save(profile);
+    public DeviceProfile addDevice(DeviceProfile device) {
+        return deviceProfileRepository.save(device);
     }
 
     @Override
-    public DeviceProfile getProfileById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("DeviceProfile not found"));
-    }
-
-    @Override
-    public List<DeviceProfile> getAllProfiles() {
-        return repo.findAll();
-    }
-
-    @Override
-    public DeviceProfile updateProfile(Long id, DeviceProfile profile) {
-        DeviceProfile existing = getProfileById(id);
-        existing.setName(profile.getName());
-        existing.setDescription(profile.getDescription());
-        return repo.save(existing);
-    }
-
-    @Override
-    public void deleteProfile(Long id) {
-        DeviceProfile existing = getProfileById(id);
-        repo.delete(existing);
+    public List<DeviceProfile> getDevicesByUser(Long userId) {
+        return deviceProfileRepository.findByUserId(userId);
     }
 }

@@ -1,30 +1,29 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.service.UserAccountService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")  // Allow Swagger / browser access
+@RequestMapping("/auth")
+@CrossOrigin
 public class AuthController {
 
-    private final UserAccountService userService;
+    private final UserAccountService userAccountService;
 
-    public AuthController(UserAccountService userService) {
-        this.userService = userService;
+    public AuthController(UserAccountService userAccountService) {
+        this.userAccountService = userAccountService;
     }
 
-    // Simple login check (POST)
+    // Dummy register
+    @PostMapping("/register")
+    public UserAccount register(@RequestBody UserAccount user) {
+        return userAccountService.register(user);
+    }
+
+    // Dummy login (NO security)
     @PostMapping("/login")
-    public UserAccount login(@RequestParam String username, @RequestParam String email) {
-        UserAccount user = userService.findByUsername(username);
-
-        if (!user.getEmail().equals(email)) {
-            throw new BadRequestException("Invalid email for the given username");
-        }
-
-        return user;  // Login successful
+    public String login() {
+        return "Login successful (dummy)";
     }
 }

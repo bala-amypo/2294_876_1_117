@@ -1,61 +1,28 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.PolicyRule;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.PolicyRuleRepository;
 import com.example.demo.service.PolicyRuleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    private final PolicyRuleRepository ruleRepo;
+    private final PolicyRuleRepository policyRuleRepository;
 
-    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepo) {
-        this.ruleRepo = ruleRepo;
+    public PolicyRuleServiceImpl(PolicyRuleRepository policyRuleRepository) {
+        this.policyRuleRepository = policyRuleRepository;
     }
 
     @Override
     public PolicyRule createRule(PolicyRule rule) {
-
-        ruleRepo.findByRuleCode(rule.getRuleCode())
-                .ifPresent(r -> {
-                    throw new BadRequestException("Rule code already exists");
-                });
-
-        return ruleRepo.save(rule);
-    }
-
-    @Override
-    public PolicyRule updateRule(Long id, PolicyRule updated) {
-
-        PolicyRule existing = ruleRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
-
-        existing.setDescription(updated.getDescription());
-        existing.setSeverity(updated.getSeverity());
-        existing.setConditionsJson(updated.getConditionsJson());
-        existing.setActive(updated.getActive());
-
-        return ruleRepo.save(existing);
-    }
-
-    @Override
-    public List<PolicyRule> getActiveRules() {
-        return ruleRepo.findByActiveTrue();
-    }
-
-    @Override
-    public Optional<PolicyRule> getRuleByCode(String ruleCode) {
-        return ruleRepo.findByRuleCode(ruleCode);
+        return policyRuleRepository.save(rule);
     }
 
     @Override
     public List<PolicyRule> getAllRules() {
-        return ruleRepo.findAll();
+        return policyRuleRepository.findAll();
     }
 }
