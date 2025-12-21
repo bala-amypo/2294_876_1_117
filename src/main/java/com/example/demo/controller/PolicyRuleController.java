@@ -7,38 +7,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rules")
+@RequestMapping("/policies")
 public class PolicyRuleController {
 
-    private final PolicyRuleService ruleService;
+    private final PolicyRuleService policyRuleService;
 
-    public PolicyRuleController(PolicyRuleService ruleService) {
-        this.ruleService = ruleService;
+    public PolicyRuleController(PolicyRuleService policyRuleService) {
+        this.policyRuleService = policyRuleService;
     }
 
-    @PostMapping
-    public PolicyRule createRule(@RequestBody PolicyRule rule) {
-        return ruleService.createRule(rule);
-    }
-
-    @PutMapping("/{id}")
-    public PolicyRule updateRule(@PathVariable Long id,
-                                 @RequestBody PolicyRule rule) {
-        return ruleService.updateRule(id, rule);
-    }
-
-    @GetMapping("/active")
-    public List<PolicyRule> activeRules() {
-        return ruleService.getActiveRules();
-    }
-
-    @GetMapping
-    public List<PolicyRule> allRules() {
-        return ruleService.getAllRules();
-    }
     @GetMapping
     public List<PolicyRule> all() {
-    return policyRuleService.getAllRules();
-}
-
+        return policyRuleService.getAllRules();
+    }
 }
