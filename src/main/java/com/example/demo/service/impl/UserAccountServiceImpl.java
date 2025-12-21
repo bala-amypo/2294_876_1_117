@@ -1,37 +1,54 @@
-package com.example.demo.controller;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-@RestController
-@RequestMapping("/users")
-public class UserAccountController {
+import java.util.List;
 
-    private final UserAccountService userAccountService;
+@Service
+public class UserAccountServiceImpl implements UserAccountService {
 
-    // Required by test cases
-    public UserAccountController() {
-        this.userAccountService = null;
+    private final UserAccountRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserAccountServiceImpl(UserAccountRepository userRepo, PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public UserAccountController(UserAccountService userAccountService) {
-        this.userAccountService = userAccountService;
+    @Override
+    public UserAccount createUser(UserAccount user) {
+        // hash password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getStatus() == null) user.setStatus("ACTIVE");
+        return userRepo.save(user);
     }
 
-    @PostMapping
-    public ResponseEntity<UserAccount> create(@RequestBody UserAccount user) {
-        return ResponseEntity.ok(userAccountService.createUser(user));
+    @Override
+    public UserAccount getUserById(Long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserAccount> getById(@PathVariable long id) {
-        return ResponseEntity.ok(userAccountService.getUserById(id));
+    @Override
+    public UserAccount updateUserStatus(Long id, String status) {
+        UserAccount user = getUserById(id);
+        user.setStatus(status);
+        return userRepo.save(user);
     }
 
-    @GetMapping("/username/{username}")
-    public ResponseEntity<UserAccount> getByUsername(@PathVariable String username) {
-        return ResponseEntity.ok(userAccountService.findByUsername(username));
+    @Override
+    public List<UserAccount> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    @Override
+    public UserAccount findByUsername(String username) {
+        return userRepo.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username " + username));
     }
 }
