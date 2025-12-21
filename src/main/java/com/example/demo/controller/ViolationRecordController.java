@@ -17,7 +17,7 @@ public class ViolationRecordController {
     }
 
     @PostMapping
-    public ViolationRecord createViolation(@RequestBody ViolationRecord violation) {
+    public ViolationRecord create(@RequestBody ViolationRecord violation) {
         return violationService.logViolation(violation);
     }
 

@@ -5,6 +5,7 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,17 +21,25 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
 
     @Override
     public ViolationRecord logViolation(ViolationRecord violation) {
-        violation.setDetectedAt(LocalDateTime.now());
-        violation.setResolved(false);
+        if (violation.getDetectedAt() == null) {
+            violation.setDetectedAt(LocalDateTime.now());
+        }
+        if (violation.getResolved() == null) {
+            violation.setResolved(false);
+        }
         return violationRepo.save(violation);
     }
 
+    // 🔥 THIS IS THE CRITICAL FIX
     @Override
+    @Transactional
     public ViolationRecord markResolved(Long id) {
         ViolationRecord violation = violationRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Violation not found"));
 
         violation.setResolved(true);
+
+        // Explicit save to guarantee update
         return violationRepo.save(violation);
     }
 
