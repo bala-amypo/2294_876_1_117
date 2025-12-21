@@ -22,31 +22,21 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount getUserById(long id) {
-        // dummy return to make test compile
-        return new UserAccount();
+        return new UserAccount(); // dummy
     }
 
     @Override
     public List<UserAccount> getAllUsers() {
         return new ArrayList<>();
     }
-}
-@Override
-public UserAccount createUser(UserAccount user) {
-    return user; // dummy implementation
-}
 
-@Override
-public UserAccount findByUsername(String username) {
-    return new UserAccount(); // dummy
-}
+    @Override
+    public UserAccount createUser(UserAccount user) {
+        return user; // dummy
+    }
 
-@Override
-public UserAccount createUser(UserAccount user) {
-    return user; // dummy implementation
-}
-
-@Override
-public UserAccount findByUsername(String username) {
-    return new UserAccount(); // dummy
+    @Override
+    public UserAccount findByUsername(String username) {
+        return new UserAccount(); // dummy
+    }
 }
