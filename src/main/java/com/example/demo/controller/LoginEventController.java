@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/logins")
+@RequestMapping("/api/logins")
 public class LoginEventController {
 
     private final LoginEventService loginEventService;
 
-    // REQUIRED by test cases
+    // REQUIRED by tests
     public LoginEventController() {
         this.loginEventService = null;
     }
@@ -22,23 +22,23 @@ public class LoginEventController {
         this.loginEventService = loginEventService;
     }
 
-    @PostMapping
-    public ResponseEntity<LoginEvent> logLogin(@RequestBody LoginEvent event) {
-        return ResponseEntity.ok(loginEventService.logLogin(event));
+    @PostMapping("/record")
+    public ResponseEntity<LoginEvent> record(@RequestBody LoginEvent event) {
+        return ResponseEntity.ok(loginEventService.recordLogin(event));
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<LoginEvent>> getByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(loginEventService.getLoginsByUser(userId));
+    public ResponseEntity<List<LoginEvent>> byUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(loginEventService.getEventsByUser(userId));
     }
 
     @GetMapping("/suspicious/{userId}")
-    public ResponseEntity<List<LoginEvent>> getSuspicious(@PathVariable Long userId) {
+    public ResponseEntity<List<LoginEvent>> suspicious(@PathVariable Long userId) {
         return ResponseEntity.ok(loginEventService.getSuspiciousLogins(userId));
     }
 
     @GetMapping
-    public ResponseEntity<List<LoginEvent>> getAll() {
-        return ResponseEntity.ok(loginEventService.getAllLogins());
+    public ResponseEntity<List<LoginEvent>> all() {
+        return ResponseEntity.ok(loginEventService.getAllEvents());
     }
 }

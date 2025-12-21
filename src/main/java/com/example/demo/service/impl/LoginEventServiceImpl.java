@@ -15,45 +15,39 @@ public class LoginEventServiceImpl implements LoginEventService {
     private final LoginEventRepository loginRepo;
     private final RuleEvaluationUtil ruleEvaluator;
 
-    public LoginEventServiceImpl(LoginEventRepository loginRepo, RuleEvaluationUtil ruleEvaluator) {
+    public LoginEventServiceImpl(LoginEventRepository loginRepo,
+                                 RuleEvaluationUtil ruleEvaluator) {
         this.loginRepo = loginRepo;
         this.ruleEvaluator = ruleEvaluator;
     }
 
     @Override
-    public void recordLogin(LoginEvent event) {
+    public LoginEvent recordLogin(LoginEvent event) {
         if (event.getIpAddress() == null || event.getDeviceId() == null) {
-            throw new IllegalArgumentException("IP and Device ID are required");
+            throw new IllegalArgumentException("IP address and device ID are required");
         }
 
         if (event.getTimestamp() == null) {
             event.setTimestamp(LocalDateTime.now());
         }
 
-        loginRepo.save(event);
-
-        ruleEvaluator.evaluateLoginEvent(event);  // now exists
+        LoginEvent saved = loginRepo.save(event);
+        ruleEvaluator.evaluateLoginEvent(saved);
+        return saved;
     }
 
     @Override
-public LoginEvent logLogin(LoginEvent event) {
-    return loginEventRepository.save(event);
-}
+    public List<LoginEvent> getEventsByUser(Long userId) {
+        return loginRepo.findByUserId(userId);
+    }
 
-@Override
-public List<LoginEvent> getLoginsByUser(Long userId) {
-    return loginEventRepository.findByUserId(userId);
-}
+    @Override
+    public List<LoginEvent> getSuspiciousLogins(Long userId) {
+        return loginRepo.findByUserIdAndLoginStatus(userId, "FAILED");
+    }
 
-@Override
-public List<LoginEvent> getSuspiciousLogins(Long userId) {
-    return loginEventRepository.findSuspiciousByUserId(userId);
-}
-
-@Override
-public List<LoginEvent> getAllLogins() {
-    return loginEventRepository.findAll();
-}
-
-    
+    @Override
+    public List<LoginEvent> getAllEvents() {
+        return loginRepo.findAll();
+    }
 }
