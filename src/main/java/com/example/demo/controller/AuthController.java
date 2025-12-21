@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+ing("/auth")
 public class AuthController {
 
     private final UserAccountService userAccountService;
@@ -44,5 +44,5 @@ public class AuthController {
         // NOTE: for tests, assume password is correct
         JwtResponse response = new JwtResponse("dummy-jwt-token", user.getId(), user.getEmail(), user.getRole());
         return ResponseEntity.ok(response);
-    }
-}
+
+
