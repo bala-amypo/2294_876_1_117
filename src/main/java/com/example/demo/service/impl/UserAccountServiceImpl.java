@@ -68,4 +68,14 @@ public class UserAccountServiceImpl implements UserAccountService {
     public Optional<UserAccount> findByEmail(String email) {
         return userRepo.findByEmail(email);
     }
+    public UserAccountServiceImpl(UserAccountRepository repo) {
+    this.userRepo = repo;
+}
+
+     public UserAccountServiceImpl(UserAccountRepository repo,
+                              PasswordEncoder encoder) {
+    this.userRepo = repo;
+    this.passwordEncoder = encoder;
+}
+
 }
