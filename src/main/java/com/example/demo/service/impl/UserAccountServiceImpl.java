@@ -1,81 +1,83 @@
-package com.example.demo.service.impl;
+// package com.example.demo.service.impl;
 
-import com.example.demo.entity.UserAccount;
-import com.example.demo.repository.UserAccountRepository;
-import com.example.demo.service.UserAccountService;
-import org.springframework.stereotype.Service;
+// import com.example.demo.entity.UserAccount;
+// import com.example.demo.repository.UserAccountRepository;
+// import com.example.demo.service.UserAccountService;
+// import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+// import java.util.List;
+// import java.util.Optional;
 
-@Service
-public class UserAccountServiceImpl implements UserAccountService {
+// @Service
+// public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository userRepo;
+//     private final UserAccountRepository userRepo;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepo) {
-        this.userRepo = userRepo;
-    }
+//     public UserAccountServiceImpl(UserAccountRepository userRepo) {
+//         this.userRepo = userRepo;
+//     }
 
-    @Override
-    public UserAccount createUser(UserAccount user) {
-        if (user.getUsername() == null || user.getEmail() == null || user.getEmployeeId() == null) {
-            throw new IllegalArgumentException("Employee ID, username, and email are required");
-        }
+//     @Override
+//     public UserAccount createUser(UserAccount user) {
+//         if (user.getUsername() == null || user.getEmail() == null || user.getEmployeeId() == null) {
+//             throw new IllegalArgumentException("Employee ID, username, and email are required");
+//         }
 
-        if (userRepo.findByUsername(user.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
-        }
+//         if (userRepo.findByUsername(user.getUsername()).isPresent()) {
+//             throw new IllegalArgumentException("Username already exists");
+//         }
 
-        if (userRepo.findByEmail(user.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
-        }
+//         if (userRepo.findByEmail(user.getEmail()).isPresent()) {
+//             throw new IllegalArgumentException("Email already exists");
+//         }
 
-        if (user.getStatus() == null) {
-            user.setStatus("ACTIVE");
-        }
-        if (user.getRole() == null) {
-            user.setRole("USER");
-        }
+//         if (user.getStatus() == null) {
+//             user.setStatus("ACTIVE");
+//         }
+//         if (user.getRole() == null) {
+//             user.setRole("USER");
+//         }
 
-        return userRepo.save(user);
-    }
+//         return userRepo.save(user);
+//     }
 
-    @Override
-    public UserAccount getUserById(Long id) {
-        return userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
+//     @Override
+//     public UserAccount getUserById(Long id) {
+//         return userRepo.findById(id)
+//                 .orElseThrow(() -> new RuntimeException("User not found"));
+//     }
 
-    @Override
-    public UserAccount updateUserStatus(Long id, String status) {
-        UserAccount user = getUserById(id);
-        user.setStatus(status);
-        return userRepo.save(user);
-    }
+//     @Override
+//     public UserAccount updateUserStatus(Long id, String status) {
+//         UserAccount user = getUserById(id);
+//         user.setStatus(status);
+//         return userRepo.save(user);
+//     }
 
-    @Override
-    public List<UserAccount> getAllUsers() {
-        return userRepo.findAll();
-    }
+//     @Override
+//     public List<UserAccount> getAllUsers() {
+//         return userRepo.findAll();
+//     }
 
-    @Override
-    public Optional<UserAccount> findByUsername(String username) {
-        return userRepo.findByUsername(username);
-    }
+//     @Override
+//     public Optional<UserAccount> findByUsername(String username) {
+//         return userRepo.findByUsername(username);
+//     }
 
-    @Override
-    public Optional<UserAccount> findByEmail(String email) {
-        return userRepo.findByEmail(email);
-    }
-    public UserAccountServiceImpl(UserAccountRepository repo) {
-    this.userRepo = repo;
-}
+//     @Override
+//     public Optional<UserAccount> findByEmail(String email) {
+//         return userRepo.findByEmail(email);
+//     }
+//     public UserAccountServiceImpl(UserAccountRepository repo) {
+//     this.userRepo = repo;
+// }
 
-     public UserAccountServiceImpl(UserAccountRepository repo,
-                              PasswordEncoder encoder) {
-    this.userRepo = repo;
-    this.passwordEncoder = encoder;
-}
+//      public UserAccountServiceImpl(UserAccountRepository repo,
+//                               PasswordEncoder encoder) {
+//     this.userRepo = repo;
+//     this.passwordEncoder = encoder;
+// }
 
-}
+// }
+
+
