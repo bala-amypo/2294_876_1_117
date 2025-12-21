@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,18 +11,10 @@ import java.util.Optional;
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository userRepo;
-    private PasswordEncoder passwordEncoder;
 
-    // Spring constructor
+    // ✅ SINGLE constructor → Spring can inject properly
     public UserAccountServiceImpl(UserAccountRepository userRepo) {
         this.userRepo = userRepo;
-    }
-
-    // Test constructor
-    public UserAccountServiceImpl(UserAccountRepository userRepo,
-                                  PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -33,9 +24,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        if (passwordEncoder != null && user.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
         return userRepo.save(user);
     }
 
