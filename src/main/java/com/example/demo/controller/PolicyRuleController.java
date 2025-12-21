@@ -3,11 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.entity.PolicyRule;
 import com.example.demo.service.PolicyRuleService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/rules")
+@RequestMapping("/rules")
 public class PolicyRuleController {
 
     private final PolicyRuleService ruleService;
@@ -21,32 +21,19 @@ public class PolicyRuleController {
         return ruleService.createRule(rule);
     }
 
-    @GetMapping("/{id}")
-    public PolicyRule getRule(@PathVariable Long id) {
-        return ruleService.getAllRules().stream()
-                .filter(r -> r.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Rule not found"));
+    @PutMapping("/{id}")
+    public PolicyRule updateRule(@PathVariable Long id,
+                                 @RequestBody PolicyRule rule) {
+        return ruleService.updateRule(id, rule);
     }
 
     @GetMapping("/active")
-    public List<PolicyRule> getActiveRules() {
+    public List<PolicyRule> activeRules() {
         return ruleService.getActiveRules();
     }
 
     @GetMapping
-    public List<PolicyRule> getAllRules() {
+    public List<PolicyRule> allRules() {
         return ruleService.getAllRules();
-    }
-
-    @PutMapping("/{id}")
-    public PolicyRule updateRule(@PathVariable Long id, @RequestBody PolicyRule updated) {
-        return ruleService.updateRule(id, updated);
-    }
-
-    @DeleteMapping("/{id}")
-    public String deleteRule(@PathVariable Long id) {
-        ruleService.getAllRules().removeIf(r -> r.getId().equals(id));
-        return "Rule deleted successfully";
     }
 }

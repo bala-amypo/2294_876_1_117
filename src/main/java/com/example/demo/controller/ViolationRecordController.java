@@ -8,11 +8,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/violations")
-public class ViolationController {
+public class ViolationRecordController {
 
     private final ViolationRecordService violationService;
 
-    public ViolationController(ViolationRecordService violationService) {
+    public ViolationRecordController(ViolationRecordService violationService) {
         this.violationService = violationService;
     }
 
