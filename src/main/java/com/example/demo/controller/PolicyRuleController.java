@@ -11,34 +11,29 @@ import java.util.List;
 @RequestMapping("/api/rules")
 public class PolicyRuleController {
 
-    private final PolicyRuleService policyRuleService;
+    private final PolicyRuleService ruleService;
 
-    // REQUIRED for tests
-    public PolicyRuleController() {
-        this.policyRuleService = null;
-    }
-
-    public PolicyRuleController(PolicyRuleService policyRuleService) {
-        this.policyRuleService = policyRuleService;
+    public PolicyRuleController(PolicyRuleService ruleService) {
+        this.ruleService = ruleService;
     }
 
     @PostMapping
-    public ResponseEntity<PolicyRule> create(@RequestBody PolicyRule rule) {
-        return ResponseEntity.ok(policyRuleService.createRule(rule));
+    public ResponseEntity<PolicyRule> createRule(@RequestBody PolicyRule rule) {
+        return ResponseEntity.ok(ruleService.createRule(rule));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PolicyRule> update(@PathVariable Long id, @RequestBody PolicyRule rule) {
-        return ResponseEntity.ok(policyRuleService.updateRule(id, rule));
+    public ResponseEntity<PolicyRule> updateRule(@PathVariable Long id, @RequestBody PolicyRule updated) {
+        return ResponseEntity.ok(ruleService.updateRule(id, updated));
     }
 
     @GetMapping("/active")
-    public ResponseEntity<List<PolicyRule>> active() {
-        return ResponseEntity.ok(policyRuleService.getActiveRules());
+    public ResponseEntity<List<PolicyRule>> getActiveRules() {
+        return ResponseEntity.ok(ruleService.getActiveRules());
     }
 
     @GetMapping
-    public ResponseEntity<List<PolicyRule>> all() {  // <-- name MUST match test
-        return ResponseEntity.ok(policyRuleService.getAllRules());
+    public ResponseEntity<List<PolicyRule>> getAllRules() {
+        return ResponseEntity.ok(ruleService.getAllRules());
     }
 }

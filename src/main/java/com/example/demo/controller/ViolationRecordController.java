@@ -13,37 +13,32 @@ public class ViolationRecordController {
 
     private final ViolationRecordService violationService;
 
-    // REQUIRED by tests
-    public ViolationRecordController() {
-        this.violationService = null;
-    }
-
     public ViolationRecordController(ViolationRecordService violationService) {
         this.violationService = violationService;
     }
 
     @PostMapping
-    public ResponseEntity<ViolationRecord> log(@RequestBody ViolationRecord violation) {
+    public ResponseEntity<ViolationRecord> logViolation(@RequestBody ViolationRecord violation) {
         return ResponseEntity.ok(violationService.logViolation(violation));
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ViolationRecord>> byUser(@PathVariable Long userId) {
+    public ResponseEntity<List<ViolationRecord>> getViolationsByUser(@PathVariable Long userId) {
         return ResponseEntity.ok(violationService.getViolationsByUser(userId));
     }
 
     @PutMapping("/{id}/resolve")
-    public ResponseEntity<ViolationRecord> resolve(@PathVariable Long id) {
+    public ResponseEntity<ViolationRecord> markResolved(@PathVariable Long id) {
         return ResponseEntity.ok(violationService.markResolved(id));
     }
 
     @GetMapping("/unresolved")
-    public ResponseEntity<List<ViolationRecord>> unresolved() {
+    public ResponseEntity<List<ViolationRecord>> getUnresolvedViolations() {
         return ResponseEntity.ok(violationService.getUnresolvedViolations());
     }
 
     @GetMapping
-    public ResponseEntity<List<ViolationRecord>> all() {
+    public ResponseEntity<List<ViolationRecord>> getAllViolations() {
         return ResponseEntity.ok(violationService.getAllViolations());
     }
 }

@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,32 +11,29 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserAccountController {
 
-    private final UserAccountService userAccountService;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final UserAccountService userService;
 
-    public UserAccountController(UserAccountService userAccountService, BCryptPasswordEncoder passwordEncoder) {
-        this.userAccountService = userAccountService;
-        this.passwordEncoder = passwordEncoder;
+    public UserAccountController(UserAccountService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
-    public UserAccount create(@RequestBody UserAccount user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userAccountService.createUser(user);
+    public ResponseEntity<UserAccount> createUser(@RequestBody UserAccount user) {
+        return ResponseEntity.ok(userService.createUser(user));
     }
 
     @GetMapping("/{id}")
-    public UserAccount getById(@PathVariable Long id) {
-        return userAccountService.getUserById(id);
+    public ResponseEntity<UserAccount> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PutMapping("/{id}/status")
-    public UserAccount updateStatus(@PathVariable Long id, @RequestParam String status) {
-        return userAccountService.updateUserStatus(id, status);
+    public ResponseEntity<UserAccount> updateUserStatus(@PathVariable Long id, @RequestParam String status) {
+        return ResponseEntity.ok(userService.updateUserStatus(id, status));
     }
 
     @GetMapping
-    public List<UserAccount> getAll() {
-        return userAccountService.getAllUsers();
+    public ResponseEntity<List<UserAccount>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 }

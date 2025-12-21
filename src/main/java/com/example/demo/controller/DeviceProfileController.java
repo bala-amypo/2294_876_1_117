@@ -2,7 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.service.DeviceProfileService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -16,29 +18,22 @@ public class DeviceProfileController {
     }
 
     @PostMapping
-    public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
-        return deviceService.registerDevice(device);
+    public ResponseEntity<DeviceProfile> registerDevice(@RequestBody DeviceProfile device) {
+        return ResponseEntity.ok(deviceService.registerDevice(device));
     }
 
     @PutMapping("/{id}/trust")
-    public DeviceProfile updateTrust(@PathVariable Long id,
-                                     @RequestParam boolean trust) {
-        return deviceService.updateTrustStatus(id, trust);
+    public ResponseEntity<DeviceProfile> updateTrustStatus(@PathVariable Long id, @RequestParam boolean trust) {
+        return ResponseEntity.ok(deviceService.updateTrustStatus(id, trust));
     }
 
     @GetMapping("/user/{userId}")
-    public List<DeviceProfile> getDevicesByUser(@PathVariable Long userId) {
-        return deviceService.getDevicesByUser(userId);
+    public ResponseEntity<List<DeviceProfile>> getDevicesByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(deviceService.getDevicesByUser(userId));
     }
 
     @GetMapping("/lookup/{deviceId}")
-    public DeviceProfile getByDeviceId(@PathVariable String deviceId) {
-        return deviceService.findByDeviceId(deviceId)
-                .orElseThrow(() -> new IllegalArgumentException("Device not found"));
+    public ResponseEntity<DeviceProfile> getDeviceById(@PathVariable String deviceId) {
+        return ResponseEntity.of(deviceService.findByDeviceId(deviceId));
     }
-    @GetMapping("/lookup/{id}")
-public String lookup(@PathVariable String id) {
-    return "OK";
-}
-
 }
