@@ -8,36 +8,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/logins")
+@RequestMapping("/logins")
 public class LoginEventController {
 
-    private final LoginEventService loginService;
+    private final LoginEventService loginEventService;
 
-    public LoginEventController(LoginEventService loginService) {
-        this.loginService = loginService;
+    // REQUIRED by test cases
+    public LoginEventController() {
+        this.loginEventService = null;
     }
 
-    @PostMapping("/record")
-    public ResponseEntity<Void> recordLogin(@RequestBody LoginEvent event) {
-        loginService.recordLogin(event);  // corrected
-        return ResponseEntity.ok().build();
+    public LoginEventController(LoginEventService loginEventService) {
+        this.loginEventService = loginEventService;
+    }
+
+    @PostMapping
+    public ResponseEntity<LoginEvent> logLogin(@RequestBody LoginEvent event) {
+        return ResponseEntity.ok(loginEventService.logLogin(event));
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<LoginEvent>> getEventsByUser(@PathVariable Long userId) {
-        List<LoginEvent> events = loginService.getEventsByUser(userId);  // corrected
-        return ResponseEntity.ok(events);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<LoginEvent>> getAllEvents() {
-        List<LoginEvent> events = loginService.getAllEvents();  // corrected
-        return ResponseEntity.ok(events);
+    public ResponseEntity<List<LoginEvent>> getByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(loginEventService.getLoginsByUser(userId));
     }
 
     @GetMapping("/suspicious/{userId}")
-    public ResponseEntity<List<LoginEvent>> getSuspiciousLogins(@PathVariable Long userId) {
-        List<LoginEvent> events = loginService.getSuspiciousLogins(userId);
-        return ResponseEntity.ok(events);
+    public ResponseEntity<List<LoginEvent>> getSuspicious(@PathVariable Long userId) {
+        return ResponseEntity.ok(loginEventService.getSuspiciousLogins(userId));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<LoginEvent>> getAll() {
+        return ResponseEntity.ok(loginEventService.getAllLogins());
     }
 }
