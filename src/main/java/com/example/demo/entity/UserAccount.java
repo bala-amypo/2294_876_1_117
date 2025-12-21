@@ -1,15 +1,14 @@
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class UserAccount {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true)
     private String employeeId;
 
@@ -20,16 +19,35 @@ public class UserAccount {
     private String email;
 
     private String password;
-
-    private String role = "USER";
-
-    private String status = "ACTIVE";
-
+    private String role;
+    private String status;
     private LocalDateTime createdAt;
 
-    public UserAccount() {}
+    public UserAccount() {
+    }
 
-    // Getters and setters for all fields
+    public UserAccount(Long id, String employeeId, String username, String email,
+                       String password, String role, String status) {
+        this.id = id;
+        this.employeeId = employeeId;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.status = status;
+    }
+
+    @PrePersist
+    public void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+        if (this.status == null) {
+            this.status = "ACTIVE";
+        }
+    }
+
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -53,14 +71,4 @@ public class UserAccount {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    @PrePersist
-    public void prePersist() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
-        if (status == null) {
-            status = "ACTIVE";
-        }
-    }
 }
