@@ -15,8 +15,7 @@ public class LoginEventServiceImpl implements LoginEventService {
     private final LoginEventRepository loginRepo;
     private final RuleEvaluationUtil ruleEvaluator;
 
-    public LoginEventServiceImpl(LoginEventRepository loginRepo,
-                                 RuleEvaluationUtil ruleEvaluator) {
+    public LoginEventServiceImpl(LoginEventRepository loginRepo, RuleEvaluationUtil ruleEvaluator) {
         this.loginRepo = loginRepo;
         this.ruleEvaluator = ruleEvaluator;
     }
@@ -24,7 +23,7 @@ public class LoginEventServiceImpl implements LoginEventService {
     @Override
     public LoginEvent recordLogin(LoginEvent event) {
         if (event.getIpAddress() == null || event.getDeviceId() == null) {
-            throw new IllegalArgumentException("IP address and device ID are required");
+            throw new IllegalArgumentException("IP address and Device ID cannot be null");
         }
 
         if (event.getTimestamp() == null) {

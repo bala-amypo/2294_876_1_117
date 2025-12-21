@@ -1,11 +1,13 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.ViolationRecord;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
@@ -18,6 +20,12 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
 
     @Override
     public ViolationRecord logViolation(ViolationRecord violation) {
+        if (violation.getDetectedAt() == null) {
+            violation.setDetectedAt(LocalDateTime.now());
+        }
+        if (violation.getResolved() == null) {
+            violation.setResolved(false);
+        }
         return violationRepo.save(violation);
     }
 
@@ -26,16 +34,13 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
         return violationRepo.findByUserId(userId);
     }
 
-     @Override
-       public ViolationRecord markResolved(Long id) {
-             ViolationRecord v = violationRepo.findById(id)
-                             .orElseThrow(() -> new IllegalArgumentException("Violation not found"));
-
-          v.setResolved(true);
-          violationRepo.save(v);
-          return v;
-}
-
+    @Override
+    public ViolationRecord markResolved(Long id) {
+        ViolationRecord violation = violationRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Violation not found with ID " + id));
+        violation.setResolved(true);
+        return violationRepo.save(violation);
+    }
 
     @Override
     public List<ViolationRecord> getUnresolvedViolations() {

@@ -22,10 +22,9 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
 
     @Override
     public DeviceProfile registerDevice(DeviceProfile device) {
-
         Optional<DeviceProfile> existing = deviceRepo.findByDeviceId(device.getDeviceId());
-        if (existing.isPresent()) {
-            throw new BadRequestException("Device already registered");
+        if (existing.isPresent() && existing.get().getUserId().equals(device.getUserId())) {
+            throw new BadRequestException("Device already registered for this user");
         }
 
         device.setLastSeen(LocalDateTime.now());
@@ -35,11 +34,9 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     @Override
     public DeviceProfile updateTrustStatus(Long id, boolean trust) {
         DeviceProfile device = deviceRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Device not found"));
-
+                .orElseThrow(() -> new ResourceNotFoundException("Device not found with ID " + id));
         device.setIsTrusted(trust);
         device.setLastSeen(LocalDateTime.now());
-
         return deviceRepo.save(device);
     }
 
