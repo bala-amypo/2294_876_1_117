@@ -19,7 +19,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        // Check for duplicate username/email
         if (userRepo.findByUsername(user.getUsername()).isPresent()) {
             throw new BadRequestException("Username already exists");
         }
@@ -38,5 +37,11 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public List<UserAccount> getAllUsers() {
         return userRepo.findAll();
+    }
+
+    @Override
+    public UserAccount findByUsername(String username) {
+        return userRepo.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

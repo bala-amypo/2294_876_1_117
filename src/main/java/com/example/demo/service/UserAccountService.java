@@ -7,4 +7,7 @@ public interface UserAccountService {
     UserAccount createUser(UserAccount user);
     UserAccount getUserById(Long id);
     List<UserAccount> getAllUsers();
+
+    // Added method for AuthController
+    UserAccount findByUsername(String username);
 }
