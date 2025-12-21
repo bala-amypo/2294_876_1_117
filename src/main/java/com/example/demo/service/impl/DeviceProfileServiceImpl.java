@@ -1,55 +1,49 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.DeviceProfile;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository deviceRepo;
+    private final DeviceProfileRepository repo;
 
-    public DeviceProfileServiceImpl(DeviceProfileRepository deviceRepo) {
-        this.deviceRepo = deviceRepo;
+    public DeviceProfileServiceImpl(DeviceProfileRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public DeviceProfile registerDevice(DeviceProfile device) {
-
-        Optional<DeviceProfile> existing = deviceRepo.findByDeviceId(device.getDeviceId());
-        if (existing.isPresent()) {
-            throw new BadRequestException("Device already registered");
-        }
-
-        device.setLastSeen(LocalDateTime.now());
-        return deviceRepo.save(device);
+    public DeviceProfile createProfile(DeviceProfile profile) {
+        return repo.save(profile);
     }
 
     @Override
-    public DeviceProfile updateTrustStatus(Long id, boolean trust) {
-        DeviceProfile device = deviceRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Device not found"));
-
-        device.setIsTrusted(trust);   // ✅ CORRECT setter
-        device.setLastSeen(LocalDateTime.now());
-
-        return deviceRepo.save(device);
+    public DeviceProfile getProfileById(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DeviceProfile not found"));
     }
 
     @Override
-    public List<DeviceProfile> getDevicesByUser(Long userId) {
-        return deviceRepo.findByUserId(userId);
+    public List<DeviceProfile> getAllProfiles() {
+        return repo.findAll();
     }
 
     @Override
-    public Optional<DeviceProfile> findByDeviceId(String deviceId) {
-        return deviceRepo.findByDeviceId(deviceId);
+    public DeviceProfile updateProfile(Long id, DeviceProfile profile) {
+        DeviceProfile existing = getProfileById(id);
+        existing.setName(profile.getName());
+        existing.setDescription(profile.getDescription());
+        return repo.save(existing);
+    }
+
+    @Override
+    public void deleteProfile(Long id) {
+        DeviceProfile existing = getProfileById(id);
+        repo.delete(existing);
     }
 }

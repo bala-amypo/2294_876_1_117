@@ -6,34 +6,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/devices")
+@RequestMapping("/api/device-profiles")
+@CrossOrigin(origins = "*")
 public class DeviceProfileController {
 
-    private final DeviceProfileService deviceService;
+    private final DeviceProfileService service;
 
-    public DeviceProfileController(DeviceProfileService deviceService) {
-        this.deviceService = deviceService;
+    public DeviceProfileController(DeviceProfileService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
-        return deviceService.registerDevice(device);
+    public DeviceProfile create(@RequestBody DeviceProfile profile) {
+        return service.createProfile(profile);
     }
 
-    @PutMapping("/{id}/trust")
-    public DeviceProfile updateTrust(@PathVariable Long id,
-                                     @RequestParam boolean trust) {
-        return deviceService.updateTrustStatus(id, trust);
+    @GetMapping
+    public List<DeviceProfile> getAll() {
+        return service.getAllProfiles();
     }
 
-    @GetMapping("/user/{userId}")
-    public List<DeviceProfile> getDevicesByUser(@PathVariable Long userId) {
-        return deviceService.getDevicesByUser(userId);
+    @GetMapping("/{id}")
+    public DeviceProfile getById(@PathVariable Long id) {
+        return service.getProfileById(id);
     }
 
-    @GetMapping("/lookup/{deviceId}")
-    public DeviceProfile getByDeviceId(@PathVariable String deviceId) {
-        return deviceService.findByDeviceId(deviceId)
-                .orElseThrow(() -> new IllegalArgumentException("Device not found"));
+    @PutMapping("/{id}")
+    public DeviceProfile update(@PathVariable Long id, @RequestBody DeviceProfile profile) {
+        return service.updateProfile(id, profile);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.deleteProfile(id);
     }
 }
