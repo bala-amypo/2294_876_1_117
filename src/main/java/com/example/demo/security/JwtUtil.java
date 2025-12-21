@@ -3,7 +3,7 @@ package com.example.demo.security;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtUtils {
+public class JwtUtil {
 
     // Dummy method for token creation
     public String generateToken(String username) {
