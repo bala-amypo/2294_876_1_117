@@ -9,11 +9,13 @@ public interface UserAccountService {
 
     UserAccount createUser(UserAccount user);
 
-    UserAccount getUserById(Long id);
-
-    UserAccount updateUserStatus(Long id, String status);
+    Optional<UserAccount> getUserById(Long id);
 
     List<UserAccount> getAllUsers();
 
+    UserAccount updateStatus(Long id, String status);
+
     Optional<UserAccount> findByUsername(String username);
+
+    Optional<UserAccount> findByEmail(String email);
 }

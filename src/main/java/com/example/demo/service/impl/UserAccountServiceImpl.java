@@ -1,10 +1,12 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,8 +19,25 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount register(UserAccount user) {
-        // NO password encoding – plain text is OK for tests
+    public UserAccount createUser(UserAccount user) {
+        return userAccountRepository.save(user);
+    }
+
+    @Override
+    public Optional<UserAccount> getUserById(Long id) {
+        return userAccountRepository.findById(id);
+    }
+
+    @Override
+    public List<UserAccount> getAllUsers() {
+        return userAccountRepository.findAll();
+    }
+
+    @Override
+    public UserAccount updateStatus(Long id, String status) {
+        UserAccount user = userAccountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        user.setStatus(status);
         return userAccountRepository.save(user);
     }
 
