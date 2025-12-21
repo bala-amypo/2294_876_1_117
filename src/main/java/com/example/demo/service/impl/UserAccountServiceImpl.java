@@ -7,7 +7,6 @@ import com.example.demo.service.UserAccountService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,31 +22,16 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        // Check uniqueness
-        if (userRepo.findByUsername(user.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
-        }
-        if (userRepo.findByEmail(user.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
-        }
-
-        // Set defaults
-        if (user.getRole() == null) user.setRole("USER");
-        if (user.getStatus() == null) user.setStatus("ACTIVE");
-
-        // Hash password
+        // hash password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        // Set creation time
-        user.setCreatedAt(LocalDateTime.now());
-
+        if (user.getStatus() == null) user.setStatus("ACTIVE");
         return userRepo.save(user);
     }
 
     @Override
     public UserAccount getUserById(Long id) {
         return userRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
     }
 
     @Override
@@ -65,6 +49,6 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount findByUsername(String username) {
         return userRepo.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username " + username));
     }
 }
