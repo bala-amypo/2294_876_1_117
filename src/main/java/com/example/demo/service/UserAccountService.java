@@ -7,4 +7,6 @@ public interface UserAccountService {
     UserAccount createUser(UserAccount user);
 
     void updateUserStatus(long id, String status);
+
+    UserAccount findByUsername(String username);
 }

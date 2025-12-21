@@ -1,10 +1,11 @@
 package com.example.demo.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -19,10 +20,13 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public void updateUserStatus(long id, String status) {
-        UserAccount user = repository.findById(id).orElse(null);
-        if (user != null) {
-            user.setStatus(status);
-            repository.save(user);
-        }
+        UserAccount user = repository.findById(id).orElseThrow();
+        user.setStatus(status);
+        repository.save(user);
+    }
+
+    @Override
+    public UserAccount findByUsername(String username) {
+        return repository.findByUsername(username).orElse(null);
     }
 }
