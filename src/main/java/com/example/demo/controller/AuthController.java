@@ -23,7 +23,6 @@ public class AuthController {
         return userService.createUser(user);
     }
 
-    // Simple login endpoint
     @PostMapping("/login")
     public String loginUser(@RequestParam String usernameOrEmail,
                             @RequestParam String password) {
@@ -35,7 +34,6 @@ public class AuthController {
 
         UserAccount user = userOpt.get();
 
-        // Simple password check (plain text)
         if (!user.getPassword().equals(password)) {
             return "Invalid password";
         }
