@@ -19,14 +19,12 @@ public class LoginEvent {
 
     private LocalDateTime timestamp;
 
-    private String loginStatus; // SUCCESS / FAILED
+    private String loginStatus;
 
     @PrePersist
     protected void onCreate() {
         if (timestamp == null) timestamp = LocalDateTime.now();
     }
-
-    // Getters and Setters
 
     public Long getId() {
         return id;
