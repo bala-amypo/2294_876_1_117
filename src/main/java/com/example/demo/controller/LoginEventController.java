@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/logins")
+@RequestMapping("/api/logins")
 public class LoginEventController {
 
     private final LoginEventService loginService;
