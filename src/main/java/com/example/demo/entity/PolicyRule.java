@@ -13,14 +13,12 @@ public class PolicyRule {
 
     private String description;
 
-    private String severity; // LOW / MEDIUM / HIGH / CRITICAL
+    private String severity; 
 
     @Column(columnDefinition = "TEXT")
     private String conditionsJson;
 
     private Boolean active = true;
-
-    // Getters and Setters
 
     public Long getId() {
         return id;

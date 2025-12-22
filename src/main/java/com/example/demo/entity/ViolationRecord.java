@@ -31,8 +31,6 @@ public class ViolationRecord {
         if (resolved == null) resolved = false;
     }
 
-    // Getters and Setters
-
     public Long getId() {
         return id;
     }
