@@ -28,8 +28,6 @@ public class DeviceProfile {
         if (isTrusted == null) isTrusted = false;
     }
 
-    // Getters and Setters
-
     public Long getId() {
         return id;
     }
