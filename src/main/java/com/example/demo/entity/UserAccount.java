@@ -32,8 +32,6 @@ public class UserAccount {
         if (createdAt == null) createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -97,4 +95,21 @@ public class UserAccount {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public UserAccount() {
+}
+
+public UserAccount(Long id, String employeeId, String username, String email,
+                   String password, String role, String status,
+                   LocalDateTime createdAt) {
+    this.id = id;
+    this.employeeId = employeeId;
+    this.username = username;
+    this.email = email;
+    this.password = password;
+    this.role = role;
+    this.status = status;
+    this.createdAt = createdAt;
+}
+
 }

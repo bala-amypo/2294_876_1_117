@@ -67,4 +67,18 @@ public class PolicyRule {
     public void setActive(Boolean active) {
         this.active = active;
     }
+
+    public PolicyRule() {
+}
+
+public PolicyRule(Long id, String ruleCode, String description,
+                  String severity, String conditionsJson, Boolean active) {
+    this.id = id;
+    this.ruleCode = ruleCode;
+    this.description = description;
+    this.severity = severity;
+    this.conditionsJson = conditionsJson;
+    this.active = active;
+}
+
 }

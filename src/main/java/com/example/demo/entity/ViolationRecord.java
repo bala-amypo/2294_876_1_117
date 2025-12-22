@@ -102,4 +102,23 @@ public class ViolationRecord {
     public void setResolved(Boolean resolved) {
         this.resolved = resolved;
     }
+
+    public ViolationRecord() {
+}
+
+public ViolationRecord(Long id, Long userId, Long policyRuleId, Long eventId,
+                       String violationType, String details,
+                       String severity, LocalDateTime detectedAt,
+                       Boolean resolved) {
+    this.id = id;
+    this.userId = userId;
+    this.policyRuleId = policyRuleId;
+    this.eventId = eventId;
+    this.violationType = violationType;
+    this.details = details;
+    this.severity = severity;
+    this.detectedAt = detectedAt;
+    this.resolved = resolved;
+}
+
 }
