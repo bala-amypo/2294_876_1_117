@@ -15,10 +15,8 @@ public class AuthController {
         this.userService = userService;
     }
 
-    // Simple registration endpoint
     @PostMapping("/register")
     public UserAccount registerUser(@RequestBody UserAccount user) {
-        // Default role if not provided
         if (user.getRole() == null) {
             user.setRole("USER");
         }
