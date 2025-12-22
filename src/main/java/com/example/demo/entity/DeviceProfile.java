@@ -83,4 +83,19 @@ public class DeviceProfile {
     public void setIsTrusted(Boolean isTrusted) {
         this.isTrusted = isTrusted;
     }
+
+    public DeviceProfile() {
+}
+
+public DeviceProfile(Long id, Long userId, String deviceId, String deviceType,
+                     String osVersion, LocalDateTime lastSeen, Boolean isTrusted) {
+    this.id = id;
+    this.userId = userId;
+    this.deviceId = deviceId;
+    this.deviceType = deviceType;
+    this.osVersion = osVersion;
+    this.lastSeen = lastSeen;
+    this.isTrusted = isTrusted;
+}
+
 }
