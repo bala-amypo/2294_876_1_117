@@ -30,4 +30,10 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     public List<PolicyRule> getAllRules() {
         return repo.findAll();
     }
+
+    @Override
+public List<PolicyRule> getAllPolicyRules() {
+    return getAllRules();
+}
+
 }

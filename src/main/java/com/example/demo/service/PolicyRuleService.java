@@ -6,8 +6,9 @@ import java.util.List;
 public interface PolicyRuleService {
 
     PolicyRule createRule(PolicyRule rule);
-
     List<PolicyRule> getActiveRules();
-
     List<PolicyRule> getAllRules();
+
+    // alias for controller
+    List<PolicyRule> getAllPolicyRules();
 }

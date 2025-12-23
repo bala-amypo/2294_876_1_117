@@ -35,4 +35,10 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
         }
         return v;
     }
+
+    @Override
+public ViolationRecord log(ViolationRecord record) {
+    return logViolation(record);
+}
+
 }
