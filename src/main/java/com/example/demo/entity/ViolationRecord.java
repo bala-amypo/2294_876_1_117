@@ -7,13 +7,10 @@ import java.time.LocalDateTime;
 public class ViolationRecord {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long userId;
-
-    private Long policyRuleId;
-
-    private Long eventId;
 
     private String violationType;
 
@@ -27,22 +24,13 @@ public class ViolationRecord {
 
     public ViolationRecord() {}
 
-    public ViolationRecord(Long id, Long userId, Long policyRuleId, Long eventId, String violationType, String details, String severity, LocalDateTime detectedAt, Boolean resolved) {
-        this.id = id;
+    public ViolationRecord(Long userId, String violationType, String details, String severity, LocalDateTime detectedAt) {
         this.userId = userId;
-        this.policyRuleId = policyRuleId;
-        this.eventId = eventId;
         this.violationType = violationType;
         this.details = details;
         this.severity = severity;
         this.detectedAt = detectedAt;
-        this.resolved = resolved;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        if (detectedAt == null) detectedAt = LocalDateTime.now();
-        if (resolved == null) resolved = false;
+        this.resolved = false;
     }
 
     // Getters and Setters
@@ -51,12 +39,6 @@ public class ViolationRecord {
 
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
-
-    public Long getPolicyRuleId() { return policyRuleId; }
-    public void setPolicyRuleId(Long policyRuleId) { this.policyRuleId = policyRuleId; }
-
-    public Long getEventId() { return eventId; }
-    public void setEventId(Long eventId) { this.eventId = eventId; }
 
     public String getViolationType() { return violationType; }
     public void setViolationType(String violationType) { this.violationType = violationType; }

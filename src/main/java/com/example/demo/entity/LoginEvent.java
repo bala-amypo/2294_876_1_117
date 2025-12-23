@@ -7,40 +7,21 @@ import java.time.LocalDateTime;
 public class LoginEvent {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long userId;
 
-    private String ipAddress;
-
-    private String location;
-
-    private String deviceId;
-
     private LocalDateTime timestamp;
 
-    private String loginStatus; // SUCCESS / FAILED
-
-
-    public Boolean getSuspicious() {
-        return suspicious;
-    }
+    private Boolean suspicious = false;
 
     public LoginEvent() {}
 
-    public LoginEvent(Long id, Long userId, String ipAddress, String location, String deviceId, LocalDateTime timestamp, String loginStatus) {
-        this.id = id;
+    public LoginEvent(Long userId, LocalDateTime timestamp, Boolean suspicious) {
         this.userId = userId;
-        this.ipAddress = ipAddress;
-        this.location = location;
-        this.deviceId = deviceId;
         this.timestamp = timestamp;
-        this.loginStatus = loginStatus;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        if (timestamp == null) timestamp = LocalDateTime.now();
+        this.suspicious = suspicious;
     }
 
     // Getters and Setters
@@ -50,18 +31,9 @@ public class LoginEvent {
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
 
-    public String getIpAddress() { return ipAddress; }
-    public void setIpAddress(String ipAddress) { this.ipAddress = ipAddress; }
-
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-
-    public String getDeviceId() { return deviceId; }
-    public void setDeviceId(String deviceId) { this.deviceId = deviceId; }
-
     public LocalDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 
-    public String getLoginStatus() { return loginStatus; }
-    public void setLoginStatus(String loginStatus) { this.loginStatus = loginStatus; }
+    public Boolean getSuspicious() { return suspicious; }
+    public void setSuspicious(Boolean suspicious) { this.suspicious = suspicious; }
 }
