@@ -10,19 +10,25 @@ import java.util.List;
 @Service
 public class LoginEventServiceImpl implements LoginEventService {
 
-    private final LoginEventRepository loginEventRepo;
+    private final LoginEventRepository loginRepo;
 
-    public LoginEventServiceImpl(LoginEventRepository loginEventRepo) {
-        this.loginEventRepo = loginEventRepo;
+    public LoginEventServiceImpl(LoginEventRepository loginRepo) {
+        this.loginRepo = loginRepo;
     }
 
     @Override
     public LoginEvent recordLogin(LoginEvent event) {
-        return loginEventRepo.save(event);
+        return loginRepo.save(event);
     }
 
     @Override
     public List<LoginEvent> getEventsByUser(Long userId) {
-        return loginEventRepo.findByUserId(userId);
+        return loginRepo.findByUserId(userId);
+    }
+
+    // 🔥 THIS METHOD WAS MISSING
+    @Override
+    public List<LoginEvent> getSuspiciousLogins(Long userId) {
+        return loginRepo.findByUserIdAndSuspiciousTrue(userId);
     }
 }

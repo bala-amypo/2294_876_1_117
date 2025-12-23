@@ -16,8 +16,9 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
         this.violationRepo = violationRepo;
     }
 
+    // 🔥 INTERFACE EXPECTS "log", NOT logViolation
     @Override
-    public ViolationRecord logViolation(ViolationRecord record) {
+    public ViolationRecord log(ViolationRecord record) {
         return violationRepo.save(record);
     }
 
@@ -29,7 +30,7 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     @Override
     public ViolationRecord markResolved(long id) {
         ViolationRecord record = violationRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Violation not found: " + id));
+                .orElseThrow(() -> new RuntimeException("Violation not found"));
         record.setResolved(true);
         return violationRepo.save(record);
     }

@@ -8,20 +8,29 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository deviceProfileRepo;
+    private final DeviceProfileRepository deviceRepo;
 
-    public DeviceProfileServiceImpl(DeviceProfileRepository deviceProfileRepo) {
-        this.deviceProfileRepo = deviceProfileRepo;
+    public DeviceProfileServiceImpl(DeviceProfileRepository deviceRepo) {
+        this.deviceRepo = deviceRepo;
     }
 
     @Override
     public DeviceProfile registerDevice(DeviceProfile device) {
-        return deviceProfileRepo.save(device);
+        return deviceRepo.save(device);
     }
 
     @Override
     public DeviceProfile lookup(String deviceId) {
-        return deviceProfileRepo.findByDeviceId(deviceId)
-                .orElseThrow(() -> new RuntimeException("Device not found: " + deviceId));
+        return deviceRepo.findByDeviceId(deviceId)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
+    }
+
+    // 🔥 THIS METHOD WAS MISSING
+    @Override
+    public DeviceProfile updateTrustStatus(long deviceId, boolean trusted) {
+        DeviceProfile device = deviceRepo.findById(deviceId)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
+        device.setIsTrusted(trusted);
+        return deviceRepo.save(device);
     }
 }
