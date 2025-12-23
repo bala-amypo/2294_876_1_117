@@ -1,14 +1,9 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.ViolationRecord;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
@@ -20,46 +15,7 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     }
 
     @Override
-    public ViolationRecord logViolation(ViolationRecord violation) {
-        if (violation.getDetectedAt() == null) {
-            violation.setDetectedAt(LocalDateTime.now());
-        }
-        if (violation.getResolved() == null) {
-            violation.setResolved(false);
-        }
-        return violationRepo.save(violation);
+    public ViolationRecord save(ViolationRecord record) {
+        return violationRepo.save(record);
     }
-
-    // 🔥 THIS IS THE CRITICAL FIX
-    @Override
-    @Transactional
-    public ViolationRecord markResolved(Long id) {
-        ViolationRecord violation = violationRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Violation not found"));
-
-        violation.setResolved(true);
-
-        // Explicit save to guarantee update
-        return violationRepo.save(violation);
-    }
-
-    @Override
-    public List<ViolationRecord> getViolationsByUser(Long userId) {
-        return violationRepo.findByUserId(userId);
-    }
-
-    @Override
-    public List<ViolationRecord> getUnresolvedViolations() {
-        return violationRepo.findByResolvedFalse();
-    }
-
-    @Override
-    public List<ViolationRecord> getAllViolations() {
-        return violationRepo.findAll();
-    }
-    @PostMapping("/log")
-public ViolationRecord log(@RequestBody ViolationRecord record) {
-    return violationService.logViolation(record);
-}
-
 }
