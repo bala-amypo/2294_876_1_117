@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+]package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
@@ -16,21 +16,11 @@ public class UserAccount {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     private String role;
 
-    @Column(nullable = false)
     private Boolean active = true;
 
-    public UserAccount() {
-    }
-
-    public UserAccount(String email, String password, String role, Boolean active) {
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.active = active;
-    }
+    public UserAccount() {}
 
     public Long getId() {
         return id;
@@ -67,7 +57,7 @@ public class UserAccount {
     public Boolean getActive() {
         return active;
     }
-    
+
     public void setActive(Boolean active) {
         this.active = active;
     }
