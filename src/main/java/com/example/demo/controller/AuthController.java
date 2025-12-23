@@ -12,8 +12,7 @@ public class AuthController {
     private final UserAccountService userService;
     private final JwtUtil jwtUtil;
 
-    public AuthController(UserAccountService userService,
-                          JwtUtil jwtUtil) {
+    public AuthController(UserAccountService userService, JwtUtil jwtUtil) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
@@ -23,6 +22,12 @@ public class AuthController {
 
         UserAccount user = userService.findByEmail(email);
 
-        return jwtUtil.generateToken(user.getEmail());
+        // 🔴 THIS IS THE IMPORTANT LINE
+        return jwtUtil.generateToken(
+                user.getEmail(),
+                user.getId(),
+                user.getRole(),
+                user.getStatus()
+        );
     }
 }

@@ -1,37 +1,34 @@
 package com.example.demo.security;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+@Component
 public class JwtUtil {
 
-    private String secret;
-    private long expiration;
-    private boolean enabled;
+    private static final String SECRET_KEY = "secret123";
 
-    public JwtUtil() {
-    }
+    public String generateToken(String email,
+                                Long userId,
+                                String role,
+                                String status) {
 
-    public JwtUtil(String secret, long expiration, boolean enabled) {
-        this.secret = secret;
-        this.expiration = expiration;
-        this.enabled = enabled;
-    }
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);
+        claims.put("role", role);
+        claims.put("status", status);
 
-    public String generateToken(String email, Long userId, String role, String username) {
-        return "dummy-token";
-    }
-
-    public boolean validateToken(String token) {
-        return true;
-    }
-
-    public String getEmail(String token) {
-        return "test@email.com";
-    }
-
-    public String getRole(String token) {
-        return "USER";
-    }
-
-    public Long getUserId(String token) {
-        return 1L;
+        return Jwts.builder()
+                .setSubject(email)
+                .addClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 3600000))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
     }
 }
