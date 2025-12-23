@@ -1,23 +1,23 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.entity.LoginEvent;
 import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
-import com.example.demo.util.RuleEvaluationUtil;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class LoginEventServiceImpl implements LoginEventService {
 
-    private final LoginEventRepository loginEventRepository;
+    private final LoginEventRepository repository;
 
-    // EXISTING constructor
-    public LoginEventServiceImpl(LoginEventRepository loginEventRepository) {
-        this.loginEventRepository = loginEventRepository;
+    public LoginEventServiceImpl(LoginEventRepository repository) {
+        this.repository = repository;
     }
 
-    // ✅ ADD THIS constructor (for tests)
-    public LoginEventServiceImpl(LoginEventRepository loginEventRepository,
-                                 RuleEvaluationUtil ruleEvaluationUtil) {
-        this.loginEventRepository = loginEventRepository;
+    @Override
+    public List<LoginEvent> getSuspiciousLogins(Long userId) {
+        return repository.findByUserIdAndSuspiciousTrue(userId);
     }
 }

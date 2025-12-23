@@ -5,8 +5,6 @@ import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
@@ -17,7 +15,7 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     }
 
     @Override
-    public Optional<DeviceProfile> lookup(String deviceId) {
-        return Optional.empty();
+    public DeviceProfile lookup(String deviceId) {
+        return repository.findByDeviceId(deviceId).orElse(null);
     }
 }

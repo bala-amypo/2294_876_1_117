@@ -8,14 +8,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
 
-    private final ViolationRecordRepository violationRecordRepository;
+    private final ViolationRecordRepository repository;
 
-    public ViolationRecordServiceImpl(ViolationRecordRepository violationRecordRepository) {
-        this.violationRecordRepository = violationRecordRepository;
+    public ViolationRecordServiceImpl(ViolationRecordRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public ViolationRecord log(ViolationRecord record) {
-        return violationRecordRepository.save(record);
+    public void markResolved(long id) {
+        ViolationRecord record = repository.findById(id).orElse(null);
+        if (record != null) {
+            record.setResolved(true);
+            repository.save(record);
+        }
     }
 }

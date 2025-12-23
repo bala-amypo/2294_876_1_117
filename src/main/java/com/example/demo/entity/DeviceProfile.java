@@ -15,22 +15,18 @@ public class DeviceProfile {
     private String deviceId;
 
     private String deviceType;
+
     private String osVersion;
+
+    private LocalDateTime lastSeen;
+
     private Boolean isTrusted = false;
 
-    // ✅ REQUIRED BY TESTS
-    public boolean isPresent() {
-        return true;
+    public DeviceProfile() {
     }
 
-    // ✅ REQUIRED BY TESTS
-    public DeviceProfile getBody() {
-        return this;
-    }
-
-    public DeviceProfile() {}
-
-    public DeviceProfile(Long id, Long userId, String deviceId, String deviceType, String osVersion, LocalDateTime lastSeen, Boolean isTrusted) {
+    public DeviceProfile(Long id, Long userId, String deviceId, String deviceType,
+                         String osVersion, LocalDateTime lastSeen, Boolean isTrusted) {
         this.id = id;
         this.userId = userId;
         this.deviceId = deviceId;
@@ -41,12 +37,12 @@ public class DeviceProfile {
     }
 
     @PrePersist
-    public void prePersist() {
-        if (lastSeen == null) lastSeen = LocalDateTime.now();
-        if (isTrusted == null) isTrusted = false;
+    @PreUpdate
+    public void updateLastSeen() {
+        this.lastSeen = LocalDateTime.now();
     }
 
-    // Getters and Setters
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -66,5 +62,5 @@ public class DeviceProfile {
     public void setLastSeen(LocalDateTime lastSeen) { this.lastSeen = lastSeen; }
 
     public Boolean getIsTrusted() { return isTrusted; }
-    public void setIsTrusted(Boolean isTrusted) { this.isTrusted = isTrusted; }
+    public void setIsTrusted(Boolean trusted) { isTrusted = trusted; }
 }
