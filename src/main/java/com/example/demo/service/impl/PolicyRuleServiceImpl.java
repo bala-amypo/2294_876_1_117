@@ -57,4 +57,9 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     public Optional<PolicyRule> getRuleByCode(String ruleCode) {
         return ruleRepo.findByRuleCode(ruleCode);
     }
+    @GetMapping("/all")
+public List<PolicyRule> all() {
+    return ruleService.getAllRules();
+}
+
 }

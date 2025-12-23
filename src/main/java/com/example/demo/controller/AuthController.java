@@ -1,44 +1,32 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     private final UserAccountService userService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserAccountService userService) {
+    public AuthController(UserAccountService userService, JwtUtil jwtUtil) {
         this.userService = userService;
-    }
-
-    @PostMapping("/register")
-    public UserAccount registerUser(@RequestBody UserAccount user) {
-        if (user.getRole() == null) {
-            user.setRole("USER");
-        }
-        return userService.createUser(user);
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/login")
-    public String loginUser(@RequestParam String usernameOrEmail,
-                            @RequestParam String password) {
+    public String login(@RequestParam String username,
+                        @RequestParam String password) {
 
-        Optional<UserAccount> userOpt = userService.findByUsername(usernameOrEmail);
-        if (userOpt.isEmpty()) {
-            return "User not found";
-        }
-
-        UserAccount user = userOpt.get();
+        UserAccount user = userService.findByUsername(username);
 
         if (!user.getPassword().equals(password)) {
-            return "Invalid password";
+            throw new RuntimeException("Invalid credentials");
         }
 
-        // Return simple success message (no JWT)
-        return "Login successful for user: " + user.getUsername();
+        return jwtUtil.generateToken(username);
     }
 }

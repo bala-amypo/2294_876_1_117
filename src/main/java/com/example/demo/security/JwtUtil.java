@@ -1,26 +1,43 @@
-// package com.example.demo.security;
+package com.example.demo.security;
 
-// import org.springframework.stereotype.Component;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
 
-// @Component
-// public class JwtUtil {
-//     public String generateToken(String subject, Long userId, String email, String role) {
-//         return "dummy-token";
-//     }
+import java.util.Date;
 
-//     public boolean validateToken(String token) {
-//         return true;
-//     }
+@Component
+public class JwtUtil {
 
-//     public String getEmail(String token) {
-//         return "test@example.com";
-//     }
+    private static final String SECRET_KEY = "secret-key-123";
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour
 
-//     public String getRole(String token) {
-//         return "USER";
-//     }
+    public String generateToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
 
-//     public Long getUserId(String token) {
-//         return 1L;
-//     }
-// }
+    public String extractUsername(String token) {
+        return extractClaims(token).getSubject();
+    }
+
+    public boolean validateToken(String token, String username) {
+        return username.equals(extractUsername(token)) && !isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractClaims(token).getExpiration().before(new Date());
+    }
+
+    private Claims extractClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+}
