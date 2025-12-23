@@ -1,51 +1,39 @@
 package com.example.demo.security;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
+@Component
 public class JwtUtil {
 
-    private final String secret;
-    private final long validityInMs;
-    private final boolean isTestMode;
+    private final String SECRET_KEY = "mysecretkey"; // replace with your secret
 
-    public JwtUtil(String secret, long validityInMs, boolean isTestMode) {
-        this.secret = secret;
-        this.validityInMs = validityInMs;
-        this.isTestMode = isTestMode;
+    public String generateToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
     }
 
-    public String generateToken(String subject, Long userId, String email, String role) {
-        // Simple token format for tests
-        String payload = subject + "|" + userId + "|" + email + "|" + role;
-        return Base64.getEncoder()
-                .encodeToString(payload.getBytes(StandardCharsets.UTF_8));
+    public String extractUsername(String token) {
+        return extractClaims(token).getSubject();
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Base64.getDecoder().decode(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public boolean validateToken(String token, String username) {
+        return extractUsername(token).equals(username) && !isTokenExpired(token);
     }
 
-    public String getEmail(String token) {
-        return decode(token)[2];
+    private Claims extractClaims(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    public String getRole(String token) {
-        return decode(token)[3];
-    }
-
-    public Long getUserId(String token) {
-        return Long.parseLong(decode(token)[1]);
-    }
-
-    private String[] decode(String token) {
-        String decoded = new String(Base64.getDecoder()
-                .decode(token), StandardCharsets.UTF_8);
-        return decoded.split("\\|");
+    private boolean isTokenExpired(String token) {
+        return extractClaims(token).getExpiration().before(new Date());
     }
 }
