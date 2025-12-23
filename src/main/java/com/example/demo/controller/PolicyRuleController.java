@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/policies")
+@RequestMapping("/api/rules")
 public class PolicyRuleController {
 
     private final PolicyRuleService policyRuleService;
@@ -17,7 +17,7 @@ public class PolicyRuleController {
     }
 
     @GetMapping
-    public List<PolicyRule> getAll() {
-        return policyRuleService.findAll();
+    public List<PolicyRule> all() {
+        return policyRuleService.getAllPolicyRules();
     }
 }

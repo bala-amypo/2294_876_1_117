@@ -8,16 +8,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/devices")
 public class DeviceProfileController {
 
-    private final DeviceProfileService deviceProfileService;
+    private final DeviceProfileService deviceService;
 
-    public DeviceProfileController(DeviceProfileService deviceProfileService) {
-        this.deviceProfileService = deviceProfileService;
+    public DeviceProfileController(DeviceProfileService deviceService) {
+        this.deviceService = deviceService;
     }
 
     @GetMapping("/{deviceId}")
-    public DeviceProfile getByDeviceId(@PathVariable String deviceId) {
-        return deviceProfileService
-                .findByDeviceId(deviceId)
-                .orElse(null);
+    public DeviceProfile lookup(@PathVariable String deviceId) {
+        return deviceService.lookup(deviceId);
     }
 }

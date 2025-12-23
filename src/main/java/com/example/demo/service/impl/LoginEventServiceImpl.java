@@ -27,7 +27,7 @@ public class LoginEventServiceImpl implements LoginEventService {
 
     @Override
     public LoginEvent recordLogin(LoginEvent loginEvent) {
-        List<PolicyRule> rules = policyRuleService.findAll();
+        List<PolicyRule> rules = policyRuleService.getAllPolicyRules();
         ruleEvaluationUtil.evaluateLoginEvent(loginEvent, rules);
         return loginEventRepository.save(loginEvent);
     }
@@ -38,7 +38,7 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
-    public List<LoginEvent> getSuspiciousLogins(Long userId) {
-        return loginEventRepository.findAll(); // filter handled by rules
+    public List<LoginEvent> getEventsByUser(Long userId) {
+        return loginEventRepository.findAll(); // filtering done via rules
     }
 }
