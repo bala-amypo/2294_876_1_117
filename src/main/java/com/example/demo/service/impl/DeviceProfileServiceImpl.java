@@ -14,10 +14,18 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
         this.repo = repo;
     }
 
-    // 🔥 REQUIRED METHOD (THIS WAS MISSING)
     @Override
     public DeviceProfile lookup(String deviceId) {
-        return repo.findByDeviceId(deviceId)
-                .orElse(null);
+        return repo.findByDeviceId(deviceId).orElse(null);
+    }
+
+    // 🔥 THIS METHOD WAS MISSING (ERROR FIX)
+    @Override
+    public DeviceProfile updateTrustStatus(long id, boolean trusted) {
+        DeviceProfile device = repo.findById(id).orElse(null);
+        if (device == null) return null;
+
+        device.setIsTrusted(trusted);
+        return repo.save(device);
     }
 }

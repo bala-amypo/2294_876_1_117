@@ -14,9 +14,18 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
         this.repo = repo;
     }
 
-    // 🔥 REQUIRED METHOD (THIS WAS MISSING)
     @Override
     public ViolationRecord log(ViolationRecord record) {
+        return repo.save(record);
+    }
+
+    // 🔥 THIS METHOD WAS MISSING (ERROR FIX)
+    @Override
+    public ViolationRecord markResolved(long id) {
+        ViolationRecord record = repo.findById(id).orElse(null);
+        if (record == null) return null;
+
+        record.setResolved(true);
         return repo.save(record);
     }
 }
