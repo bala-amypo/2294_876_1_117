@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,13 +12,12 @@ public class UserAccountController {
 
     private final UserAccountService userService;
 
-    @Autowired
     public UserAccountController(UserAccountService userService) {
         this.userService = userService;
     }
 
     @PostMapping
-    public UserAccount create(@RequestBody UserAccount user) {
+    public UserAccount createUser(@RequestBody UserAccount user) {
         return userService.create(user);
     }
 
@@ -29,7 +27,7 @@ public class UserAccountController {
     }
 
     @GetMapping
-    public List<UserAccount> all() {
+    public List<UserAccount> getAllUsers() {
         return userService.all();
     }
 }
