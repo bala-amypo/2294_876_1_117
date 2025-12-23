@@ -23,8 +23,13 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
 
     @Override
     public PolicyRule update(Long id, PolicyRule rule) {
-        rule.setId(id);
-        return repo.save(rule);
+        PolicyRule existing = repo.findById(id).orElseThrow();
+        existing.setRuleCode(rule.getRuleCode());
+        existing.setDescription(rule.getDescription());
+        existing.setSeverity(rule.getSeverity());
+        existing.setConditionsJson(rule.getConditionsJson());
+        existing.setActive(rule.getActive());
+        return repo.save(existing);
     }
 
     @Override
