@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +16,7 @@ public class ViolationRecordController {
     }
 
     @PostMapping
-    public ViolationRecord log(@RequestBody ViolationRecord record) {
-        return violationRecordService.log(record);
+    public ResponseEntity<ViolationRecord> log(@RequestBody ViolationRecord record) {
+        return ResponseEntity.ok(violationRecordService.log(record));
     }
 }
