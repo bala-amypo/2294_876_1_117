@@ -30,4 +30,9 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
         }
         return null;
     }
+    @Override
+     public DeviceProfile lookup(String deviceId) {
+        return repo.findByDeviceId(deviceId).orElse(null);
+}
+
 }
