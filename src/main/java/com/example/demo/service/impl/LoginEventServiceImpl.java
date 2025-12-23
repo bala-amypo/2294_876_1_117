@@ -23,10 +23,18 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
+    public List<LoginEvent> getEventsByUser(Long userId) {
+        return repository.findAll()
+                .stream()
+                .filter(e -> e.getUserId().equals(userId))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<LoginEvent> getSuspiciousLogins(Long userId) {
         return repository.findAll()
                 .stream()
-                .filter(e -> e.getUserId().equals(userId) && Boolean.TRUE.equals(e.getSuspicious()))
+                .filter(e -> e.getUserId().equals(userId) && e.isSuspicious())
                 .collect(Collectors.toList());
     }
 }

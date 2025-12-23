@@ -5,6 +5,9 @@ import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
 
@@ -27,5 +30,13 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
             return repository.save(record);
         }
         return null;
+    }
+
+    @Override
+    public List<ViolationRecord> getUnresolvedViolations() {
+        return repository.findAll()
+                .stream()
+                .filter(v -> !Boolean.TRUE.equals(v.getResolved()))
+                .collect(Collectors.toList());
     }
 }

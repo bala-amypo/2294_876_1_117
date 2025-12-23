@@ -22,6 +22,11 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
+    public UserAccount getUserById(long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
     public List<UserAccount> getAllUsers() {
         return repository.findAll();
     }

@@ -15,7 +15,7 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     }
 
     @Override
-    public DeviceProfile lookup(String deviceId) {
+    public DeviceProfile findByDeviceId(String deviceId) {
         return repository.findByDeviceId(deviceId).orElse(null);
     }
 
