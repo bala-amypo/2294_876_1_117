@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 public class ViolationRecord {
 
     @Id
-    @Column(unique = true)
     private Long id;
 
     private Long userId;
@@ -18,24 +17,17 @@ public class ViolationRecord {
 
     private String violationType;
 
-    @Column(columnDefinition = "TEXT")
     private String details;
 
-    private String severity; // inherited from PolicyRule
+    private String severity;
 
     private LocalDateTime detectedAt;
 
     private Boolean resolved = false;
 
-    @PrePersist
-    public void prePersist() {
-        if (detectedAt == null) detectedAt = LocalDateTime.now();
-        if (resolved == null) resolved = false;
-    }
-
     public ViolationRecord() {}
 
-    public ViolationRecord(Long id, Long userId, Long policyRuleId, Long eventId, String violationType, String details, String severity) {
+    public ViolationRecord(Long id, Long userId, Long policyRuleId, Long eventId, String violationType, String details, String severity, LocalDateTime detectedAt, Boolean resolved) {
         this.id = id;
         this.userId = userId;
         this.policyRuleId = policyRuleId;
@@ -43,8 +35,14 @@ public class ViolationRecord {
         this.violationType = violationType;
         this.details = details;
         this.severity = severity;
-        this.detectedAt = LocalDateTime.now();
-        this.resolved = false;
+        this.detectedAt = detectedAt;
+        this.resolved = resolved;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (detectedAt == null) detectedAt = LocalDateTime.now();
+        if (resolved == null) resolved = false;
     }
 
     // Getters and Setters

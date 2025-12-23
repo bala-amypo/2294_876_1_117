@@ -7,12 +7,11 @@ import java.time.LocalDateTime;
 public class DeviceProfile {
 
     @Id
-    @Column(unique = true)
     private Long id;
 
     private Long userId;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String deviceId;
 
     private String deviceType;
@@ -23,21 +22,22 @@ public class DeviceProfile {
 
     private Boolean isTrusted = false;
 
-    @PrePersist
-    public void prePersist() {
-        if (lastSeen == null) lastSeen = LocalDateTime.now();
-    }
-
     public DeviceProfile() {}
 
-    public DeviceProfile(Long id, Long userId, String deviceId, String deviceType, String osVersion) {
+    public DeviceProfile(Long id, Long userId, String deviceId, String deviceType, String osVersion, LocalDateTime lastSeen, Boolean isTrusted) {
         this.id = id;
         this.userId = userId;
         this.deviceId = deviceId;
         this.deviceType = deviceType;
         this.osVersion = osVersion;
-        this.lastSeen = LocalDateTime.now();
-        this.isTrusted = false;
+        this.lastSeen = lastSeen;
+        this.isTrusted = isTrusted;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (lastSeen == null) lastSeen = LocalDateTime.now();
+        if (isTrusted == null) isTrusted = false;
     }
 
     // Getters and Setters

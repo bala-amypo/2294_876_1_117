@@ -7,38 +7,35 @@ import java.time.LocalDateTime;
 public class LoginEvent {
 
     @Id
-    @Column(unique = true)
     private Long id;
 
     private Long userId;
 
-    @Column(nullable = false)
     private String ipAddress;
 
     private String location;
 
-    @Column(nullable = false)
     private String deviceId;
 
     private LocalDateTime timestamp;
 
     private String loginStatus; // SUCCESS / FAILED
 
-    @PrePersist
-    public void prePersist() {
-        if (timestamp == null) timestamp = LocalDateTime.now();
-    }
-
     public LoginEvent() {}
 
-    public LoginEvent(Long id, Long userId, String ipAddress, String location, String deviceId, String loginStatus) {
+    public LoginEvent(Long id, Long userId, String ipAddress, String location, String deviceId, LocalDateTime timestamp, String loginStatus) {
         this.id = id;
         this.userId = userId;
         this.ipAddress = ipAddress;
         this.location = location;
         this.deviceId = deviceId;
+        this.timestamp = timestamp;
         this.loginStatus = loginStatus;
-        this.timestamp = LocalDateTime.now();
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (timestamp == null) timestamp = LocalDateTime.now();
     }
 
     // Getters and Setters

@@ -7,42 +7,42 @@ import java.time.LocalDateTime;
 public class UserAccount {
 
     @Id
-    @Column(unique = true)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String employeeId;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String username;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
-    private String role = "USER"; // ADMIN / USER / AUDITOR
-    private String status = "ACTIVE"; // ACTIVE / SUSPENDED
-    private LocalDateTime createdAt;
+    private String role; // ADMIN / USER / AUDITOR
 
-    @PrePersist
-    public void prePersist() {
-        if (createdAt == null) createdAt = LocalDateTime.now();
-        if (status == null) status = "ACTIVE";
-        if (role == null) role = "USER";
-    }
+    private String status; // ACTIVE / SUSPENDED
+
+    private LocalDateTime createdAt;
 
     public UserAccount() {}
 
-    public UserAccount(Long id, String employeeId, String username, String email, String password, String role, String status) {
+    public UserAccount(Long id, String employeeId, String username, String email, String password, String role, String status, LocalDateTime createdAt) {
         this.id = id;
         this.employeeId = employeeId;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.role = role != null ? role : "USER";
-        this.status = status != null ? status : "ACTIVE";
+        this.role = role;
+        this.status = status;
+        this.createdAt = createdAt;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (status == null) status = "ACTIVE";
+        if (createdAt == null) createdAt = LocalDateTime.now();
     }
 
     // Getters and Setters

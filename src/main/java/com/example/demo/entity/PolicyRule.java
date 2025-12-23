@@ -6,10 +6,9 @@ import jakarta.persistence.*;
 public class PolicyRule {
 
     @Id
-    @Column(unique = true)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String ruleCode;
 
     private String description;
@@ -29,7 +28,7 @@ public class PolicyRule {
         this.description = description;
         this.severity = severity;
         this.conditionsJson = conditionsJson;
-        this.active = active != null ? active : true;
+        this.active = active;
     }
 
     // Getters and Setters
@@ -48,4 +47,6 @@ public class PolicyRule {
     public String getConditionsJson() { return conditionsJson; }
     public void setConditionsJson(String conditionsJson) { this.conditionsJson = conditionsJson; }
 
-    public Boolean getActive
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
+}
