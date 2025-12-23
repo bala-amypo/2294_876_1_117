@@ -6,46 +6,50 @@ import com.example.demo.service.PolicyRuleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    private final PolicyRuleRepository repository;
+    private final PolicyRuleRepository ruleRepo;
 
-    public PolicyRuleServiceImpl(PolicyRuleRepository repository) {
-        this.repository = repository;
+    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepo) {
+        this.ruleRepo = ruleRepo;
     }
 
     @Override
     public PolicyRule createRule(PolicyRule rule) {
-        return repository.save(rule);
+        Optional<PolicyRule> existing = ruleRepo.findByRuleCode(rule.getRuleCode());
+        if (existing.isPresent()) {
+            throw new IllegalArgumentException("Rule code must be unique");
+        }
+        if (rule.getActive() == null) rule.setActive(true);
+        return ruleRepo.save(rule);
     }
 
     @Override
-    public PolicyRule updateRule(Long id, PolicyRule rule) {
-        PolicyRule existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("PolicyRule not found"));
-        existing.setRuleCode(rule.getRuleCode());
-        existing.setDescription(rule.getDescription());
-        existing.setSeverity(rule.getSeverity());
-        existing.setConditionsJson(rule.getConditionsJson());
-        existing.setActive(rule.getActive());
-        return repository.save(existing);
-    }
-
-    @Override
-    public List<PolicyRule> getAllRules() {
-        return repository.findAll();
+    public PolicyRule updateRule(Long id, PolicyRule updated) {
+        PolicyRule rule = ruleRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
+        rule.setDescription(updated.getDescription());
+        rule.setSeverity(updated.getSeverity());
+        rule.setConditionsJson(updated.getConditionsJson());
+        if (updated.getActive() != null) rule.setActive(updated.getActive());
+        return ruleRepo.save(rule);
     }
 
     @Override
     public List<PolicyRule> getActiveRules() {
-        return repository.findByActiveTrue();
+        return ruleRepo.findByActiveTrue();
     }
 
     @Override
-    public PolicyRule getRuleByCode(String code) {
-        return repository.findByRuleCode(code)
-                .orElseThrow(() -> new RuntimeException("PolicyRule not found with code: " + code));
+    public List<PolicyRule> getAllRules() {
+        return ruleRepo.findAll();
+    }
+
+    @Override
+    public Optional<PolicyRule> getRuleByCode(String ruleCode) {
+        return ruleRepo.findByRuleCode(ruleCode);
     }
 }

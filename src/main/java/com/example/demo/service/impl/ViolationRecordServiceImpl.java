@@ -1,33 +1,56 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.ViolationRecord;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
 
-    private final ViolationRecordRepository repository;
+    private final ViolationRecordRepository violationRepo;
 
-    public ViolationRecordServiceImpl(ViolationRecordRepository repository) {
-        this.repository = repository;
+    public ViolationRecordServiceImpl(ViolationRecordRepository violationRepo) {
+        this.violationRepo = violationRepo;
     }
 
     @Override
-    public ViolationRecord logViolation(ViolationRecord record) {
-        return repository.save(record);
+    public ViolationRecord logViolation(ViolationRecord violation) {
+        if (violation.getDetectedAt() == null) {
+            violation.setDetectedAt(LocalDateTime.now());
+        }
+        if (violation.getResolved() == null) {
+            violation.setResolved(false);
+        }
+        return violationRepo.save(violation);
+    }
+
+    @Override
+    @Transactional
+    public ViolationRecord markResolved(Long id) {
+        ViolationRecord violation = violationRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Violation not found"));
+        violation.setResolved(true);
+        return violationRepo.save(violation);
+    }
+
+    @Override
+    public List<ViolationRecord> getViolationsByUser(Long userId) {
+        return violationRepo.findByUserId(userId);
     }
 
     @Override
     public List<ViolationRecord> getUnresolvedViolations() {
-        return repository.findByResolvedFalse();
+        return violationRepo.findByResolvedFalse();
     }
 
     @Override
     public List<ViolationRecord> getAllViolations() {
-        return repository.findAll();
+        return violationRepo.findAll();
     }
 }
