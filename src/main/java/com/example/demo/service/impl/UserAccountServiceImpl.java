@@ -32,4 +32,10 @@ public class UserAccountServiceImpl implements UserAccountService {
     public List<UserAccount> all() {
         return repo.findAll();
     }
+
+    // 🔴 ADD THIS
+    @Override
+    public UserAccount findByEmail(String email) {
+        return repo.findByEmail(email).orElse(null);
+    }
 }

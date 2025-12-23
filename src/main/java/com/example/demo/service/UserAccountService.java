@@ -10,4 +10,7 @@ public interface UserAccountService {
     UserAccount updateStatus(Long id, String status);
 
     List<UserAccount> all();
+
+    // 🔴 ADD THIS
+    UserAccount findByEmail(String email);
 }
