@@ -5,15 +5,9 @@ import java.util.List;
 
 public interface UserAccountService {
 
-    UserAccount createUser(UserAccount user);
+    UserAccount create(UserAccount user);
 
-    UserAccount getUserById(long id);
+    UserAccount updateStatus(Long id, String status);
 
-    UserAccount updateUserStatus(long id, String status);
-
-    List<UserAccount> getAllUsers();
-
-    UserAccount findByUsername(String username);
-
-    UserAccount findByEmail(String email);
+    List<UserAccount> all();
 }

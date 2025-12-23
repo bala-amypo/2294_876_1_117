@@ -5,7 +5,6 @@ import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,27 +16,20 @@ public class UserAccountServiceImpl implements UserAccountService {
         this.repo = repo;
     }
 
-    public UserAccount createUser(UserAccount user) {
-        return user;
+    @Override
+    public UserAccount create(UserAccount user) {
+        return repo.save(user);
     }
 
-    public UserAccount getUserById(long id) {
-        return new UserAccount();
+    @Override
+    public UserAccount updateStatus(Long id, String status) {
+        UserAccount user = repo.findById(id).orElseThrow();
+        user.setStatus(status);
+        return repo.save(user);
     }
 
-    public UserAccount updateUserStatus(long id, String status) {
-        return new UserAccount();
-    }
-
-    public List<UserAccount> getAllUsers() {
-        return new ArrayList<>();
-    }
-
-    public UserAccount findByUsername(String username) {
-        return new UserAccount();
-    }
-
-    public UserAccount findByEmail(String email) {
-        return new UserAccount();
+    @Override
+    public List<UserAccount> all() {
+        return repo.findAll();
     }
 }
