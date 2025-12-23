@@ -16,7 +16,7 @@ public class UserAccountController {
 
     @PostMapping
     public UserAccount createUser(@RequestBody UserAccount user) {
-        return userService.create(user);
+        return userService.saveUser(user);   // ✅ FIXED
     }
 
     @GetMapping("/{id}")

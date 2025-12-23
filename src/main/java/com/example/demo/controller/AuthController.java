@@ -23,23 +23,23 @@ public class AuthController {
     public UserAccount register(@RequestBody RegisterRequest request) {
 
         UserAccount user = new UserAccount();
-        user.setUsername(request.username);
-        user.setPassword(request.password);
-        user.setRole(request.role);
+        user.setUsername(request.getUsername());
+        user.setPassword(request.getPassword());
+        user.setRole(request.getRole());
 
-        return userService.create(user);
+        return userService.saveUser(user);   // ✅ CORRECT METHOD
     }
 
     @PostMapping("/login")
     public JwtResponse login(@RequestBody LoginRequest request) {
 
-        UserAccount user = userService.findByUsername(request.username);
+        UserAccount user = userService.findByUsername(request.getUsername());
 
         if (user == null) {
             throw new RuntimeException("User not found");
         }
 
-        if (!user.getPassword().equals(request.password)) {
+        if (!user.getPassword().equals(request.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
