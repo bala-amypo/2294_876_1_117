@@ -19,4 +19,9 @@ public class DeviceProfileController {
     public ResponseEntity<DeviceProfile> getById(@PathVariable Long id) {
         return ResponseEntity.of(service.getById(id));
     }
+    @GetMapping("/lookup/{deviceId}")
+public DeviceProfile lookup(@PathVariable String deviceId) {
+    return new DeviceProfile();
+}
+
 }

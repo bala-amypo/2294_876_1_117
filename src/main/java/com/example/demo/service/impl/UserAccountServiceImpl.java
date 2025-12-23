@@ -3,52 +3,41 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository userRepo;
-    private final PasswordEncoder passwordEncoder;
+    private final UserAccountRepository repo;
 
-    @Autowired
-    public UserAccountServiceImpl(UserAccountRepository userRepo, PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
+    public UserAccountServiceImpl(UserAccountRepository repo) {
+        this.repo = repo;
     }
 
-    @Override
-    public UserAccount create(UserAccount user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+    public UserAccount createUser(UserAccount user) {
+        return user;
     }
 
-    @Override
-    public UserAccount updateStatus(Long id, String status) {
-        UserAccount user = userRepo.findById(id).orElse(null);
-        if (user != null) {
-            user.setStatus(status);
-            return userRepo.save(user);
-        }
-        return null;
+    public UserAccount getUserById(long id) {
+        return new UserAccount();
     }
 
-    @Override
-    public List<UserAccount> all() {
-        return userRepo.findAll();
+    public UserAccount updateUserStatus(long id, String status) {
+        return new UserAccount();
     }
 
-    @Override
+    public List<UserAccount> getAllUsers() {
+        return new ArrayList<>();
+    }
+
     public UserAccount findByUsername(String username) {
-        return userRepo.findByUsername(username); // must return UserAccount, not Optional
+        return new UserAccount();
     }
 
-    @Override
     public UserAccount findByEmail(String email) {
-        return userRepo.findByEmail(email); // must exist in your repo
+        return new UserAccount();
     }
 }

@@ -1,20 +1,19 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.UserAccount;
-
 import java.util.List;
 
 public interface UserAccountService {
 
-    UserAccount create(UserAccount user);
+    UserAccount createUser(UserAccount user);
 
-    UserAccount updateStatus(Long id, String status);
+    UserAccount getUserById(long id);
 
-    List<UserAccount> all();
+    UserAccount updateUserStatus(long id, String status);
 
-    // Add this method to match your controller usage
+    List<UserAccount> getAllUsers();
+
     UserAccount findByUsername(String username);
 
-    // Add missing method to match error
     UserAccount findByEmail(String email);
 }

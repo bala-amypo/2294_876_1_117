@@ -4,10 +4,8 @@ import com.example.demo.entity.ViolationRecord;
 import java.util.List;
 
 public interface ViolationRecordService {
-    ViolationRecord log(ViolationRecord record);
-    List<ViolationRecord> byUser(Long userId);
-    List<ViolationRecord> unresolved();
-    
-    // Add this method
-    void markResolved(Long id);
+
+    ViolationRecord logViolation(ViolationRecord record);
+
+    List<ViolationRecord> getUnresolvedViolations();
 }

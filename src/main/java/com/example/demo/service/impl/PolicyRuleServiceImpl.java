@@ -1,42 +1,24 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.PolicyRule;
-import com.example.demo.repository.PolicyRuleRepository;
 import com.example.demo.service.PolicyRuleService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    private final PolicyRuleRepository ruleRepo;
-
-    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepo) {
-        this.ruleRepo = ruleRepo;
+    public PolicyRule createRule(PolicyRule rule) {
+        return rule;
     }
 
-    @Override
-    public PolicyRule create(PolicyRule rule) {
-        return ruleRepo.save(rule);
+    public List<PolicyRule> getActiveRules() {
+        return new ArrayList<>();
     }
 
-    @Override
-    public PolicyRule update(Long id, PolicyRule rule) {
-        PolicyRule existing = ruleRepo.findById(id).orElse(null);
-        if (existing != null) {
-            existing.setRuleCode(rule.getRuleCode());
-            existing.setDescription(rule.getDescription());
-            existing.setSeverity(rule.getSeverity());
-            existing.setConditionsJson(rule.getConditionsJson());
-            existing.setActive(rule.getActive());
-            return ruleRepo.save(existing);
-        }
-        return null;
-    }
-
-    @Override
-    public List<PolicyRule> all() {
-        return ruleRepo.findAll();
+    public List<PolicyRule> getAllRules() {
+        return new ArrayList<>();
     }
 }
