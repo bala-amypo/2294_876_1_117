@@ -33,4 +33,10 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
         }
         return d;
     }
+
+    @Override
+public DeviceProfile lookup(String deviceId) {
+    return findByDeviceId(deviceId);
+}
+
 }
