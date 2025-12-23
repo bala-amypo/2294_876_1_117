@@ -1,19 +1,15 @@
-package com.example.demo.security;
+package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
-    public JwtUtil jwtUtil() {
-        return new JwtUtil(
-                "test-secret-key",
-                3600000L,
-                true
-        );
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
-
-    // other security beans (if any)
 }

@@ -3,9 +3,12 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -13,6 +16,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final UserAccountRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public UserAccountServiceImpl(UserAccountRepository userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
@@ -20,16 +24,15 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount create(UserAccount user) {
-        if (user.getPassword() != null && passwordEncoder != null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
     }
 
     @Override
     public UserAccount updateStatus(Long id, String status) {
-        UserAccount user = userRepo.findById(id).orElse(null);
-        if (user != null) {
+        Optional<UserAccount> userOpt = userRepo.findById(id);
+        if (userOpt.isPresent()) {
+            UserAccount user = userOpt.get();
             user.setStatus(status);
             return userRepo.save(user);
         }
@@ -42,12 +45,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount findByUsername(String username) {
-        return userRepo.findByUsername(username).orElse(null); // <-- convert Optional to UserAccount
-    }
-
-    @Override
-    public UserAccount findByEmail(String email) {
-        return userRepo.findByEmail(email).orElse(null);      // <-- convert Optional to UserAccount
+    public Optional<UserAccount> findByUsername(String username) {
+        return userRepo.findByUsername(username);
     }
 }
