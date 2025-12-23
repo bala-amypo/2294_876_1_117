@@ -31,7 +31,6 @@ public class LoginEventServiceImpl implements LoginEventService {
         return loginRepo.findByUserIdAndSuspiciousTrue(userId);
     }
 
-    // 🔥 REQUIRED BY INTERFACE
     @Override
     public List<LoginEvent> getAllEvents() {
         return loginRepo.findAll();

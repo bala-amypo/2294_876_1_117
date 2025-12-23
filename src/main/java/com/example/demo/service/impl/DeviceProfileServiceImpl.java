@@ -19,7 +19,6 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
         return deviceRepo.save(deviceProfile);
     }
 
-    // 🔥 REQUIRED BY INTERFACE
     @Override
     public DeviceProfile findByDeviceId(String deviceId) {
         return deviceRepo.findByDeviceId(deviceId)

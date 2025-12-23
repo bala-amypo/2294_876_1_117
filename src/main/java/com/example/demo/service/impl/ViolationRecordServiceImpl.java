@@ -16,7 +16,6 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
         this.violationRepo = violationRepo;
     }
 
-    // 🔥 INTERFACE EXPECTS logViolation
     @Override
     public ViolationRecord logViolation(ViolationRecord record) {
         return violationRepo.save(record);
