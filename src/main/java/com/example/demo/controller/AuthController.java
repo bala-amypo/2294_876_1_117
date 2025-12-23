@@ -21,31 +21,35 @@ public class AuthController {
 
     @PostMapping("/register")
     public UserAccount register(@RequestBody RegisterRequest request) {
-        UserAccount user = new UserAccount();
-        user.setId(request.getId());
-        user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword());
-        user.setRole("USER");
-        user.setActive(true);
 
-        return userService.save(user);
+        UserAccount user = new UserAccount();
+        user.setUsername(request.username);
+        user.setPassword(request.password);
+        user.setRole(request.role);
+
+        return userService.create(user);
     }
 
     @PostMapping("/login")
     public JwtResponse login(@RequestBody LoginRequest request) {
 
-        UserAccount user = userService.findByUsername(request.getUsername());
+        UserAccount user = userService.findByUsername(request.username);
 
         if (user == null) {
             throw new RuntimeException("User not found");
         }
 
-        if (!user.getPassword().equals(request.getPassword())) {
+        if (!user.getPassword().equals(request.password)) {
             throw new RuntimeException("Invalid credentials");
         }
 
         String token = jwtUtil.generateToken(user.getUsername());
 
-        return new JwtResponse(token);
+        return new JwtResponse(
+                token,
+                user.getId(),
+                user.getUsername(),
+                user.getRole()
+        );
     }
 }

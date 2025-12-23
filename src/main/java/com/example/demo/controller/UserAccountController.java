@@ -16,16 +16,16 @@ public class UserAccountController {
 
     @PostMapping
     public UserAccount createUser(@RequestBody UserAccount user) {
-        return userService.save(user);
+        return userService.create(user);
     }
 
     @GetMapping("/{id}")
-    public UserAccount getUserById(@PathVariable Long id) {
-        return userService.findById(id);
+    public UserAccount getUser(@PathVariable Long id) {
+        return userService.getById(id);
     }
 
     @GetMapping
     public List<UserAccount> getAllUsers() {
-        return userService.findAll();
+        return userService.getAll();
     }
 }
