@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,24 +11,21 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserAccountController {
 
-    private final UserAccountService userService;
-
-    public UserAccountController(UserAccountService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private UserAccountService userService;
 
     @PostMapping
-    public UserAccount create(@RequestBody UserAccount user) {
-        return userService.create(user);
+    public UserAccount createUser(@RequestBody UserAccount user) {
+        return userService.save(user);
     }
 
     @GetMapping("/{id}")
-    public UserAccount get(@PathVariable Long id) {
-        return userService.getById(id);
+    public UserAccount getUserById(@PathVariable Long id) {
+        return userService.findById(id);
     }
 
     @GetMapping
-    public List<UserAccount> all() {
-        return userService.getAll();
+    public List<UserAccount> getAllUsers() {
+        return userService.findAll();
     }
 }
