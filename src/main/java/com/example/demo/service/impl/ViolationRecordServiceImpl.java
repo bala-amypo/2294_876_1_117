@@ -17,8 +17,27 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     }
 
     @Override
-    public ViolationRecord save(ViolationRecord record) {
+    public ViolationRecord logViolation(ViolationRecord record) {
         return violationRepo.save(record);
+    }
+
+    @Override
+    public ViolationRecord markResolved(Long id) {
+        ViolationRecord record = violationRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Violation not found"));
+
+        record.setResolved(true);
+        return violationRepo.save(record);
+    }
+
+    @Override
+    public List<ViolationRecord> getViolationsByUser(Long userId) {
+        return violationRepo.findByUserId(userId);
+    }
+
+    @Override
+    public List<ViolationRecord> getUnresolvedViolations() {
+        return violationRepo.findByResolvedFalse();
     }
 
     @Override

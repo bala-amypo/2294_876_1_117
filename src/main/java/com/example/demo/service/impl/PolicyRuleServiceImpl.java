@@ -18,6 +18,29 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     }
 
     @Override
+    public PolicyRule createRule(PolicyRule rule) {
+        return ruleRepo.save(rule);
+    }
+
+    @Override
+    public PolicyRule updateRule(Long id, PolicyRule rule) {
+        PolicyRule existing = ruleRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
+
+        existing.setDescription(rule.getDescription());
+        existing.setSeverity(rule.getSeverity());
+        existing.setConditionsJson(rule.getConditionsJson());
+        existing.setActive(rule.getActive());
+
+        return ruleRepo.save(existing);
+    }
+
+    @Override
+    public List<PolicyRule> getActiveRules() {
+        return ruleRepo.findByActiveTrue();
+    }
+
+    @Override
     public List<PolicyRule> getAllRules() {
         return ruleRepo.findAll();
     }
