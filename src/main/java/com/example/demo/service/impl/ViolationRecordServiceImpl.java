@@ -3,38 +3,31 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
 
-    private final ViolationRecordRepository repo;
+    private final ViolationRecordRepository repository;
 
-    public ViolationRecordServiceImpl(ViolationRecordRepository repo) {
-        this.repo = repo;
-    }
-
-    @Override
-    public ViolationRecord log(ViolationRecord record) {
-        return repo.save(record);
+    public ViolationRecordServiceImpl(ViolationRecordRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public ViolationRecord markResolved(Long id) {
-        ViolationRecord record = repo.findById(id).orElseThrow();
+        ViolationRecord record = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Record not found"));
         record.setResolved(true);
-        return repo.save(record);
+        return repository.save(record);
     }
 
     @Override
     public List<ViolationRecord> byUser(Long userId) {
-        return repo.findByUserId(userId);
+        return repository.findByUserId(userId);
     }
 
     @Override
     public List<ViolationRecord> unresolved() {
-        return repo.findByResolvedFalse();
+        return repository.findByResolvedFalse();
     }
 }

@@ -3,34 +3,34 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.PolicyRule;
 import com.example.demo.repository.PolicyRuleRepository;
 import com.example.demo.service.PolicyRuleService;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    private final PolicyRuleRepository ruleRepo;
+    private final PolicyRuleRepository repository;
 
-    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepo) {
-        this.ruleRepo = ruleRepo;
+    public PolicyRuleServiceImpl(PolicyRuleRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public PolicyRule create(PolicyRule rule) {
-        return ruleRepo.save(rule);
+        return repository.save(rule);
     }
 
     @Override
     public PolicyRule update(Long id, PolicyRule rule) {
-        PolicyRule existing = ruleRepo.findById(id).orElseThrow();
+        PolicyRule existing = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
+        existing.setRuleCode(rule.getRuleCode());
         existing.setDescription(rule.getDescription());
+        existing.setSeverity(rule.getSeverity());
         existing.setConditionsJson(rule.getConditionsJson());
-        return ruleRepo.save(existing);
+        return repository.save(existing);
     }
 
     @Override
     public List<PolicyRule> all() {
-        return ruleRepo.findAll();
+        return repository.findAll();
     }
 }
