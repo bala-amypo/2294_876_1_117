@@ -4,13 +4,8 @@ import com.example.demo.entity.UserAccount;
 import java.util.List;
 
 public interface UserAccountService {
-    UserAccount create(UserAccount user);
-    UserAccount updateStatus(Long id, String status);
-    List<UserAccount> all();
-
-    // Missing method
-    UserAccount findByEmail(String email);
-
-    // Optional: get by ID if used
+    UserAccount createUser(UserAccount user);
+    UserAccount updateUserStatus(Long id, String status);
+    List<UserAccount> getAllUsers();
     UserAccount getUserById(Long id);
 }

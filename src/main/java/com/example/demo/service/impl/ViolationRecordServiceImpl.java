@@ -12,32 +12,18 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
 
     private final ViolationRecordRepository repository;
 
-    // Constructor injection
     public ViolationRecordServiceImpl(ViolationRecordRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public ViolationRecord markResolved(Long id) {
-        ViolationRecord record = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Violation not found"));
-        record.setResolved(true);
+    public ViolationRecord logViolation(ViolationRecord record) {
         return repository.save(record);
     }
 
     @Override
-    public List<ViolationRecord> byUser(Long userId) {
-        return repository.findByUserId(userId);
-    }
-
-    @Override
-    public List<ViolationRecord> unresolved() {
+    public List<ViolationRecord> getUnresolvedViolations() {
         return repository.findByResolvedFalse();
-    }
-
-    @Override
-    public ViolationRecord log(ViolationRecord record) {
-        return repository.save(record);
     }
 
     @Override

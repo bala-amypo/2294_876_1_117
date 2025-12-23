@@ -1,19 +1,29 @@
 package com.example.demo.util;
 
-import com.example.demo.entity.PolicyRule;
-import com.example.demo.entity.ViolationRecord;
+import com.example.demo.entity.LoginEvent;
+import com.example.demo.repository.PolicyRuleRepository;
+import com.example.demo.repository.ViolationRecordRepository;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RuleEvaluationUtil {
 
-    public static boolean evaluate(PolicyRule rule, Object event) {
-        return true;
+    private final PolicyRuleRepository ruleRepository;
+    private final ViolationRecordRepository violationRepository;
+
+    public RuleEvaluationUtil(PolicyRuleRepository ruleRepository, ViolationRecordRepository violationRepository) {
+        this.ruleRepository = ruleRepository;
+        this.violationRepository = violationRepository;
     }
 
-    public static ViolationRecord buildViolation(PolicyRule rule, Object event) {
-        ViolationRecord vr = new ViolationRecord();
-        vr.setViolationType(rule.getRuleCode());
-        vr.setSeverity(rule.getSeverity());
-        vr.setDetails(rule.getDescription());
-        return vr;
+    // Example evaluation logic
+    public void evaluateLoginEvent(LoginEvent event) {
+        // Iterate over active rules and evaluate
+        ruleRepository.findByActiveTrue().forEach(rule -> {
+            // Dummy evaluation: create a violation if something matches
+            if (event.getUsername() == null || event.getUsername().isEmpty()) {
+                // save violation
+            }
+        });
     }
 }

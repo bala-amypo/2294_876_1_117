@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,39 +12,35 @@ import java.util.List;
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    // Constructor injection (no @Autowired needed)
-    public UserAccountServiceImpl(UserAccountRepository repository) {
+    public UserAccountServiceImpl(UserAccountRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public UserAccount create(UserAccount user) {
+    public UserAccount createUser(UserAccount user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repository.save(user);
     }
 
     @Override
-    public UserAccount updateStatus(Long id, String status) {
-        UserAccount user = repository.findById(id)
+    public UserAccount updateUserStatus(Long id, String status) {
+        UserAccount existing = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setStatus(status);
-        return repository.save(user);
+        existing.setStatus(status);
+        return repository.save(existing);
     }
 
     @Override
-    public List<UserAccount> all() {
+    public List<UserAccount> getAllUsers() {
         return repository.findAll();
-    }
-
-    @Override
-    public UserAccount findByEmail(String email) {
-        return repository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
     }
 
     @Override
     public UserAccount getUserById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
