@@ -22,7 +22,19 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     }
 
     @Override
-    public List<ViolationRecord> getAllViolations() {
-        return repo.findAll();
+    public ViolationRecord markResolved(Long id) {
+        ViolationRecord record = repo.findById(id).orElseThrow();
+        record.setResolved(true);
+        return repo.save(record);
+    }
+
+    @Override
+    public List<ViolationRecord> byUser(Long userId) {
+        return repo.findByUserId(userId);
+    }
+
+    @Override
+    public List<ViolationRecord> unresolved() {
+        return repo.findByResolvedFalse();
     }
 }
