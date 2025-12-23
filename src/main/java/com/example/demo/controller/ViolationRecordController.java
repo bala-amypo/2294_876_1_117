@@ -4,40 +4,19 @@ import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/violations")
 public class ViolationRecordController {
 
-    private final ViolationRecordService violationService;
+    private final ViolationRecordService service;
 
-    public ViolationRecordController(ViolationRecordService violationService) {
-        this.violationService = violationService;
+    public ViolationRecordController(ViolationRecordService service) {
+        this.service = service;
     }
 
+    // METHOD NAME MUST BE log()
     @PostMapping
-    public ViolationRecord create(@RequestBody ViolationRecord violation) {
-        return violationService.logViolation(violation);
-    }
-
-    @PutMapping("/{id}/resolve")
-    public ViolationRecord resolve(@PathVariable Long id) {
-        return violationService.markResolved(id);
-    }
-
-    @GetMapping("/user/{userId}")
-    public List<ViolationRecord> byUser(@PathVariable Long userId) {
-        return violationService.getViolationsByUser(userId);
-    }
-
-    @GetMapping("/unresolved")
-    public List<ViolationRecord> unresolved() {
-        return violationService.getUnresolvedViolations();
-    }
-
-    @GetMapping
-    public List<ViolationRecord> all() {
-        return violationService.getAllViolations();
+    public ViolationRecord log(@RequestBody ViolationRecord record) {
+        return service.log(record);
     }
 }

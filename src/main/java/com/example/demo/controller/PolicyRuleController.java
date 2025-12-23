@@ -10,30 +10,15 @@ import java.util.List;
 @RequestMapping("/api/rules")
 public class PolicyRuleController {
 
-    private final PolicyRuleService ruleService;
+    private final PolicyRuleService service;
 
-    public PolicyRuleController(PolicyRuleService ruleService) {
-        this.ruleService = ruleService;
+    public PolicyRuleController(PolicyRuleService service) {
+        this.service = service;
     }
 
-    @PostMapping
-    public PolicyRule createRule(@RequestBody PolicyRule rule) {
-        return ruleService.createRule(rule);
-    }
-
-    @PutMapping("/{id}")
-    public PolicyRule updateRule(@PathVariable Long id,
-                                 @RequestBody PolicyRule rule) {
-        return ruleService.updateRule(id, rule);
-    }
-
-    @GetMapping("/active")
-    public List<PolicyRule> activeRules() {
-        return ruleService.getActiveRules();
-    }
-
+    // METHOD NAME MUST BE all()
     @GetMapping
-    public List<PolicyRule> allRules() {
-        return ruleService.getAllRules();
+    public List<PolicyRule> all() {
+        return service.findAll();
     }
 }
