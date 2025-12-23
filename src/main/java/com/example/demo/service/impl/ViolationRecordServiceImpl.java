@@ -14,8 +14,6 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
         this.repo = repo;
     }
 
-    // ✅ matches interface: lookup(String)
-    // ✅ handles Optional correctly
     @Override
     public DeviceProfile lookup(String deviceId) {
         return repo.findByDeviceId(deviceId)
