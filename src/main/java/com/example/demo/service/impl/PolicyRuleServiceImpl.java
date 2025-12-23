@@ -17,12 +17,12 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     }
 
     @Override
-    public PolicyRule create(PolicyRule rule) {
+    public PolicyRule createRule(PolicyRule rule) {
         return repository.save(rule);
     }
 
     @Override
-    public PolicyRule update(Long id, PolicyRule rule) {
+    public PolicyRule updateRule(Long id, PolicyRule rule) {
         PolicyRule existing = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("PolicyRule not found"));
         existing.setRuleCode(rule.getRuleCode());
@@ -34,8 +34,13 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     }
 
     @Override
-    public List<PolicyRule> all() {
+    public List<PolicyRule> getAllRules() {
         return repository.findAll();
+    }
+
+    @Override
+    public List<PolicyRule> getActiveRules() {
+        return repository.findByActiveTrue();
     }
 
     @Override
