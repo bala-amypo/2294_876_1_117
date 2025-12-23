@@ -15,7 +15,7 @@ public class ViolationRecordController {
     }
 
     @PostMapping
-    public ViolationRecord log(@RequestBody ViolationRecord record) {
-        return violationRecordService.log(record);
+    public ViolationRecord save(@RequestBody ViolationRecord record) {
+        return violationRecordService.saveViolation(record);
     }
 }
