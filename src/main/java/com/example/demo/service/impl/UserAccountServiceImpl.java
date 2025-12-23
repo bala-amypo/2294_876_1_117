@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,30 +11,46 @@ import java.util.List;
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository userRepo;
+    private final UserAccountRepository repo;
+    private final PasswordEncoder encoder;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepo) {
-        this.userRepo = userRepo;
+    // REQUIRED BY TEST
+    public UserAccountServiceImpl(UserAccountRepository repo) {
+        this.repo = repo;
+        this.encoder = null;
+    }
+
+    // REQUIRED BY SPRING
+    public UserAccountServiceImpl(UserAccountRepository repo, PasswordEncoder encoder) {
+        this.repo = repo;
+        this.encoder = encoder;
     }
 
     @Override
-    public UserAccount saveUser(UserAccount user) {
-        return userRepo.save(user);
+    public UserAccount createUser(UserAccount user) {
+        if (encoder != null) {
+            user.setPassword(encoder.encode(user.getPassword()));
+        }
+        return repo.save(user);
     }
 
     @Override
-    public UserAccount findByUsername(String username) {
-        // 🔥 FIX IS HERE
-        return userRepo.findByUsername(username).orElse(null);
+    public UserAccount getUserById(long id) {
+        return repo.findById(id).orElse(null);
     }
 
     @Override
-    public UserAccount getById(Long id) {
-        return userRepo.findById(id).orElse(null);
+    public UserAccount updateUserStatus(long id, String status) {
+        UserAccount user = repo.findById(id).orElse(null);
+        if (user != null) {
+            user.setStatus(status);
+            repo.save(user);
+        }
+        return user;
     }
 
     @Override
-    public List<UserAccount> getAll() {
-        return userRepo.findAll();
+    public List<UserAccount> getAllUsers() {
+        return repo.findAll();
     }
 }

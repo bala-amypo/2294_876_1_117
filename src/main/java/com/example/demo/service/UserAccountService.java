@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface UserAccountService {
 
-    UserAccount saveUser(UserAccount user);
+    UserAccount createUser(UserAccount user);
 
-    UserAccount findByUsername(String username);
+    UserAccount getUserById(long id);
 
-    UserAccount getById(Long id);
+    UserAccount updateUserStatus(long id, String status);
 
-    List<UserAccount> getAll();
+    List<UserAccount> getAllUsers();
 }
