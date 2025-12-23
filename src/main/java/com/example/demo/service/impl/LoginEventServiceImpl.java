@@ -15,7 +15,6 @@ public class LoginEventServiceImpl implements LoginEventService {
     private final LoginEventRepository loginRepo;
     private final RuleEvaluationUtil ruleEvaluator;
 
-    // Required signature by tests
     public LoginEventServiceImpl(LoginEventRepository loginRepo, RuleEvaluationUtil ruleEvaluator) {
         this.loginRepo = loginRepo;
         this.ruleEvaluator = ruleEvaluator;
@@ -24,21 +23,11 @@ public class LoginEventServiceImpl implements LoginEventService {
     @Override
     public LoginEvent recordLogin(LoginEvent event) {
         if (event.getIpAddress() == null || event.getDeviceId() == null) {
-            throw new IllegalArgumentException("IP Address and Device ID are required");
+            throw new IllegalArgumentException("IP address and device ID required");
         }
-
-        if (event.getTimestamp() == null) {
-            event.setTimestamp(LocalDateTime.now());
-        }
-
+        if (event.getTimestamp() == null) event.setTimestamp(LocalDateTime.now());
         LoginEvent saved = loginRepo.save(event);
-
-        // evaluate rules (utility)
-        try {
-            ruleEvaluator.evaluateLoginEvent(saved);
-        } catch (Exception ignored) {
-        }
-
+        ruleEvaluator.evaluateLoginEvent(saved);
         return saved;
     }
 

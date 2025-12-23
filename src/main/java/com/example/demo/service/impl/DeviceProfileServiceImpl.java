@@ -21,10 +21,9 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
 
     @Override
     public DeviceProfile registerDevice(DeviceProfile device) {
-        if (deviceRepo.findByDeviceId(device.getDeviceId()).isPresent()) {
+        deviceRepo.findByDeviceId(device.getDeviceId()).ifPresent(d -> {
             throw new IllegalArgumentException("Device ID already exists");
-        }
-        if (device.getIsTrusted() == null) device.setIsTrusted(false);
+        });
         device.setLastSeen(LocalDateTime.now());
         return deviceRepo.save(device);
     }
@@ -46,10 +45,5 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     @Override
     public Optional<DeviceProfile> findByDeviceId(String deviceId) {
         return deviceRepo.findByDeviceId(deviceId);
-    }
-
-    @Override
-    public Optional<DeviceProfile> getById(Long id) {
-        return deviceRepo.findById(id);
     }
 }
