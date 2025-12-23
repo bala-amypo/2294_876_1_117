@@ -5,14 +5,6 @@ import com.example.demo.entity.ViolationRecord;
 import java.util.List;
 
 public interface ViolationRecordService {
-
-    ViolationRecord logViolation(ViolationRecord record);
-
-    ViolationRecord markResolved(Long id);
-
-    List<ViolationRecord> getViolationsByUser(Long userId);
-
-    List<ViolationRecord> getUnresolvedViolations();
-
+    ViolationRecord log(ViolationRecord record);
     List<ViolationRecord> getAllViolations();
 }

@@ -9,30 +9,36 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository userRepo;
-    private final PasswordEncoder passwordEncoder;
+    private final UserAccountRepository repo;
+    private final PasswordEncoder encoder;
 
-    // REQUIRED by test cases
-    public UserAccountServiceImpl(UserAccountRepository userRepo,
-                                  PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
+    // REQUIRED by tests
+    public UserAccountServiceImpl(UserAccountRepository repo,
+                                  PasswordEncoder encoder) {
+        this.repo = repo;
+        this.encoder = encoder;
     }
 
-    // Optional (Spring)
-    public UserAccountServiceImpl(UserAccountRepository userRepo) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = null;
+    // REQUIRED by Spring
+    public UserAccountServiceImpl(UserAccountRepository repo) {
+        this.repo = repo;
+        this.encoder = null;
     }
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        return userRepo.save(user);
+        return repo.save(user);
     }
 
     @Override
     public UserAccount getUserById(Long id) {
-        return userRepo.findById(id)
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public UserAccount findByEmail(String email) {
+        return repo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
