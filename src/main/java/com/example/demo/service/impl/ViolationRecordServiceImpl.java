@@ -29,4 +29,13 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     public List<ViolationRecord> unresolved() {
         return violationRepo.findByResolvedFalse();
     }
+
+    @Override
+    public void markResolved(Long id) {
+        ViolationRecord record = violationRepo.findById(id).orElse(null);
+        if (record != null) {
+            record.setResolved(true);
+            violationRepo.save(record);
+        }
+    }
 }
