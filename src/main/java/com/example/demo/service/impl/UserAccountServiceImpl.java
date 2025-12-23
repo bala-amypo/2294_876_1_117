@@ -18,8 +18,13 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount saveUser(UserAccount user) {
-        return userRepo.save(user); // return type UserAccount, not void
+    public UserAccount createUser(UserAccount user) {
+        return userRepo.save(user);
+    }
+
+    @Override
+    public UserAccount getUserById(long id) {
+        return userRepo.findById(id).orElse(null);
     }
 
     @Override
@@ -28,14 +33,14 @@ public class UserAccountServiceImpl implements UserAccountService {
         if (optionalUser.isPresent()) {
             UserAccount user = optionalUser.get();
             user.setStatus(status);
-            return userRepo.save(user); // return updated UserAccount
+            return userRepo.save(user);
         }
         return null;
     }
 
     @Override
-    public UserAccount getUserById(long id) {
-        return userRepo.findById(id).orElse(null);
+    public UserAccount saveUser(UserAccount user) {
+        return userRepo.save(user);
     }
 
     @Override
@@ -45,6 +50,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount findByUsername(String username) {
-        return userRepo.findByUsername(username).orElse(null);
+        return userRepo.findByUsername(username);
     }
 }
