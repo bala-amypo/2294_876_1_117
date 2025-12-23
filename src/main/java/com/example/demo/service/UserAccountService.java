@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface UserAccountService {
 
-    UserAccount create(UserAccount user);
+    UserAccount createUser(UserAccount user);
+
+    UserAccount findByUsername(String username);
 
     UserAccount getById(Long id);
 

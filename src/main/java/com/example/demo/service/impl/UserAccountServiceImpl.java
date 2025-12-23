@@ -18,8 +18,14 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount create(UserAccount user) {
+    public UserAccount createUser(UserAccount user) {
         return repository.save(user);
+    }
+
+    @Override
+    public UserAccount findByUsername(String username) {
+        return repository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
