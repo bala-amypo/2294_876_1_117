@@ -5,7 +5,7 @@ import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
@@ -17,7 +17,7 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     }
 
     @Override
-    public ViolationRecord logViolation(ViolationRecord record) {
+    public ViolationRecord log(ViolationRecord record) {
         return repo.save(record);
     }
 }

@@ -6,6 +6,7 @@ import com.example.demo.service.UserAccountService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -30,5 +31,10 @@ public class UserAccountServiceImpl implements UserAccountService {
             return repo.save(user);
         }
         return null;
+    }
+
+    @Override
+    public List<UserAccount> getAllUsers() {
+        return repo.findAll();
     }
 }

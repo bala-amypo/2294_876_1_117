@@ -25,4 +25,9 @@ public class LoginEventServiceImpl implements LoginEventService {
     public List<LoginEvent> getSuspiciousLogins(Long userId) {
         return repo.findByUserIdAndSuspiciousTrue(userId);
     }
+
+    @Override
+    public List<LoginEvent> getAllEvents() {
+        return repo.findAll();
+    }
 }

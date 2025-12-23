@@ -4,7 +4,7 @@ import com.example.demo.entity.DeviceProfile;
 import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
