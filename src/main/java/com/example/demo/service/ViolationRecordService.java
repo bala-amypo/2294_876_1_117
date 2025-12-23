@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface ViolationRecordService {
 
-    ViolationRecord log(ViolationRecord record);
+    ViolationRecord logViolation(ViolationRecord violation);
 
-    void markResolved(Long id);
+    List<ViolationRecord> getViolationsByUser(Long userId);
 
-    List<ViolationRecord> byUser(Long userId);
+    ViolationRecord markResolved(Long id);
 
-    List<ViolationRecord> unresolved();
+    List<ViolationRecord> getUnresolvedViolations();
+
+    List<ViolationRecord> getAllViolations();
 }
