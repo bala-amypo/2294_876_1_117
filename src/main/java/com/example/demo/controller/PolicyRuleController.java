@@ -41,7 +41,7 @@ public class PolicyRuleController {
         return ResponseEntity.ok(service.getAllRules());
     }
     @GetMapping
-public List<PolicyRule> all() {
+    public List<PolicyRule> all() {
     return policyRuleService.getAll();
 }
 
