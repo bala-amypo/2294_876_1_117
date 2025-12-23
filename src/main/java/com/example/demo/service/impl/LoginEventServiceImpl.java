@@ -6,7 +6,6 @@ import com.example.demo.service.LoginEventService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LoginEventServiceImpl implements LoginEventService {
@@ -18,15 +17,12 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
-    public LoginEvent recordLogin(LoginEvent event) {
-        return repository.save(event);
+    public List<LoginEvent> getAllEvents() {
+        return repository.findAll();
     }
 
     @Override
-    public List<LoginEvent> getSuspiciousLogins(Long userId) {
-        return repository.findByUserId(userId)
-                .stream()
-                .filter(LoginEvent::getSuspicious) // 🔴 FIXED HERE
-                .collect(Collectors.toList());
+    public void recordLogin(LoginEvent event) {
+        repository.save(event);
     }
 }

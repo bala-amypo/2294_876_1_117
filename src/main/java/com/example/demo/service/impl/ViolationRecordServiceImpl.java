@@ -5,6 +5,8 @@ import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
 
@@ -15,7 +17,22 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     }
 
     @Override
-    public ViolationRecord logViolation(ViolationRecord record) {
-        return repository.save(record);
+    public void logViolation(ViolationRecord record) {
+        repository.save(record);
+    }
+
+    @Override
+    public ViolationRecord markResolved(long id) {
+        ViolationRecord vr = repository.findById(id).orElse(null);
+        if (vr != null) {
+            vr.setResolved(true);
+            repository.save(vr);
+        }
+        return vr;
+    }
+
+    @Override
+    public List<ViolationRecord> getUnresolvedViolations() {
+        return repository.findByResolvedFalse();
     }
 }
