@@ -1,45 +1,19 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.entity.UserAccount;
-import com.example.demo.repository.UserAccountRepository;
-import com.example.demo.service.UserAccountService;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository repo;
+    private final UserAccountRepository userRepository;
 
-    public UserAccountServiceImpl(UserAccountRepository repo) {
-        this.repo = repo;
+    public UserAccountServiceImpl(UserAccountRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public UserAccount create(UserAccount user) {
-        return repo.save(user);
+    public Optional<UserAccount> findByEmail(String email) {
+        return Optional.ofNullable(userRepository.findByEmail(email));
     }
 
-    @Override
-    public UserAccount getById(Long id) {
-        return repo.findById(id).orElse(null);
-    }
-
-    @Override
-    public List<UserAccount> all() {   // ✅ METHOD NAME MATCHED
-        return repo.findAll();
-    }
-
-    @Override
-    public UserAccount updateStatus(Long id, String status) {
-        UserAccount user = repo.findById(id).orElseThrow();
-        user.setStatus(status);
-        return repo.save(user);
-    }
-
-    @Override
-    public UserAccount findByEmail(String email) {
-        return repo.findByEmail(email); // ✅ NO Optional, NO orElse
-    }
+    // Keep other methods as they are
 }

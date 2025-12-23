@@ -1,18 +1,7 @@
-package com.example.demo.service;
-
-import com.example.demo.entity.UserAccount;
-
-import java.util.List;
+import java.util.Optional;
 
 public interface UserAccountService {
-
-    UserAccount create(UserAccount user);
-
-    UserAccount getById(Long id);
-
-    List<UserAccount> all();   // 👈 IMPORTANT (not getAll)
-
-    UserAccount updateStatus(Long id, String status);
-
-    UserAccount findByEmail(String email);
+    Optional<UserAccount> findByEmail(String email);
+    
+    // Keep other methods as they are
 }
