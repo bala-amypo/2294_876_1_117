@@ -22,6 +22,16 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
+    public UserAccount getById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<UserAccount> getAll() {
+        return repo.findAll();
+    }
+
+    @Override
     public UserAccount updateStatus(Long id, String status) {
         UserAccount user = repo.findById(id).orElseThrow();
         user.setStatus(status);
@@ -29,12 +39,8 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public List<UserAccount> all() {
-        return repo.findAll();
-    }
-
-    @Override
     public UserAccount findByEmail(String email) {
-        return repo.findByEmail(email).orElse(null);
+        // 🔥 NO orElse HERE
+        return repo.findByEmail(email);
     }
 }
