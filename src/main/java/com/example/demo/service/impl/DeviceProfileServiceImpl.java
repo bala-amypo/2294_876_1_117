@@ -1,42 +1,55 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.DeviceProfile;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository repository;
+    private final DeviceProfileRepository deviceRepo;
 
-    public DeviceProfileServiceImpl(DeviceProfileRepository repository) {
-        this.repository = repository;
+    public DeviceProfileServiceImpl(DeviceProfileRepository deviceRepo) {
+        this.deviceRepo = deviceRepo;
     }
 
     @Override
     public DeviceProfile registerDevice(DeviceProfile device) {
-        return repository.save(device);
+        if (deviceRepo.findByDeviceId(device.getDeviceId()).isPresent()) {
+            throw new IllegalArgumentException("Device ID already exists");
+        }
+        if (device.getIsTrusted() == null) device.setIsTrusted(false);
+        device.setLastSeen(LocalDateTime.now());
+        return deviceRepo.save(device);
     }
 
     @Override
-    public DeviceProfile findByDeviceId(String deviceId) {
-        return repository.findByDeviceId(deviceId)
-                .orElseThrow(() -> new RuntimeException("Device not found"));
+    public DeviceProfile updateTrustStatus(Long id, boolean trust) {
+        DeviceProfile device = deviceRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Device not found"));
+        device.setIsTrusted(trust);
+        device.setLastSeen(LocalDateTime.now());
+        return deviceRepo.save(device);
     }
 
     @Override
-    public DeviceProfile updateTrustStatus(Long id, boolean isTrusted) {
-        DeviceProfile existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Device not found"));
-        existing.setIsTrusted(isTrusted);
-        return repository.save(existing);
+    public List<DeviceProfile> getDevicesByUser(Long userId) {
+        return deviceRepo.findByUserId(userId);
     }
 
     @Override
-    public List<DeviceProfile> getAllDevices() {
-        return repository.findAll();
+    public Optional<DeviceProfile> findByDeviceId(String deviceId) {
+        return deviceRepo.findByDeviceId(deviceId);
+    }
+
+    @Override
+    public Optional<DeviceProfile> getById(Long id) {
+        return deviceRepo.findById(id);
     }
 }
