@@ -1,50 +1,28 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.DeviceProfile;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository deviceRepo;
+    private final DeviceProfileRepository repository;
 
-    public DeviceProfileServiceImpl(DeviceProfileRepository deviceRepo) {
-        this.deviceRepo = deviceRepo;
+    public DeviceProfileServiceImpl(DeviceProfileRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public DeviceProfile registerDevice(DeviceProfile device) {
-        deviceRepo.findByDeviceId(device.getDeviceId()).ifPresent(d -> {
-            throw new IllegalArgumentException("Device ID already exists");
-        });
-        device.setLastSeen(LocalDateTime.now());
-        return deviceRepo.save(device);
+    public Optional<DeviceProfile> lookup(String deviceId) {
+        return repository.findByDeviceId(deviceId);
     }
 
     @Override
-    public DeviceProfile updateTrustStatus(Long id, boolean trust) {
-        DeviceProfile device = deviceRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Device not found"));
-        device.setIsTrusted(trust);
-        device.setLastSeen(LocalDateTime.now());
-        return deviceRepo.save(device);
+    public DeviceProfile save(DeviceProfile deviceProfile) {
+        return repository.save(deviceProfile);
     }
-
-    @Override
-    public List<DeviceProfile> getDevicesByUser(Long userId) {
-        return deviceRepo.findByUserId(userId);
-    }
-
-    @Override
-    public Optional<DeviceProfile> findByDeviceId(String deviceId) {
-        return deviceRepo.findByDeviceId(deviceId);
-    }
-    
 }
