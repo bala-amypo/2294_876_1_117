@@ -18,4 +18,14 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     public DeviceProfile lookup(String deviceId) {
         return repository.findByDeviceId(deviceId).orElse(null);
     }
+
+    @Override
+    public DeviceProfile updateTrustStatus(long id, boolean trusted) {
+        DeviceProfile device = repository.findById(id).orElse(null);
+        if (device != null) {
+            device.setIsTrusted(trusted);
+            return repository.save(device);
+        }
+        return null;
+    }
 }

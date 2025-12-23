@@ -15,11 +15,17 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     }
 
     @Override
-    public void markResolved(long id) {
+    public ViolationRecord log(ViolationRecord record) {
+        return repository.save(record);
+    }
+
+    @Override
+    public ViolationRecord markResolved(long id) {
         ViolationRecord record = repository.findById(id).orElse(null);
         if (record != null) {
             record.setResolved(true);
-            repository.save(record);
+            return repository.save(record);
         }
+        return null;
     }
 }
