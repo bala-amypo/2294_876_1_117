@@ -23,7 +23,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount findByUsername(String username) {
-        return userRepo.findByUsername(username);
+        // 🔥 FIX IS HERE
+        return userRepo.findByUsername(username).orElse(null);
     }
 
     @Override
