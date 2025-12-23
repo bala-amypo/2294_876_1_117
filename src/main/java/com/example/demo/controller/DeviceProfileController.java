@@ -16,6 +16,8 @@ public class DeviceProfileController {
 
     @GetMapping("/{deviceId}")
     public DeviceProfile getByDeviceId(@PathVariable String deviceId) {
-        return deviceProfileService.findByDeviceId(deviceId);
+        return deviceProfileService
+                .findByDeviceId(deviceId)
+                .orElse(null);
     }
 }

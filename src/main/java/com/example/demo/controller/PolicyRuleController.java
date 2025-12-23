@@ -17,7 +17,7 @@ public class PolicyRuleController {
     }
 
     @GetMapping
-    public List<PolicyRule> getAllRules() {
-        return policyRuleService.getAllPolicyRules();
+    public List<PolicyRule> getAll() {
+        return policyRuleService.findAll();
     }
 }
