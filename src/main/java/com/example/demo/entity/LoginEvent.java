@@ -21,6 +21,11 @@ public class LoginEvent {
 
     private String loginStatus; // SUCCESS / FAILED
 
+
+    public Boolean getSuspicious() {
+        return suspicious;
+    }
+
     public LoginEvent() {}
 
     public LoginEvent(Long id, Long userId, String ipAddress, String location, String deviceId, LocalDateTime timestamp, String loginStatus) {

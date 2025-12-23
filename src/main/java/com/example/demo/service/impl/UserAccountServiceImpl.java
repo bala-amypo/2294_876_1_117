@@ -17,27 +17,17 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
+    public UserAccount saveUser(UserAccount user) {
+        return repository.save(user);
+    }
+
+    @Override
     public UserAccount findByUsername(String username) {
         return repository.findByUsername(username).orElse(null);
     }
 
     @Override
-    public UserAccount getUserById(long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    @Override
     public List<UserAccount> getAllUsers() {
         return repository.findAll();
-    }
-
-    @Override
-    public UserAccount updateUserStatus(long id, String status) {
-        UserAccount user = repository.findById(id).orElse(null);
-        if (user != null) {
-            user.setStatus(status);
-            return repository.save(user);
-        }
-        return null;
     }
 }
