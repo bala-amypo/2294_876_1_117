@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,28 +13,32 @@ public class ViolationRecordController {
 
     private final ViolationRecordService service;
 
-    @Autowired
     public ViolationRecordController(ViolationRecordService service) {
         this.service = service;
     }
 
-    @PostMapping("/log")
-    public ViolationRecord log(@RequestBody ViolationRecord record) {
-        return service.log(record);
-    }
-
-    @PutMapping("/{id}/resolve")
-    public void markResolved(@PathVariable Long id) {
-        service.markResolved(id);
+    @PostMapping
+    public ResponseEntity<ViolationRecord> logViolation(@RequestBody ViolationRecord violation) {
+        return ResponseEntity.ok(service.logViolation(violation));
     }
 
     @GetMapping("/user/{userId}")
-    public List<ViolationRecord> byUser(@PathVariable Long userId) {
-        return service.byUser(userId);
+    public ResponseEntity<List<ViolationRecord>> getViolationsByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(service.getViolationsByUser(userId));
+    }
+
+    @PutMapping("/{id}/resolve")
+    public ResponseEntity<ViolationRecord> markResolved(@PathVariable Long id) {
+        return ResponseEntity.ok(service.markResolved(id));
     }
 
     @GetMapping("/unresolved")
-    public List<ViolationRecord> unresolved() {
-        return service.unresolved();
+    public ResponseEntity<List<ViolationRecord>> getUnresolvedViolations() {
+        return ResponseEntity.ok(service.getUnresolvedViolations());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ViolationRecord>> getAllViolations() {
+        return ResponseEntity.ok(service.getAllViolations());
     }
 }

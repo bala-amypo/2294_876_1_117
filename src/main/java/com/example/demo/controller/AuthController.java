@@ -1,9 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.JwtResponse;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,34 +15,40 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserAccountService userService;
+    private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    // Constructor injection
-    public AuthController(UserAccountService userService, JwtUtil jwtUtil) {
+    public AuthController(UserAccountService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
-        // Find user by email
-        UserAccount user = userService.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // Dummy password check
-        if (!user.getPassword().equals(password)) {
-            return ResponseEntity.status(401).body("Invalid credentials");
+    // POST /auth/register
+    @PostMapping("/register")
+    public ResponseEntity<UserAccount> register(@RequestBody RegisterRequest request) {
+        UserAccount user = new UserAccount();
+        user.setEmployeeId(request.getEmployeeId());
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        if (request.getRole() != null) {
+            user.setRole(request.getRole());
         }
-
-        // Generate token
-        String token = jwtUtil.generateToken(user.getEmail());
-        return ResponseEntity.ok(token);
+        UserAccount saved = userService.createUser(user);
+        return ResponseEntity.ok(saved);
     }
 
-    @GetMapping("/validate")
-    public ResponseEntity<String> validate(@RequestParam String token) {
-        boolean valid = jwtUtil.validateToken(token);
-        return valid ? ResponseEntity.ok("Token is valid")
-                     : ResponseEntity.status(401).body("Token is invalid");
+    // POST /auth/login
+    @PostMapping("/login")
+    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest request) {
+        UserAccount user = userService.findByUsername(request.getUsernameOrEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+        String token = jwtUtil.generateToken(user.getUsername(), user.getId(), user.getEmail(), user.getRole());
+        JwtResponse response = new JwtResponse(token, user.getId(), user.getEmail(), user.getRole());
+        return ResponseEntity.ok(response);
     }
 }
