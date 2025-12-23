@@ -22,10 +22,12 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.save(user);
     }
 
-    @Override
-    public UserAccount getUserById(long id) {
-        return userRepo.findById(id).orElse(null);
-    }
+@Override
+public UserAccount getUserById(long id) {
+    // Correctly unwrap Optional
+    return userRepo.findById(id).orElse(null);
+}
+
 
     @Override
     public UserAccount updateUserStatus(long id, String status) {

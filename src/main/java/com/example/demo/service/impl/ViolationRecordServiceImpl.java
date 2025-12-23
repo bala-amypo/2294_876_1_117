@@ -17,7 +17,7 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     }
 
     @Override
-    public ViolationRecord log(ViolationRecord violation) {
+    public ViolationRecord logViolation(ViolationRecord violation) {
         return violationRepo.save(violation);
     }
 
