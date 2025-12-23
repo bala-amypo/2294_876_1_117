@@ -6,7 +6,7 @@ import com.example.demo.service.UserAccountService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final UserAccountService userService;
@@ -19,21 +19,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password) {
+    public String login(@RequestParam String email) {
 
-        // 🔥 FIX IS HERE — NO orElseThrow()
         UserAccount user = userService.findByEmail(email);
 
-        if (!user.getPassword().equals(password)) {
-            throw new RuntimeException("Invalid credentials");
-        }
-
-        return jwtUtil.generateToken(
-                user.getEmail(),
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
-        );
+        return jwtUtil.generateToken(user.getEmail());
     }
 }

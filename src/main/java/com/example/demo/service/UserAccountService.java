@@ -1,16 +1,18 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.UserAccount;
+
 import java.util.List;
 
 public interface UserAccountService {
 
     UserAccount create(UserAccount user);
 
+    UserAccount findByEmail(String email);
+
+    UserAccount findByUsername(String username);
+
     UserAccount updateStatus(Long id, String status);
 
     List<UserAccount> all();
-
-    // 🔴 ADD THIS
-    UserAccount findByEmail(String email);
 }
