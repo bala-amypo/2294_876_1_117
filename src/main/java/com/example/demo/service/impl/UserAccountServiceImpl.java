@@ -27,7 +27,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public List<UserAccount> getAll() {
+    public List<UserAccount> all() {   // ✅ METHOD NAME MATCHED
         return repo.findAll();
     }
 
@@ -40,7 +40,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount findByEmail(String email) {
-        // 🔥 NO orElse HERE
-        return repo.findByEmail(email);
+        return repo.findByEmail(email); // ✅ NO Optional, NO orElse
     }
 }
