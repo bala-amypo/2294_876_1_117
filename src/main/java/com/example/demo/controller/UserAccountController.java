@@ -40,3 +40,4 @@ public class UserAccountController {
         return ResponseEntity.ok(service.getAllUsers());
     }
 }
+
