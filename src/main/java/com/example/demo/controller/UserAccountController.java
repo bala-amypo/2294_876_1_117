@@ -43,4 +43,9 @@ public class UserAccountController {
     public ResponseEntity<List<UserAccount>> getAllUsers() {
         return ResponseEntity.ok(service.getAllUsers());
     }
+    @PostMapping
+public UserAccount create(@RequestBody UserAccount user) {
+    return userService.create(user);
+}
+
 }

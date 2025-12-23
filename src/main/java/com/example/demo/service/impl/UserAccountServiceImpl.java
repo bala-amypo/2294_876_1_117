@@ -59,4 +59,5 @@ public class UserAccountServiceImpl implements UserAccountService {
     public Optional<UserAccount> findByUsername(String username) {
         return userRepo.findByUsername(username);
     }
+    
 }

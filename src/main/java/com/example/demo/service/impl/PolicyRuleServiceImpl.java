@@ -53,4 +53,5 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     public List<PolicyRule> getAllRules() {
         return ruleRepo.findAll();
     }
+    
 }

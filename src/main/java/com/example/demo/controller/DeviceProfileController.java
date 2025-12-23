@@ -40,4 +40,9 @@ public class DeviceProfileController {
     public ResponseEntity<DeviceProfile> findByDeviceId(@PathVariable String deviceId) {
         return ResponseEntity.ok(service.findByDeviceId(deviceId).orElse(null));
     }
+    @GetMapping("/{deviceId}")
+public DeviceProfile lookup(@PathVariable String deviceId) {
+    return deviceService.lookup(deviceId);
+}
+
 }

@@ -41,4 +41,9 @@ public class ViolationRecordController {
     public ResponseEntity<List<ViolationRecord>> getAllViolations() {
         return ResponseEntity.ok(service.getAllViolations());
     }
+    @PostMapping
+public ViolationRecord log(@RequestBody ViolationRecord record) {
+    return violationRecordService.log(record);
+}
+
 }
