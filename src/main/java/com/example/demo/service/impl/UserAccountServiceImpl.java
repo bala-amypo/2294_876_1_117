@@ -37,4 +37,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     public List<UserAccount> getAllUsers() {
         return repo.findAll();
     }
+    @Override
+public UserAccount getUserById(long id) {
+    return userRepo.findById(id).orElse(null);
+}
+
 }

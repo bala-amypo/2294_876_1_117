@@ -10,4 +10,6 @@ import java.util.List;
 public interface LoginEventRepository extends JpaRepository<LoginEvent, Long> {
     List<LoginEvent> findByUserId(Long userId);
     List<LoginEvent> findByUserIdAndLoginStatus(Long userId, String loginStatus);
+    List<LoginEvent> findByUserIdAndSuspiciousTrue(Long userId);
+
 }

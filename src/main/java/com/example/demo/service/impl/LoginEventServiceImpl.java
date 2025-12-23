@@ -30,4 +30,10 @@ public class LoginEventServiceImpl implements LoginEventService {
     public List<LoginEvent> getAllEvents() {
         return repo.findAll();
     }
+
+    @Override
+public List<LoginEvent> getEventsByUser(Long userId) {
+    return repo.findByUserId(userId); // Make sure LoginEventRepository has findByUserId()
+}
+
 }

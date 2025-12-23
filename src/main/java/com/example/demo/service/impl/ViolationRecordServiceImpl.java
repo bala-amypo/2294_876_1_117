@@ -20,4 +20,15 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     public ViolationRecord log(ViolationRecord record) {
         return repo.save(record);
     }
+    @Override
+public ViolationRecord markResolved(long id) {
+    Optional<ViolationRecord> optional = repo.findById(id);
+    if (optional.isPresent()) {
+        ViolationRecord record = optional.get();
+        record.setResolved(true);
+        return repo.save(record);
+    }
+    return null;
+}
+
 }
