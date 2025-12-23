@@ -1,23 +1,24 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.ViolationRecord;
-import com.example.demo.repository.ViolationRecordRepository;
-import com.example.demo.service.ViolationRecordService;
+import com.example.demo.entity.DeviceProfile;
+import com.example.demo.repository.DeviceProfileRepository;
+import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class ViolationRecordServiceImpl implements ViolationRecordService {
+public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final ViolationRecordRepository repo;
+    private final DeviceProfileRepository repo;
 
-    public ViolationRecordServiceImpl(ViolationRecordRepository repo) {
+    public DeviceProfileServiceImpl(DeviceProfileRepository repo) {
         this.repo = repo;
     }
 
+    // ✅ matches interface: lookup(String)
+    // ✅ handles Optional correctly
     @Override
-    public List<ViolationRecord> getUnresolvedViolations() {
-        return repo.findByResolvedFalse();
+    public DeviceProfile lookup(String deviceId) {
+        return repo.findByDeviceId(deviceId)
+                .orElse(null);
     }
 }
