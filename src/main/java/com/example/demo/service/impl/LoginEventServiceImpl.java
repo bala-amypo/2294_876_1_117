@@ -10,19 +10,19 @@ import java.util.List;
 @Service
 public class LoginEventServiceImpl implements LoginEventService {
 
-    private final LoginEventRepository repository;
+    private final LoginEventRepository repo;
 
-    public LoginEventServiceImpl(LoginEventRepository repository) {
-        this.repository = repository;
+    public LoginEventServiceImpl(LoginEventRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public List<LoginEvent> getAllEvents() {
-        return repository.findAll();
+    public LoginEvent recordLogin(LoginEvent event) {
+        return repo.save(event); // must return the saved entity
     }
 
     @Override
-    public void recordLogin(LoginEvent event) {
-        repository.save(event);
+    public List<LoginEvent> getSuspiciousLogins(Long userId) {
+        return repo.findByUserIdAndSuspiciousTrue(userId);
     }
 }

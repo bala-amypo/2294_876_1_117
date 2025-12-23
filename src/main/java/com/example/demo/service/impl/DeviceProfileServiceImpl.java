@@ -16,18 +16,18 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     }
 
     @Override
-    public DeviceProfile updateTrustStatus(long id, boolean isTrusted) {
-        Optional<DeviceProfile> optional = repo.findById(id);
-        if(optional.isPresent()) {
-            DeviceProfile dp = optional.get();
-            dp.setIsTrusted(isTrusted);
-            return repo.save(dp); // return the saved entity
-        }
-        return null;
+    public DeviceProfile lookup(String deviceId) {
+        return repo.findByDeviceId(deviceId).orElse(null);
     }
 
     @Override
-    public DeviceProfile findByDeviceId(String deviceId) {
-        return repo.findByDeviceId(deviceId).orElse(null);
+    public DeviceProfile updateTrustStatus(long id, boolean isTrusted) {
+        Optional<DeviceProfile> optional = repo.findById(id);
+        if (optional.isPresent()) {
+            DeviceProfile dp = optional.get();
+            dp.setIsTrusted(isTrusted);
+            return repo.save(dp);
+        }
+        return null;
     }
 }

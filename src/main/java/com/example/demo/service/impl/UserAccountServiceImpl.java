@@ -10,33 +10,25 @@ import java.util.List;
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository repository;
+    private final UserAccountRepository repo;
 
-    public UserAccountServiceImpl(UserAccountRepository repository) {
-        this.repository = repository;
+    public UserAccountServiceImpl(UserAccountRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public void saveUser(UserAccount user) {
-        repository.save(user);
+    public UserAccount saveUser(UserAccount user) {
+        return repo.save(user);
     }
 
     @Override
-    public void updateUserStatus(long userId, String status) {
-        UserAccount user = repository.findById(userId).orElse(null);
-        if (user != null) {
+    public UserAccount updateUserStatus(long id, String status) {
+        Optional<UserAccount> optional = repo.findById(id);
+        if (optional.isPresent()) {
+            UserAccount user = optional.get();
             user.setStatus(status);
-            repository.save(user);
+            return repo.save(user);
         }
-    }
-
-    @Override
-    public UserAccount getUserById(long userId) {
-        return repository.findById(userId).orElse(null);
-    }
-
-    @Override
-    public List<UserAccount> getAllUsers() {
-        return repository.findAll();
+        return null;
     }
 }
