@@ -4,29 +4,30 @@ import com.example.demo.entity.DeviceProfile;
 import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository repository;
+    private final DeviceProfileRepository repo;
 
-    public DeviceProfileServiceImpl(DeviceProfileRepository repository) {
-        this.repository = repository;
+    public DeviceProfileServiceImpl(DeviceProfileRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public DeviceProfile lookup(String deviceId) {
-        return repository.findByDeviceId(deviceId);
+    public DeviceProfile updateTrustStatus(long id, boolean isTrusted) {
+        Optional<DeviceProfile> optional = repo.findById(id);
+        if(optional.isPresent()) {
+            DeviceProfile dp = optional.get();
+            dp.setIsTrusted(isTrusted);
+            return repo.save(dp); // return the saved entity
+        }
+        return null;
     }
 
     @Override
-    public void updateTrustStatus(long id, boolean trusted) {
-        Optional<DeviceProfile> dp = repository.findById(id);
-        dp.ifPresent(d -> {
-            d.setIsTrusted(trusted);
-            repository.save(d);
-        });
+    public DeviceProfile findByDeviceId(String deviceId) {
+        return repo.findByDeviceId(deviceId).orElse(null);
     }
 }

@@ -12,16 +12,18 @@ public class UserAccount {
     private String username;
     private String password;
     private String status = "ACTIVE";
+    private String role = "USER"; // default role
 
     public UserAccount() {}
 
-    public UserAccount(String username, String password) {
+    public UserAccount(String username, String password, String role) {
         this.username = username;
         this.password = password;
+        this.role = role;
         this.status = "ACTIVE";
     }
 
-    // Getters and Setters
+    // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -33,4 +35,7 @@ public class UserAccount {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }
