@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,21 +11,32 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserAccountController {
 
-    @Autowired
-    private UserAccountService userService;
+    private UserAccountService service;
+
+    // REQUIRED BY TEST
+    public UserAccountController() {}
+
+    public UserAccountController(UserAccountService service) {
+        this.service = service;
+    }
 
     @PostMapping
-    public UserAccount createUser(@RequestBody UserAccount user) {
-        return userService.saveUser(user);   // ✅ FIXED
+    public ResponseEntity<UserAccount> create(UserAccount user) {
+        return ResponseEntity.ok(service.createUser(user));
     }
 
     @GetMapping("/{id}")
-    public UserAccount getUser(@PathVariable Long id) {
-        return userService.getById(id);
+    public ResponseEntity<UserAccount> get(@PathVariable long id) {
+        return ResponseEntity.ok(service.getUserById(id));
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<UserAccount> update(@PathVariable long id, @RequestParam String status) {
+        return ResponseEntity.ok(service.updateUserStatus(id, status));
     }
 
     @GetMapping
-    public List<UserAccount> getAllUsers() {
-        return userService.getAll();
+    public ResponseEntity<List<UserAccount>> all() {
+        return ResponseEntity.ok(service.getAllUsers());
     }
 }
