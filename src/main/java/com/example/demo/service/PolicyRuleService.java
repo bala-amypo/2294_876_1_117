@@ -7,4 +7,7 @@ public interface PolicyRuleService {
     PolicyRule create(PolicyRule rule);
     PolicyRule update(Long id, PolicyRule rule);
     List<PolicyRule> all();
+
+    // Missing method
+    PolicyRule getRuleByCode(String code);
 }
