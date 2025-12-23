@@ -11,35 +11,40 @@ import java.util.Optional;
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository repo;
+    private final UserAccountRepository userRepo;
 
-    public UserAccountServiceImpl(UserAccountRepository repo) {
-        this.repo = repo;
+    public UserAccountServiceImpl(UserAccountRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
     @Override
     public UserAccount saveUser(UserAccount user) {
-        return repo.save(user);
+        return userRepo.save(user); // return type UserAccount, not void
     }
 
     @Override
     public UserAccount updateUserStatus(long id, String status) {
-        Optional<UserAccount> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            UserAccount user = optional.get();
+        Optional<UserAccount> optionalUser = userRepo.findById(id);
+        if (optionalUser.isPresent()) {
+            UserAccount user = optionalUser.get();
             user.setStatus(status);
-            return repo.save(user);
+            return userRepo.save(user); // return updated UserAccount
         }
         return null;
     }
 
     @Override
-    public List<UserAccount> getAllUsers() {
-        return repo.findAll();
+    public UserAccount getUserById(long id) {
+        return userRepo.findById(id).orElse(null);
     }
-    @Override
-public UserAccount getUserById(long id) {
-    return userRepo.findById(id).orElse(null);
-}
 
+    @Override
+    public List<UserAccount> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    @Override
+    public UserAccount findByUsername(String username) {
+        return userRepo.findByUsername(username).orElse(null);
+    }
 }
