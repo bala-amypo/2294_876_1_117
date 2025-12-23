@@ -3,42 +3,39 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository repo;
-    private final PasswordEncoder encoder;
+    private final UserAccountRepository userRepo;
 
-    // REQUIRED by tests
-    public UserAccountServiceImpl(UserAccountRepository repo,
-                                  PasswordEncoder encoder) {
-        this.repo = repo;
-        this.encoder = encoder;
-    }
-
-    // REQUIRED by Spring
-    public UserAccountServiceImpl(UserAccountRepository repo) {
-        this.repo = repo;
-        this.encoder = null;
+    // Constructor injection
+    public UserAccountServiceImpl(UserAccountRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
     @Override
-    public UserAccount createUser(UserAccount user) {
-        return repo.save(user);
+    public UserAccount create(UserAccount user) {
+        return userRepo.save(user);
     }
 
     @Override
-    public UserAccount getUserById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public UserAccount updateStatus(Long id, String status) {
+        UserAccount user = userRepo.findById(id).orElseThrow();
+        user.setStatus(status);
+        return userRepo.save(user);
+    }
+
+    @Override
+    public List<UserAccount> all() {
+        return userRepo.findAll();
     }
 
     @Override
     public UserAccount findByEmail(String email) {
-        return repo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepo.findByEmail(email);
     }
 }
