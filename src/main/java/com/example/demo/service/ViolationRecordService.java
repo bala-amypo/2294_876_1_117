@@ -10,4 +10,6 @@ public interface ViolationRecordService {
     List<ViolationRecord> byUser(Long userId);
 
     List<ViolationRecord> unresolved();
+
+    ViolationRecord markResolved(Long id);   // 🔥 REQUIRED BY CONTROLLER
 }
