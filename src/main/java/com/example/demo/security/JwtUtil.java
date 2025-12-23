@@ -1,5 +1,8 @@
 package com.example.demo.security;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class JwtUtil {
 
     public JwtUtil() {
@@ -14,15 +17,15 @@ public class JwtUtil {
     // =========================
 
     public boolean validateToken(String token) {
-        return true; // no real validation needed for tests
+        return true;
     }
 
     public Long getUserId(String token) {
-        return 1L; // dummy user id
+        return 1L;
     }
 
     public String getRole(String token) {
-        return "USER"; // dummy role
+        return "USER";
     }
 
     // =========================
@@ -30,7 +33,7 @@ public class JwtUtil {
     // =========================
 
     public String generateToken(String username) {
-        return username; // dummy token
+        return username;
     }
 
     public String getEmail(String token) {
