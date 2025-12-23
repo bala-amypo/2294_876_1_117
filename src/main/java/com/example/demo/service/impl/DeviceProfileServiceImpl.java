@@ -15,17 +15,17 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     }
 
     @Override
-    public DeviceProfile registerDevice(DeviceProfile device) {
-        return deviceRepo.save(device);
+    public DeviceProfile registerDevice(DeviceProfile deviceProfile) {
+        return deviceRepo.save(deviceProfile);
     }
 
+    // 🔥 REQUIRED BY INTERFACE
     @Override
-    public DeviceProfile lookup(String deviceId) {
+    public DeviceProfile findByDeviceId(String deviceId) {
         return deviceRepo.findByDeviceId(deviceId)
                 .orElseThrow(() -> new RuntimeException("Device not found"));
     }
 
-    // 🔥 THIS METHOD WAS MISSING
     @Override
     public DeviceProfile updateTrustStatus(long deviceId, boolean trusted) {
         DeviceProfile device = deviceRepo.findById(deviceId)
