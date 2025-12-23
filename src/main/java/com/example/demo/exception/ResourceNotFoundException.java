@@ -1,8 +1,5 @@
-package com.example.demo.exception;
-
-public class ResourceNotFoundException extends RuntimeException {
-
-    public ResourceNotFoundException(String message) {
-        super(message);
-    }
-}
+       │           ├─ servlet
+       │           │  └─ SimpleStatusServlet.java
+       │           ├─ util
+       │           │  └─ RuleEvaluationUtil.java
+now servlet and utl
