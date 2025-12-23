@@ -22,7 +22,8 @@ public class AuthController {
     @PostMapping("/login")
     public JwtResponse login(@RequestBody LoginRequest request) {
 
-        UserAccount user = userService.getUserByEmail(request.getEmail());
+        UserAccount user = userService.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
         String token = jwtUtil.generateToken(
                 user.getEmail(),

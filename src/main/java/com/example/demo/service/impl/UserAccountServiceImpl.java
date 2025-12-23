@@ -5,6 +5,8 @@ import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
@@ -15,9 +17,8 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount getUserByEmail(String email) {
-        return userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public Optional<UserAccount> findByEmail(String email) {
+        return userRepo.findByEmail(email);
     }
 
     @Override
