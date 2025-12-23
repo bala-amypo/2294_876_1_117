@@ -1,13 +1,20 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.UserAccount;
+
 import java.util.List;
 
 public interface UserAccountService {
 
-    UserAccount create(UserAccount user);              // <-- test expects 'create'
-    UserAccount updateStatus(Long id, String status); // <-- test expects 'updateStatus'
-    List<UserAccount> all();                           // <-- test expects 'all'
-    UserAccount findByUsername(String username);      // <-- must return UserAccount (not Optional)
-    UserAccount findByEmail(String email);            // <-- must return UserAccount
+    UserAccount create(UserAccount user);
+
+    UserAccount updateStatus(Long id, String status);
+
+    List<UserAccount> all();
+
+    // Add this method to match your controller usage
+    UserAccount findByUsername(String username);
+
+    // Add missing method to match error
+    UserAccount findByEmail(String email);
 }

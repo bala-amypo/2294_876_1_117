@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -30,9 +29,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount updateStatus(Long id, String status) {
-        Optional<UserAccount> userOpt = userRepo.findById(id);
-        if (userOpt.isPresent()) {
-            UserAccount user = userOpt.get();
+        UserAccount user = userRepo.findById(id).orElse(null);
+        if (user != null) {
             user.setStatus(status);
             return userRepo.save(user);
         }
@@ -45,7 +43,12 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public Optional<UserAccount> findByUsername(String username) {
-        return userRepo.findByUsername(username);
+    public UserAccount findByUsername(String username) {
+        return userRepo.findByUsername(username); // must return UserAccount, not Optional
+    }
+
+    @Override
+    public UserAccount findByEmail(String email) {
+        return userRepo.findByEmail(email); // must exist in your repo
     }
 }
