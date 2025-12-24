@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -14,12 +15,14 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final UserAccountRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
+    // Constructor for Spring
     public UserAccountServiceImpl(UserAccountRepository userRepo,
                                   PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
     }
 
+    // Constructor for tests
     public UserAccountServiceImpl(UserAccountRepository userRepo) {
         this.userRepo = userRepo;
         this.passwordEncoder = null;
@@ -33,10 +36,10 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.save(user);
     }
 
+    // 🔴 MUST return Optional<UserAccount>
     @Override
-    public UserAccount getUserById(Long id) {
-        return userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public Optional<UserAccount> getUserById(Long id) {
+        return userRepo.findById(id);
     }
 
     @Override
@@ -46,14 +49,15 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount updateStatus(Long id, String status) {
-        UserAccount user = getUserById(id);
+        UserAccount user = userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         user.setStatus(status);
         return userRepo.save(user);
     }
 
+    // 🔴 EXACT MATCH WITH INTERFACE
     @Override
-    public UserAccount findByEmail(String email) {
-        return userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public Optional<UserAccount> findByEmail(String email) {
+        return userRepo.findByEmail(email);
     }
 }
