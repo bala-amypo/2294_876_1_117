@@ -15,12 +15,12 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final UserAccountRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
-    // Use constructor injection
     public UserAccountServiceImpl(UserAccountRepository userRepo,
                                   PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
     }
+
 
     @Override
     public UserAccount createUser(UserAccount user) {
