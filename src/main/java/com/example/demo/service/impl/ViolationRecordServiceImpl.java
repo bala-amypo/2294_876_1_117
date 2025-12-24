@@ -1,43 +1,60 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.ViolationRecord;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ViolationRecordRepository;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
 
-    private final ViolationRecordRepository repo;
+    private final ViolationRecordRepository violationRepo;
 
-    public ViolationRecordServiceImpl(ViolationRecordRepository repo) {
-        this.repo = repo;
+    public ViolationRecordServiceImpl(ViolationRecordRepository violationRepo) {
+        this.violationRepo = violationRepo;
     }
 
     @Override
-    public ViolationRecord logViolation(ViolationRecord record) {
-        return repo.save(record);
+    public ViolationRecord logViolation(ViolationRecord violation) {
+        if (violation.getDetectedAt() == null) {
+            violation.setDetectedAt(LocalDateTime.now());
+        }
+        if (violation.getResolved() == null) {
+            violation.setResolved(false);
+        }
+        return violationRepo.save(violation);
+    }
+
+    // 🔥 THIS IS THE CRITICAL FIX
+    @Override
+    @Transactional
+    public ViolationRecord markResolved(Long id) {
+        ViolationRecord violation = violationRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Violation not found"));
+
+        violation.setResolved(true);
+
+        // Explicit save to guarantee update
+        return violationRepo.save(violation);
+    }
+
+    @Override
+    public List<ViolationRecord> getViolationsByUser(Long userId) {
+        return violationRepo.findByUserId(userId);
     }
 
     @Override
     public List<ViolationRecord> getUnresolvedViolations() {
-        return repo.findByResolvedFalse();
+        return violationRepo.findByResolvedFalse();
     }
 
     @Override
-    public ViolationRecord markResolved(long id) {
-        ViolationRecord record = repo.findById(id).orElse(null);
-        if (record == null) {
-            return null;
-        }
-        record.setResolved(true);
-        return repo.save(record);
-    }
-
-    @Override
-    public ViolationRecord log(ViolationRecord record) {
-        return logViolation(record);
+    public List<ViolationRecord> getAllViolations() {
+        return violationRepo.findAll();
     }
 }

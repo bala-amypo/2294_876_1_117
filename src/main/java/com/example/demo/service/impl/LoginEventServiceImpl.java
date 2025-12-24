@@ -5,6 +5,7 @@ import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,6 +19,19 @@ public class LoginEventServiceImpl implements LoginEventService {
 
     @Override
     public LoginEvent recordLogin(LoginEvent event) {
+
+        if (event.getIpAddress() == null || event.getDeviceId() == null) {
+            throw new IllegalArgumentException("IP Address and Device ID are required");
+        }
+
+        if (event.getLoginStatus() == null) {
+            event.setLoginStatus("FAILED");
+        }
+
+        if (event.getTimestamp() == null) {
+            event.setTimestamp(LocalDateTime.now());
+        }
+
         return loginRepo.save(event);
     }
 
@@ -28,7 +42,7 @@ public class LoginEventServiceImpl implements LoginEventService {
 
     @Override
     public List<LoginEvent> getSuspiciousLogins(Long userId) {
-        return loginRepo.findByUserIdAndSuspiciousTrue(userId);
+        return loginRepo.findByUserIdAndLoginStatus(userId, "FAILED");
     }
 
     @Override
