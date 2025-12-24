@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "login_event")
 public class LoginEvent {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long userId;
@@ -15,7 +17,11 @@ public class LoginEvent {
 
     private LocalDateTime loginTime;
 
-    public LoginEvent() {}
+    // 🔥 REQUIRED FIELD (USED IN RuleEvaluationUtil + TESTS)
+    private String loginStatus;
+
+    public LoginEvent() {
+    }
 
     public Long getId() {
         return id;
@@ -47,5 +53,14 @@ public class LoginEvent {
 
     public void setLoginTime(LocalDateTime loginTime) {
         this.loginTime = loginTime;
+    }
+
+    // 🔥 REQUIRED GETTER & SETTER
+    public String getLoginStatus() {
+        return loginStatus;
+    }
+
+    public void setLoginStatus(String loginStatus) {
+        this.loginStatus = loginStatus;
     }
 }
