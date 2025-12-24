@@ -4,6 +4,8 @@ import java.util.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.*;
+import org.springframework.stereotype.Service;
+
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
