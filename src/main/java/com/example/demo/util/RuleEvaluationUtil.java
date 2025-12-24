@@ -1,31 +1,48 @@
 package com.example.demo.util;
 
-import java.util.*;
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
+import com.example.demo.entity.LoginEvent;
+import com.example.demo.entity.PolicyRule;
+import com.example.demo.entity.ViolationRecord;
+import com.example.demo.repository.PolicyRuleRepository;
+import com.example.demo.repository.ViolationRecordRepository;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+
+@Component
 public class RuleEvaluationUtil {
 
-    private final PolicyRuleRepository ruleRepo;
-    private final ViolationRecordRepository violationRepo;
+    private final PolicyRuleRepository policyRuleRepository;
+    private final ViolationRecordRepository violationRecordRepository;
 
-    public RuleEvaluationUtil(PolicyRuleRepository ruleRepo,
-                              ViolationRecordRepository violationRepo) {
-        this.ruleRepo = ruleRepo;
-        this.violationRepo = violationRepo;
+    // REQUIRED constructor (tests + Spring)
+    public RuleEvaluationUtil(PolicyRuleRepository policyRuleRepository,
+                              ViolationRecordRepository violationRecordRepository) {
+        this.policyRuleRepository = policyRuleRepository;
+        this.violationRecordRepository = violationRecordRepository;
     }
 
+    // REQUIRED method signature
     public void evaluateLoginEvent(LoginEvent event) {
-        for (PolicyRule rule : ruleRepo.findByActiveTrue()) {
-            if (event.getLoginStatus() != null &&
-                rule.getConditionsJson() != null &&
-                rule.getConditionsJson().contains(event.getLoginStatus())) {
 
-                ViolationRecord v = new ViolationRecord();
-                v.setSeverity(rule.getSeverity());
-                v.setResolved(false);
-                violationRepo.save(v);
-            }
+        if (event == null || event.getUserId() == null) {
+            return;
+        }
+
+        List<PolicyRule> activeRules = policyRuleRepository.findByActiveTrue();
+
+        for (PolicyRule rule : activeRules) {
+
+            ViolationRecord violation = new ViolationRecord();
+            violation.setUserId(event.getUserId());
+            violation.setPolicyRuleId(rule.getId());
+            violation.setEventId(event.getId());
+            violation.setViolationType(rule.getRuleCode());
+            violation.setDetails("Policy rule violated: " + rule.getDescription());
+            violation.setSeverity(rule.getSeverity());
+            violation.setResolved(false); // detectedAt handled by @PrePersist
+
+            violationRecordRepository.save(violation);
         }
     }
 }
