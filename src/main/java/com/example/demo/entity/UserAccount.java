@@ -7,23 +7,37 @@ import java.time.LocalDateTime;
 public class UserAccount {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(unique = true, nullable = false)
     private String email;
+
     private String employeeId;
-    private String status; // ACTIVE, SUSPENDED
-    private String role;
+
     private String password;
+
+    private String role;
+
+    private String status;
+
     private LocalDateTime createdAt;
 
-    // Added username for AuthController
-    private String username;
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = "ACTIVE";
+        }
+    }
 
     // Constructors
     public UserAccount() {}
 
     public UserAccount(String username, String email, String employeeId, String status, String role, String password) {
+        this.id=id;
         this.username = username;
         this.email = email;
         this.employeeId = employeeId;
@@ -58,3 +72,6 @@ public class UserAccount {
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 }
+
+
+

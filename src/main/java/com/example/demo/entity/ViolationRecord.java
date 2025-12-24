@@ -42,3 +42,5 @@ public class ViolationRecord {
     public Boolean getResolved() { return resolved; }
     public void setResolved(Boolean resolved) { this.resolved = resolved; }
 }
+
+
