@@ -29,6 +29,27 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public Optional<UserAccount> findByUsername(String username) {
-        return userRepository.findByUsername(username); // Make sure this method exists in UserAccountRepository
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public UserAccount createUser(UserAccount user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Optional<UserAccount> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public UserAccount updateUserStatus(Long id, String status) {
+        Optional<UserAccount> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            UserAccount user = optionalUser.get();
+            user.setStatus(status); // Make sure UserAccount entity has a 'status' field
+            return userRepository.save(user);
+        }
+        return null; // or throw exception if preferred
     }
 }

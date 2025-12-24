@@ -7,5 +7,10 @@ import java.util.Optional;
 public interface UserAccountService {
     List<UserAccount> getAllUsers();
     Optional<UserAccount> getUserByEmail(String email);
-    Optional<UserAccount> findByUsername(String username); // Make sure this is in the interface
+    Optional<UserAccount> findByUsername(String username);
+
+    // Add these methods to fix controller calls
+    UserAccount createUser(UserAccount user);
+    Optional<UserAccount> getUserById(Long id);
+    UserAccount updateUserStatus(Long id, String status);
 }
