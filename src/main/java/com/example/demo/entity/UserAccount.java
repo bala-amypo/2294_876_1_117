@@ -4,108 +4,58 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "violation_record")
-public class ViolationRecord {
+@Table(name = "user_account")
+public class UserAccount {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long userId;
+    @Column(unique = true, nullable = false)
+    private String username;
 
-    private Long policyRuleId;
+    @Column(unique = true, nullable = false)
+    private String email;
 
-    private Long eventId;
+    private String password;
 
-    private String violationType;
+    private String role;
 
-    private String details;
+    private String status;
 
-    private String severity;
+    private String employeeId;
 
-    private Boolean resolved = false;
-
-    private LocalDateTime detectedAt;
+    private LocalDateTime createdAt;
 
     @PrePersist
     public void onCreate() {
-        this.detectedAt = LocalDateTime.now();
-        if (this.resolved == null) {
-            this.resolved = false;
+        this.createdAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = "ACTIVE";
         }
     }
 
-    // -------- GETTERS & SETTERS --------
+    // getters & setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public Long getUserId() {
-        return userId;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public Long getPolicyRuleId() {
-        return policyRuleId;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setPolicyRuleId(Long policyRuleId) {
-        this.policyRuleId = policyRuleId;
-    }
+    public String getEmployeeId() { return employeeId; }
+    public void setEmployeeId(String employeeId) { this.employeeId = employeeId; }
 
-    public Long getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
-    }
-
-    public String getViolationType() {
-        return violationType;
-    }
-
-    public void setViolationType(String violationType) {
-        this.violationType = violationType;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public String getSeverity() {
-        return severity;
-    }
-
-    public void setSeverity(String severity) {
-        this.severity = severity;
-    }
-
-    public Boolean getResolved() {
-        return resolved;
-    }
-
-    public void setResolved(Boolean resolved) {
-        this.resolved = resolved;
-    }
-
-    public LocalDateTime getDetectedAt() {
-        return detectedAt;
-    }
-
-    public void setDetectedAt(LocalDateTime detectedAt) {
-        this.detectedAt = detectedAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }
