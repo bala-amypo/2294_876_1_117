@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -15,17 +14,18 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final UserAccountRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
+    // Constructor used by Spring
     public UserAccountServiceImpl(UserAccountRepository userRepo,
                                   PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
     }
 
+    // Constructor used by tests
     public UserAccountServiceImpl(UserAccountRepository userRepo) {
         this.userRepo = userRepo;
-        this.passwordEncoder = null; 
+        this.passwordEncoder = null;
     }
-
 
     @Override
     public UserAccount createUser(UserAccount user) {
@@ -35,9 +35,11 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.save(user);
     }
 
+    // ✅ MUST return UserAccount (NOT Optional)
     @Override
-    public Optional<UserAccount> getUserById(Long id) {
-        return userRepo.findById(id);
+    public UserAccount getUserById(Long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
@@ -47,9 +49,15 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount updateStatus(Long id, String status) {
-        UserAccount user = userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        UserAccount user = getUserById(id);
         user.setStatus(status);
         return userRepo.save(user);
+    }
+
+    // ✅ REQUIRED by interface
+    @Override
+    public UserAccount findByEmail(String email) {
+        return userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
