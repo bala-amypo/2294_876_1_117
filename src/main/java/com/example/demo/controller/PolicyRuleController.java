@@ -3,9 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.entity.PolicyRule;
 import com.example.demo.service.PolicyRuleService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-
 
 import java.util.List;
 
@@ -13,19 +10,30 @@ import java.util.List;
 @RequestMapping("/api/rules")
 public class PolicyRuleController {
 
-    private final PolicyRuleService policyService;
+    private final PolicyRuleService ruleService;
 
-    public PolicyRuleController(PolicyRuleService policyService) {
-        this.policyService = policyService;
+    public PolicyRuleController(PolicyRuleService ruleService) {
+        this.ruleService = ruleService;
     }
 
     @PostMapping
     public PolicyRule createRule(@RequestBody PolicyRule rule) {
-        return policyService.createRule(rule);
+        return ruleService.createRule(rule);
+    }
+
+    @PutMapping("/{id}")
+    public PolicyRule updateRule(@PathVariable Long id,
+                                 @RequestBody PolicyRule rule) {
+        return ruleService.updateRule(id, rule);
     }
 
     @GetMapping("/active")
-    public List<PolicyRule> getActiveRules() {
-        return policyService.getActiveRules();
+    public List<PolicyRule> activeRules() {
+        return ruleService.getActiveRules();
+    }
+
+    @GetMapping
+    public List<PolicyRule> allRules() {
+        return ruleService.getAllRules();
     }
 }

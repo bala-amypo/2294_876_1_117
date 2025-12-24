@@ -1,95 +1,40 @@
-package com.example.demo.entity;
+package com.example.demo.controller;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import com.example.demo.entity.DeviceProfile;
+import com.example.demo.service.DeviceProfileService;
+import org.springframework.web.bind.annotation.*;
 
-@Entity
-public class DeviceProfile {
+import java.util.List;
+import java.util.Optional;
 
-    @Id
-    private Long id;
+@RestController
+@RequestMapping("/api/devices")
+public class DeviceProfileController {
 
-    @Column(nullable = false)
-    private Long userId;
+    private final DeviceProfileService deviceService;
 
-    @Column(unique = true, nullable = false)
-    private String deviceId;
-
-    private String deviceType;
-
-    private String osVersion;
-
-    private LocalDateTime lastSeen;
-
-    private Boolean isTrusted = false;
-
-    public DeviceProfile() {
+    public DeviceProfileController(DeviceProfileService deviceService) {
+        this.deviceService = deviceService;
     }
 
-    @PrePersist
-    public void onCreate() {
-        this.lastSeen = LocalDateTime.now();
+    @PostMapping
+    public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
+        return deviceService.registerDevice(device);
     }
 
-    // -------- getters & setters --------
-
-    public Long getId() {
-        return id;
+    @PutMapping("/{id}/trust")
+    public DeviceProfile updateTrust(@PathVariable Long id,
+                                     @RequestParam boolean trusted) {
+        return deviceService.updateTrustStatus(id, trusted);
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @GetMapping("/user/{userId}")
+    public List<DeviceProfile> getByUser(@PathVariable Long userId) {
+        return deviceService.getDevicesByUser(userId);
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public String getDeviceType() {
-        return deviceType;
-    }
-
-    public void setDeviceType(String deviceType) {
-        this.deviceType = deviceType;
-    }
-
-    public String getOsVersion() {
-        return osVersion;
-    }
-
-    public void setOsVersion(String osVersion) {
-        this.osVersion = osVersion;
-    }
-
-    public LocalDateTime getLastSeen() {
-        return lastSeen;
-    }
-
-    public void setLastSeen(LocalDateTime lastSeen) {
-        this.lastSeen = lastSeen;
-    }
-
-    public Boolean getIsTrusted() {
-        return isTrusted;
-    }
-
-    public void setIsTrusted(Boolean isTrusted) {
-        this.isTrusted = isTrusted;
+    @GetMapping("/lookup/{deviceId}")
+    public Optional<DeviceProfile> lookup(@PathVariable String deviceId) {
+        return deviceService.findByDeviceId(deviceId);
     }
 }
