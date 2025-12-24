@@ -2,8 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.service.DeviceProfileService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+
 
 import java.util.List;
 
@@ -34,8 +35,9 @@ public class DeviceProfileController {
     }
 
     @GetMapping("/lookup/{deviceId}")
-    public DeviceProfile byDevice(@PathVariable String deviceId) {
-        return service.findByDeviceId(deviceId)
-                .orElseThrow(() -> new RuntimeException("Device not found"));
+    public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
+        DeviceProfile profile = service.findByDeviceId(deviceId);
+        return ResponseEntity.ok(profile);
     }
 }
+
