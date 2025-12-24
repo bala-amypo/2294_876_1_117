@@ -12,15 +12,19 @@ public class UserAccount {
 
     private String email;
     private String employeeId;
-    private String status; // e.g., ACTIVE, SUSPENDED
+    private String status; // ACTIVE, SUSPENDED
     private String role;
     private String password;
     private LocalDateTime createdAt;
 
+    // Added username for AuthController
+    private String username;
+
     // Constructors
     public UserAccount() {}
 
-    public UserAccount(String email, String employeeId, String status, String role, String password) {
+    public UserAccount(String username, String email, String employeeId, String status, String role, String password) {
+        this.username = username;
         this.email = email;
         this.employeeId = employeeId;
         this.status = status;
@@ -50,4 +54,7 @@ public class UserAccount {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 }

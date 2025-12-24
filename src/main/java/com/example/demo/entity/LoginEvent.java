@@ -15,13 +15,16 @@ public class LoginEvent {
     private String location;
     private LocalDateTime timestamp;
 
-    // Constructors
+    // Added IP address for tests
+    private String ipAddress;
+
     public LoginEvent() {}
 
-    public LoginEvent(Long userId, String deviceId, String location, LocalDateTime timestamp) {
+    public LoginEvent(Long userId, String deviceId, String location, String ipAddress, LocalDateTime timestamp) {
         this.userId = userId;
         this.deviceId = deviceId;
         this.location = location;
+        this.ipAddress = ipAddress;
         this.timestamp = timestamp;
     }
 
@@ -40,4 +43,7 @@ public class LoginEvent {
 
     public LocalDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+
+    public String getIpAddress() { return ipAddress; }
+    public void setIpAddress(String ipAddress) { this.ipAddress = ipAddress; }
 }
