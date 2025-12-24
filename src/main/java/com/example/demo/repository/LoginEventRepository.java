@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface LoginEventRepository extends JpaRepository<LoginEvent, Long> {
     List<LoginEvent> findByUserId(Long userId);
-    List<LoginEvent> findByUserIdAndLoginStatus(Long userId, String loginStatus);
+
+    // If you want to filter by status, make sure the entity has "status" field (not loginStatus)
+    List<LoginEvent> findByUserIdAndStatus(Long userId, String status);
 }

@@ -4,7 +4,6 @@ import com.example.demo.entity.LoginEvent;
 import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -17,8 +16,8 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
-    public List<LoginEvent> getEventsByUserIdAndStatus(Long userId, String loginStatus) {
-        return loginEventRepository.findByUserIdAndLoginStatus(userId, loginStatus);
+    public LoginEvent saveEvent(LoginEvent event) {
+        return loginEventRepository.save(event);
     }
 
     @Override
@@ -27,7 +26,12 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
-    public LoginEvent saveEvent(LoginEvent event) {
-        return loginEventRepository.save(event);
+    public List<LoginEvent> getEventsByUserIdAndStatus(Long userId, String status) {
+        return loginEventRepository.findByUserIdAndStatus(userId, status);
+    }
+
+    @Override
+    public List<LoginEvent> getAllEvents() {
+        return loginEventRepository.findAll();
     }
 }
