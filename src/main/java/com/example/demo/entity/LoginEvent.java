@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "login_event")
 public class LoginEvent {
 
     @Id
@@ -17,7 +16,11 @@ public class LoginEvent {
 
     private LocalDateTime loginTime;
 
+    // Used by RuleEvaluationUtil
     private String loginStatus;
+
+    // 🔥 REQUIRED by LoginEventRepository.findByUserIdAndSuspiciousTrue()
+    private boolean suspicious;
 
     public LoginEvent() {
     }
@@ -60,5 +63,14 @@ public class LoginEvent {
 
     public void setLoginStatus(String loginStatus) {
         this.loginStatus = loginStatus;
+    }
+
+    // 🔥 IMPORTANT: boolean getter MUST be isSuspicious()
+    public boolean isSuspicious() {
+        return suspicious;
+    }
+
+    public void setSuspicious(boolean suspicious) {
+        this.suspicious = suspicious;
     }
 }
