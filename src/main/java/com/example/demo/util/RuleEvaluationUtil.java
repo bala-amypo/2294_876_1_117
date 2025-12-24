@@ -1,37 +1,31 @@
 package com.example.demo.util;
 
-import com.example.demo.entity.LoginEvent;
-import com.example.demo.repository.PolicyRuleRepository;
-import com.example.demo.repository.ViolationRecordRepository;
-import org.springframework.stereotype.Component;
+import java.util.*;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 
-@Component
 public class RuleEvaluationUtil {
 
-    private PolicyRuleRepository policyRuleRepo;
-    private ViolationRecordRepository violationRecordRepo;
+    private final PolicyRuleRepository ruleRepo;
+    private final ViolationRecordRepository violationRepo;
 
-    public RuleEvaluationUtil() {
-        // no-arg constructor for Spring and simple instantiation
-    }
-
-    // Constructor for tests that pass repositories
-    public RuleEvaluationUtil(PolicyRuleRepository policyRuleRepo, ViolationRecordRepository violationRecordRepo) {
-        this.policyRuleRepo = policyRuleRepo;
-        this.violationRecordRepo = violationRecordRepo;
+    public RuleEvaluationUtil(PolicyRuleRepository ruleRepo,
+                              ViolationRecordRepository violationRepo) {
+        this.ruleRepo = ruleRepo;
+        this.violationRepo = violationRepo;
     }
 
     public void evaluateLoginEvent(LoginEvent event) {
-        // Intentionally left simple
-        // Tests only verify method existence and invocation safety
-    }
+        for (PolicyRule rule : ruleRepo.findByActiveTrue()) {
+            if (event.getLoginStatus() != null &&
+                rule.getConditionsJson() != null &&
+                rule.getConditionsJson().contains(event.getLoginStatus())) {
 
-    // Optional: getters for the repositories if needed in tests
-    public PolicyRuleRepository getPolicyRuleRepo() {
-        return policyRuleRepo;
-    }
-
-    public ViolationRecordRepository getViolationRecordRepo() {
-        return violationRecordRepo;
+                ViolationRecord v = new ViolationRecord();
+                v.setSeverity(rule.getSeverity());
+                v.setResolved(false);
+                violationRepo.save(v);
+            }
+        }
     }
 }
