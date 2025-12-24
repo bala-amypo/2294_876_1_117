@@ -1,10 +1,16 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.UserAccount;
+import com.example.demo.entity.LoginEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
-public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
-    Optional<UserAccount> findByEmail(String email);
-    Optional<UserAccount> findByUsername(String username);
+import java.util.List;
+
+@Repository
+public interface LoginEventRepository extends JpaRepository<LoginEvent, Long> {
+
+    // Now this works because LoginEvent has loginStatus field
+    List<LoginEvent> findByUserIdAndLoginStatus(Long userId, String loginStatus);
+    
+    List<LoginEvent> findByUserId(Long userId);
 }

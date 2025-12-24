@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.LoginEvent;
 import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
-import com.example.demo.util.RuleEvaluationUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,37 +10,24 @@ import java.util.List;
 @Service
 public class LoginEventServiceImpl implements LoginEventService {
 
-    private final LoginEventRepository loginRepo;
-    private final RuleEvaluationUtil evaluator;
+    private final LoginEventRepository loginEventRepository;
 
-    public LoginEventServiceImpl(LoginEventRepository loginRepo,
-                                 RuleEvaluationUtil evaluator) {
-        this.loginRepo = loginRepo;
-        this.evaluator = evaluator;
+    public LoginEventServiceImpl(LoginEventRepository loginEventRepository) {
+        this.loginEventRepository = loginEventRepository;
     }
 
     @Override
-    public LoginEvent recordLogin(LoginEvent event) {
-        if (event.getIpAddress() == null || event.getDeviceId() == null) {
-            throw new IllegalArgumentException("IP and Device ID required");
-        }
-        LoginEvent saved = loginRepo.save(event);
-        evaluator.evaluateLoginEvent(saved);
-        return saved;
+    public List<LoginEvent> getEventsByUserIdAndStatus(Long userId, String loginStatus) {
+        return loginEventRepository.findByUserIdAndLoginStatus(userId, loginStatus);
     }
 
     @Override
-    public List<LoginEvent> getEventsByUser(Long userId) {
-        return loginRepo.findByUserId(userId);
+    public List<LoginEvent> getEventsByUserId(Long userId) {
+        return loginEventRepository.findByUserId(userId);
     }
 
     @Override
-    public List<LoginEvent> getSuspiciousLogins(Long userId) {
-        return loginRepo.findByUserIdAndLoginStatus(userId, "FAILED");
-    }
-
-    @Override
-    public List<LoginEvent> getAllEvents() {
-        return loginRepo.findAll();
+    public LoginEvent saveEvent(LoginEvent event) {
+        return loginEventRepository.save(event);
     }
 }
