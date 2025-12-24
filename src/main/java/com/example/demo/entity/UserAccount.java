@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 public class UserAccount {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 private String employeeId;
 private String email;
@@ -24,6 +23,4 @@ public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; 
 public String getEmail() { return email; }
 public String getRole() { return role; }
 
-    // ✅ Needed for test cases
-    public Object getBody() { return this; }
 }
