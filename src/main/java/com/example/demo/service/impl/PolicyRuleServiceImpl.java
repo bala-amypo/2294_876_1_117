@@ -6,31 +6,50 @@ import com.example.demo.service.PolicyRuleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    private final PolicyRuleRepository ruleRepository;
+    private final PolicyRuleRepository ruleRepo;
 
-    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepository) {
-        this.ruleRepository = ruleRepository;
+    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepo) {
+        this.ruleRepo = ruleRepo;
     }
 
     @Override
     public PolicyRule createRule(PolicyRule rule) {
-        return ruleRepository.save(rule);
+        return ruleRepo.save(rule);
     }
 
     @Override
-    public List<PolicyRule> getAllRules() {
-        return ruleRepository.findAll();
+    public PolicyRule updateRule(Long id, PolicyRule rule) {
+        PolicyRule existing = ruleRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
+
+        existing.setDescription(rule.getDescription());
+        existing.setSeverity(rule.getSeverity());
+        existing.setConditionsJson(rule.getConditionsJson());
+        existing.setActive(rule.getActive());
+
+        return ruleRepo.save(existing);
     }
 
     @Override
     public List<PolicyRule> getActiveRules() {
-        return ruleRepository.findAll()
+        return ruleRepo.findByActiveTrue();
+    }
+
+    @Override
+    public Optional<PolicyRule> getRuleByCode(String ruleCode) {
+        return ruleRepo.findAll()
                 .stream()
-                .filter(rule -> Boolean.TRUE.equals(rule.getActive()))
-                .toList();
+                .filter(r -> r.getRuleCode().equals(ruleCode))
+                .findFirst();
+    }
+
+    @Override
+    public List<PolicyRule> getAllRules() {
+        return ruleRepo.findAll();
     }
 }
