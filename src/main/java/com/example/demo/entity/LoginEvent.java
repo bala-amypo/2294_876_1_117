@@ -17,7 +17,6 @@ public class LoginEvent {
 
     private LocalDateTime loginTime;
 
-    // 🔥 REQUIRED FIELD (USED IN RuleEvaluationUtil + TESTS)
     private String loginStatus;
 
     public LoginEvent() {
@@ -55,7 +54,6 @@ public class LoginEvent {
         this.loginTime = loginTime;
     }
 
-    // 🔥 REQUIRED GETTER & SETTER
     public String getLoginStatus() {
         return loginStatus;
     }
