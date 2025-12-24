@@ -11,25 +11,18 @@ public class DeviceProfile {
 
     private Long userId;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String deviceId;
 
     private String deviceType;
 
     private String osVersion;
 
-    private Boolean isTrusted = false;
-
     private LocalDateTime lastSeen;
 
-    public DeviceProfile() {
-    }
+    private Boolean isTrusted = false;
 
-    @PrePersist
-    public void onCreate() {
-        this.lastSeen = LocalDateTime.now();
-    }
-
+    public DeviceProfile() {}
 
     public Long getId() {
         return id;
@@ -71,19 +64,19 @@ public class DeviceProfile {
         this.osVersion = osVersion;
     }
 
-    public Boolean getIsTrusted() {
-        return isTrusted;
-    }
-
-    public void setIsTrusted(Boolean trusted) {
-        isTrusted = trusted;
-    }
-
     public LocalDateTime getLastSeen() {
         return lastSeen;
     }
 
     public void setLastSeen(LocalDateTime lastSeen) {
         this.lastSeen = lastSeen;
+    }
+
+    public Boolean getIsTrusted() {
+        return isTrusted;
+    }
+
+    public void setIsTrusted(Boolean isTrusted) {
+        this.isTrusted = isTrusted;
     }
 }
