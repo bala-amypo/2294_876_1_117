@@ -37,9 +37,10 @@ public class PolicyRuleController {
         return ruleService.getAllRules();
     }
 
-public List<PolicyRule> all() {
-    return getAllRules();
+     public List<PolicyRule> all() {
+    return list();   
 }
+
 
 
 }

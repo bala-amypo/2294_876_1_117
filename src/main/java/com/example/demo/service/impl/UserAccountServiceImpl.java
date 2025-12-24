@@ -4,6 +4,8 @@ import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +14,9 @@ import java.util.Optional;
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository userRepo;
+
+    private final PasswordEncoder passwordEncoder;
+
 
     public UserAccountServiceImpl(UserAccountRepository userRepo) {
         this.userRepo = userRepo;
