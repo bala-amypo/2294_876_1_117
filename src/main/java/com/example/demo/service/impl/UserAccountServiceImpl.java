@@ -35,8 +35,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public Optional<UserAccount> getUserById(Long id) {
-        return userRepo.findById(id);
+    public UserAccount getUserById(Long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
@@ -46,8 +47,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount updateStatus(Long id, String status) {
-        UserAccount user = userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        UserAccount user = getUserById(id);
         user.setStatus(status);
         return userRepo.save(user);
     }
@@ -55,5 +55,10 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public Optional<UserAccount> findByEmail(String email) {
         return userRepo.findByEmail(email);
+    }
+
+    @Override
+    public Optional<UserAccount> findByUsername(String username) {
+        return userRepo.findByUsername(username);
     }
 }
