@@ -10,14 +10,15 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;       // <-- for setUsername/getUsername
-    private String password;       // <-- for setPassword/getPassword
+    private String username;
+    private String password;
     private String employeeId;
     private String email;
     private String role;
+    private String status; // ACTIVE / SUSPENDED
     private LocalDateTime createdAt;
 
-    // ===== Getters and Setters =====
+    // ===== Getters & Setters =====
     public Long getId() { return id; }
 
     public String getUsername() { return username; }
@@ -34,6 +35,9 @@ public class UserAccount {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

@@ -46,6 +46,13 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
+    public UserAccount updateUserStatus(Long userId, String status) {
+        UserAccount user = getUserById(userId);
+        user.setStatus(status);
+        return userRepo.save(user);
+    }
+
+    @Override
     public UserAccount findByUsername(String username) {
         return userRepo.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
