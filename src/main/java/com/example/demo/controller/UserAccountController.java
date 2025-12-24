@@ -36,4 +36,10 @@ public class UserAccountController {
     public List<UserAccount> getAllUsers() {
         return userService.getAllUsers();
     }
+
+    // === TEST ALIAS METHOD ===
+    public UserAccount create(UserAccount user) {
+    return createUser(user); // calls your existing method
+}
+
 }

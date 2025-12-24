@@ -40,4 +40,10 @@ public class ViolationRecordController {
     public List<ViolationRecord> all() {
         return violationService.getAllViolations();
     }
+
+    // === TEST ALIAS METHOD ===
+public ViolationRecord log(ViolationRecord record) {
+    return create(record); // existing logic
+}
+
 }

@@ -98,4 +98,11 @@ public DeviceProfile(Long id, Long userId, String deviceId, String deviceType,
     this.isTrusted = isTrusted;
 }
 
+public ResponseEntity<DeviceProfile> getDeviceProfileResponse(Long id) {
+    return getDeviceProfile(id)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+}
+
+
 }
