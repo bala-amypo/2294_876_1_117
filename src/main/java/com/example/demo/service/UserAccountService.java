@@ -2,16 +2,19 @@ package com.example.demo.service;
 
 import com.example.demo.entity.UserAccount;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserAccountService {
 
     UserAccount createUser(UserAccount user);
 
-    // aliases needed by controllers/tests
-    UserAccount saveUser(UserAccount user);
-    UserAccount findByUsername(String username);
+    UserAccount getUserById(Long id);
 
-    UserAccount getUserById(long id);
-    UserAccount updateUserStatus(long id, String status);
+    UserAccount updateUserStatus(Long id, String status);
+
     List<UserAccount> getAllUsers();
+
+    Optional<UserAccount> findByUsername(String username);
+
+    Optional<UserAccount> findByEmail(String email);
 }
