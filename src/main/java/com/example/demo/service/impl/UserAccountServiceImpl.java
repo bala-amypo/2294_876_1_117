@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.entity.LoginEvent;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.UserAccountService;
@@ -9,13 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository userRepository;
-    private final LoginEventRepository loginEventRepository; // Injected
+    private final LoginEventRepository loginEventRepository;
 
     @Autowired
     public UserAccountServiceImpl(UserAccountRepository userRepository,
@@ -34,8 +34,8 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public Optional<UserAccount> getUserById(Long id) {
-        return userRepository.findById(id);
+    public UserAccount getUserById(Long id) {
+        return userRepository.findById(id).orElse(null); // must return UserAccount, not Optional
     }
 
     @Override
@@ -45,19 +45,22 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount updateUserStatus(Long id, String status) {
-        Optional<UserAccount> optUser = userRepository.findById(id);
-        if (optUser.isPresent()) {
-            UserAccount user = optUser.get();
+        UserAccount user = userRepository.findById(id).orElse(null);
+        if (user != null) {
             user.setStatus(status);
             return userRepository.save(user);
         }
         return null;
     }
 
-    // Example of referencing LoginEvent if needed
+    @Override
+    public UserAccount findByUsername(String username) {
+        return userRepository.findByUsername(username); // now matches interface
+    }
+
+    // Example: Login event logging
     public void logUserLoginEvent(UserAccount user, String ipAddress, String deviceId) {
-        // Create LoginEvent and save
-        com.example.demo.entity.LoginEvent event = new com.example.demo.entity.LoginEvent();
+        LoginEvent event = new LoginEvent();
         event.setUserId(user.getId());
         event.setIpAddress(ipAddress);
         event.setDeviceId(deviceId);
