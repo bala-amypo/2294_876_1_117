@@ -15,12 +15,14 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final UserAccountRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
+    // Constructor for Spring
     public UserAccountServiceImpl(UserAccountRepository userRepo,
                                   PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
     }
 
+    // Constructor for tests
     public UserAccountServiceImpl(UserAccountRepository userRepo) {
         this.userRepo = userRepo;
         this.passwordEncoder = null;
@@ -40,25 +42,26 @@ public class UserAccountServiceImpl implements UserAccountService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    // 🔴 METHOD NAME MUST MATCH INTERFACE
     @Override
-    public List<UserAccount> getAllUsers() {
-        return userRepo.findAll();
-    }
-
-    @Override
-    public UserAccount updateStatus(Long id, String status) {
+    public UserAccount updateUserStatus(Long id, String status) {
         UserAccount user = getUserById(id);
         user.setStatus(status);
         return userRepo.save(user);
     }
 
     @Override
-    public Optional<UserAccount> findByEmail(String email) {
-        return userRepo.findByEmail(email);
+    public List<UserAccount> getAllUsers() {
+        return userRepo.findAll();
     }
 
     @Override
     public Optional<UserAccount> findByUsername(String username) {
         return userRepo.findByUsername(username);
+    }
+
+    @Override
+    public Optional<UserAccount> findByEmail(String email) {
+        return userRepo.findByEmail(email);
     }
 }
