@@ -35,7 +35,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount getUserById(Long id) {
-        return userRepository.findById(id).orElse(null); // must return UserAccount, not Optional
+        return userRepository.findById(id).orElse(null); // extract from Optional
     }
 
     @Override
@@ -55,10 +55,20 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount findByUsername(String username) {
-        return userRepository.findByUsername(username); // now matches interface
+        return userRepository.findByUsername(username);
     }
 
-    // Example: Login event logging
+    @Override
+    public UserAccount updateRole(Long id, String role) {
+        UserAccount user = userRepository.findById(id).orElse(null); // extract Optional
+        if (user != null) {
+            user.setRole(role);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    // Example: Logging login events
     public void logUserLoginEvent(UserAccount user, String ipAddress, String deviceId) {
         LoginEvent event = new LoginEvent();
         event.setUserId(user.getId());
