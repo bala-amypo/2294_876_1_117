@@ -1,10 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.DeviceProfile;
-import java.util.Optional;
 
 public interface DeviceProfileService {
-    DeviceProfile registerDevice(DeviceProfile device);
-    Optional<DeviceProfile> findByDeviceId(String deviceId);
+
+    DeviceProfile registerDevice(DeviceProfile deviceProfile);
+
+    DeviceProfile findByDeviceId(String deviceId);  // <- MUST match Impl
+
     DeviceProfile updateTrustStatus(Long id, boolean isTrusted);
 }
