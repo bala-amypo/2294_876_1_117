@@ -10,37 +10,36 @@ import java.util.List;
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
 
-    private final ViolationRecordRepository violationRepo;
+    private final ViolationRecordRepository repo;
 
-    public ViolationRecordServiceImpl(ViolationRecordRepository violationRepo) {
-        this.violationRepo = violationRepo;
+    public ViolationRecordServiceImpl(ViolationRecordRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public ViolationRecord logViolation(ViolationRecord violation) {
-        return violationRepo.save(violation);
+    public ViolationRecord create(ViolationRecord record) {
+        return repo.save(record);
     }
 
     @Override
-    public List<ViolationRecord> getViolationsByUser(Long userId) {
-        return violationRepo.findByUserId(userId);
+    public List<ViolationRecord> getByUserId(Long userId) {
+        return repo.findByUserId(userId);
     }
 
     @Override
-    public ViolationRecord markResolved(Long id) {
-        ViolationRecord v = violationRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Violation not found"));
+    public ViolationRecord resolve(Long id) {
+        ViolationRecord v = repo.findById(id).orElseThrow();
         v.setResolved(true);
-        return violationRepo.save(v);
+        return repo.save(v);
     }
 
     @Override
-    public List<ViolationRecord> getUnresolvedViolations() {
-        return violationRepo.findByResolvedFalse();
+    public List<ViolationRecord> getUnresolved() {
+        return repo.findByResolvedFalse();
     }
 
     @Override
-    public List<ViolationRecord> getAllViolations() {
-        return violationRepo.findAll();
+    public List<ViolationRecord> getAll() {
+        return repo.findAll();
     }
 }

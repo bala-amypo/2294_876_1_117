@@ -9,38 +9,47 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ViolationRecordServiceImpl implements ViolationRecordService {
+public class UserAccountServiceImpl implements UserAccountService {
 
-    private final ViolationRecordRepository repo;
+    private final UserAccountRepository userRepository;
 
-    public ViolationRecordServiceImpl(ViolationRecordRepository repo) {
-        this.repo = repo;
+    public UserAccountServiceImpl(UserAccountRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public ViolationRecord create(ViolationRecord record) {
-        return repo.save(record);
+    public List<UserAccount> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override
-    public List<ViolationRecord> getByUserId(Long userId) {
-        return repo.findByUserId(userId);
+    public Optional<UserAccount> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
-    public ViolationRecord resolve(Long id) {
-        ViolationRecord v = repo.findById(id).orElseThrow();
-        v.setResolved(true);
-        return repo.save(v);
+    public Optional<UserAccount> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Override
-    public List<ViolationRecord> getUnresolved() {
-        return repo.findByResolvedFalse();
+    public UserAccount createUser(UserAccount user) {
+        return userRepository.save(user);
     }
 
     @Override
-    public List<ViolationRecord> getAll() {
-        return repo.findAll();
+    public Optional<UserAccount> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public UserAccount updateUserStatus(Long id, String status) {
+        Optional<UserAccount> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            UserAccount user = optionalUser.get();
+            user.setStatus(status); // Make sure UserAccount entity has a 'status' field
+            return userRepository.save(user);
+        }
+        return null; // or throw exception if preferred
     }
 }
