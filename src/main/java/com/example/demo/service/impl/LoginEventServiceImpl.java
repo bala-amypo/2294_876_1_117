@@ -1,12 +1,10 @@
 package com.example.demo.service.impl;
 
-import java.util.*;
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.*;
-import com.example.demo.util.RuleEvaluationUtil;
+import com.example.demo.entity.LoginEvent;
+import com.example.demo.repository.LoginEventRepository;
+import com.example.demo.service.LoginEventService;
 import org.springframework.stereotype.Service;
-
+import java.util.List;
 
 @Service
 public class LoginEventServiceImpl implements LoginEventService {
@@ -18,7 +16,17 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
-    public List<LoginEvent> getSuspiciousEvents() {
-        return repo.findBySuspiciousTrue();
+    public LoginEvent recordLogin(LoginEvent loginEvent) {
+        return repo.save(loginEvent);
+    }
+
+    @Override
+    public List<LoginEvent> getEventsByUser(Long userId) {
+        return repo.findByUserId(userId);
+    }
+
+    @Override
+    public List<LoginEvent> getSuspiciousLogins(Long userId) {
+        return repo.findByUserIdAndSuspiciousTrue(userId);
     }
 }

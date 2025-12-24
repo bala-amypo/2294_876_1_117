@@ -1,7 +1,7 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import java.util.*;
-import com.example.demo.entity.*;
+// import java.util.*;
+// import com.example.demo.entity.*;
 
 
 // public interface DeviceProfileService {
@@ -10,7 +10,13 @@ import com.example.demo.entity.*;
 //     DeviceProfile updateTrustStatus(Long id, Boolean trusted);
 // }
 
+package com.example.demo.service;
+
+import com.example.demo.entity.DeviceProfile;
+
 public interface DeviceProfileService {
-    DeviceProfile getDeviceByDeviceId(String deviceId);
-    DeviceProfile updateDeviceTrust(String deviceId, boolean isTrusted);
+    DeviceProfile registerDevice(DeviceProfile device);
+    DeviceProfile findByDeviceId(String deviceId);
+    DeviceProfile updateTrustStatus(Long id, boolean isTrusted);
 }
+

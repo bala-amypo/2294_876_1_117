@@ -1,11 +1,9 @@
 package com.example.demo.service.impl;
 
-import java.util.*;
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.*;
+import com.example.demo.entity.DeviceProfile;
+import com.example.demo.repository.DeviceProfileRepository;
+import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
@@ -17,14 +15,20 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     }
 
     @Override
-    public DeviceProfile getDeviceByDeviceId(String deviceId) {
+    public DeviceProfile registerDevice(DeviceProfile device) {
+        return repo.save(device);
+    }
+
+    @Override
+    public DeviceProfile findByDeviceId(String deviceId) {
         return repo.findByDeviceId(deviceId)
                    .orElseThrow(() -> new RuntimeException("Device not found"));
     }
 
     @Override
-    public DeviceProfile updateDeviceTrust(String deviceId, boolean isTrusted) {
-        DeviceProfile device = getDeviceByDeviceId(deviceId);
+    public DeviceProfile updateTrustStatus(Long id, boolean isTrusted) {
+        DeviceProfile device = repo.findById(id)
+                   .orElseThrow(() -> new RuntimeException("Device not found"));
         device.setIsTrusted(isTrusted);
         return repo.save(device);
     }
