@@ -57,4 +57,9 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+    @Override
+public List<LoginEvent> getEventsByUserAndStatus(Long userId, String status) {
+    return loginEventRepository.findByUserIdAndStatus(userId, status);
+}
+
 }
