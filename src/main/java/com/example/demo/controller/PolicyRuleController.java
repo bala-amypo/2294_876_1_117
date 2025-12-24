@@ -35,3 +35,7 @@ public class PolicyRuleController {
     }
 
     @GetMapping
+    public List<PolicyRule> all() {
+        return service.getAllRules();
+    }
+}
