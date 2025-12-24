@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/logins")
-@Tag(name = "Logins")
 public class LoginEventController {
 
     private final LoginEventService service;

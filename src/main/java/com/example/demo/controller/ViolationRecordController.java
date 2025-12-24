@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/violations")
-@Tag(name = "Violations")
 public class ViolationRecordController {
 
     private final ViolationRecordService service;

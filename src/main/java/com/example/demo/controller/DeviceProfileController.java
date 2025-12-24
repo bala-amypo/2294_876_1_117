@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/devices")
-@Tag(name = "Devices")
 public class DeviceProfileController {
 
     private final DeviceProfileService service;

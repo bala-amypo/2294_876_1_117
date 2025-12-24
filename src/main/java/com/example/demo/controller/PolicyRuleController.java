@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/rules")
-@Tag(name = "Rules")
 public class PolicyRuleController {
 
     private final PolicyRuleService service;

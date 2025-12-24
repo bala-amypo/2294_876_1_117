@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@Tag(name = "Users")
 public class UserAccountController {
 
     private final UserAccountService service;
