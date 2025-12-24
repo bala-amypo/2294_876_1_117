@@ -1,51 +1,95 @@
-package com.example.demo.controller;
+package com.example.demo.entity;
 
-import com.example.demo.entity.DeviceProfile;
-import com.example.demo.service.DeviceProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 
-@RestController
-@RequestMapping("/api/devices")
-public class DeviceProfileController {
+@Entity
+public class DeviceProfile {
 
-    private final DeviceProfileService deviceService;
+    @Id
+    private Long id;
 
-    @Autowired
-    public DeviceProfileController(DeviceProfileService deviceService) {
-        this.deviceService = deviceService;
+    @Column(nullable = false)
+    private Long userId;
+
+    @Column(unique = true, nullable = false)
+    private String deviceId;
+
+    private String deviceType;
+
+    private String osVersion;
+
+    private LocalDateTime lastSeen;
+
+    private Boolean isTrusted = false;
+
+    public DeviceProfile() {
     }
 
-    // Register a new device
-    @PostMapping
-    public ResponseEntity<DeviceProfile> registerDevice(@RequestBody DeviceProfile device) {
-        DeviceProfile savedDevice = deviceService.registerDevice(device);
-        return ResponseEntity.ok(savedDevice);
+    @PrePersist
+    public void onCreate() {
+        this.lastSeen = LocalDateTime.now();
     }
 
-    // Get device by deviceId
-    @GetMapping("/{deviceId}")
-    public ResponseEntity<DeviceProfile> getDeviceById(@PathVariable String deviceId) {
-        DeviceProfile device = deviceService.findByDeviceId(deviceId);
-        if (device != null) {
-            return ResponseEntity.ok(device);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    // -------- getters & setters --------
+
+    public Long getId() {
+        return id;
     }
 
-    // Update trust status of a device
-    @PutMapping("/{deviceId}/trust")
-    public ResponseEntity<DeviceProfile> updateTrustStatus(
-            @PathVariable Long deviceId,
-            @RequestParam boolean trusted
-    ) {
-        DeviceProfile updatedDevice = deviceService.updateTrustStatus(deviceId, trusted);
-        if (updatedDevice != null) {
-            return ResponseEntity.ok(updatedDevice);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getOsVersion() {
+        return osVersion;
+    }
+
+    public void setOsVersion(String osVersion) {
+        this.osVersion = osVersion;
+    }
+
+    public LocalDateTime getLastSeen() {
+        return lastSeen;
+    }
+
+    public void setLastSeen(LocalDateTime lastSeen) {
+        this.lastSeen = lastSeen;
+    }
+
+    public Boolean getIsTrusted() {
+        return isTrusted;
+    }
+
+    public void setIsTrusted(Boolean isTrusted) {
+        this.isTrusted = isTrusted;
     }
 }
