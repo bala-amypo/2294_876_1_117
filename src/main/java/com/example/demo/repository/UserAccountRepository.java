@@ -7,7 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
-    Optional<UserAccount> findByUsername(String username);
-    Optional<UserAccount> findByEmail(String email);
+public interface LoginEventRepository extends JpaRepository<LoginEvent, Long> {
+
+    // Corrected method
+    List<LoginEvent> findByUserIdAndStatus(Long userId, String status);
+
+    // If you need by status only
+    List<LoginEvent> findByStatus(String status);
 }
