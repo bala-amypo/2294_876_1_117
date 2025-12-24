@@ -1,56 +1,32 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.LoginEvent;
-import com.example.demo.repository.LoginEventRepository;
-import com.example.demo.service.LoginEventService;
-import com.example.demo.util.RuleEvaluationUtil; // import RuleEvaluationUtil
-import org.springframework.stereotype.Service;
+import java.util.*;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
+import com.example.demo.service.*;
+import com.example.demo.util.RuleEvaluationUtil;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-@Service
 public class LoginEventServiceImpl implements LoginEventService {
 
-    private final LoginEventRepository loginRepo;
-    private final RuleEvaluationUtil ruleEvaluationUtil; // add this
+    private final LoginEventRepository repo;
+    private final RuleEvaluationUtil evaluator;
 
-    // Updated constructor
-    public LoginEventServiceImpl(LoginEventRepository loginRepo, RuleEvaluationUtil ruleEvaluationUtil) {
-        this.loginRepo = loginRepo;
-        this.ruleEvaluationUtil = ruleEvaluationUtil;
+    public LoginEventServiceImpl(LoginEventRepository repo, RuleEvaluationUtil evaluator) {
+        this.repo = repo;
+        this.evaluator = evaluator;
     }
 
-    @Override
-    public LoginEvent recordLogin(LoginEvent event) {
-
-        if (event.getIpAddress() == null || event.getDeviceId() == null) {
-            throw new IllegalArgumentException("IP Address and Device ID are required");
-        }
-
-        if (event.getLoginStatus() == null) {
-            event.setLoginStatus("FAILED");
-        }
-
-        if (event.getTimestamp() == null) {
-            event.setTimestamp(LocalDateTime.now());
-        }
-
-        return loginRepo.save(event);
+    public LoginEvent recordLogin(LoginEvent e) {
+        LoginEvent saved = repo.save(e);
+        evaluator.evaluateLoginEvent(saved);
+        return saved;
     }
 
-    @Override
     public List<LoginEvent> getEventsByUser(Long userId) {
-        return loginRepo.findByUserId(userId);
+        return repo.findByUserId(userId);
     }
 
-    @Override
     public List<LoginEvent> getSuspiciousLogins(Long userId) {
-        return loginRepo.findByUserIdAndLoginStatus(userId, "FAILED");
-    }
-
-    @Override
-    public List<LoginEvent> getAllEvents() {
-        return loginRepo.findAll();
+        return repo.findByUserIdAndLoginStatus(userId, "FAILED");
     }
 }
