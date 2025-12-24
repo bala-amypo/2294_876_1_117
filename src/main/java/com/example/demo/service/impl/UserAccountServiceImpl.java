@@ -15,20 +15,17 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final UserAccountRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
-    // ✅ CONSTRUCTOR USED BY SPRING / TESTS
     public UserAccountServiceImpl(UserAccountRepository userRepo,
                                   PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ✅ CONSTRUCTOR USED BY TESTS THAT PASS ONLY REPO
     public UserAccountServiceImpl(UserAccountRepository userRepo) {
         this.userRepo = userRepo;
-        this.passwordEncoder = null; // ✅ REQUIRED to satisfy Java final rule
+        this.passwordEncoder = null; 
     }
 
-    // ================= EXISTING LOGIC (UNCHANGED) =================
 
     @Override
     public UserAccount createUser(UserAccount user) {
