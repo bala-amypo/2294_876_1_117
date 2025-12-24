@@ -1,14 +1,36 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
+
+@Entity
 public class PolicyRule {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String ruleCode;
-    private String description;
-    private String severity;
-    private String conditionsJson;
-    private Boolean active;
 
+    @Column(unique = true)
+    private String ruleCode;
+
+    private String description;
+    private String severity;       // LOW / MEDIUM / HIGH / CRITICAL
+    private String conditionsJson;
+    private Boolean active = true;
+
+    public PolicyRule() {
+    }
+
+    public PolicyRule(Long id, String ruleCode, String description,
+                      String severity, String conditionsJson, Boolean active) {
+        this.id = id;
+        this.ruleCode = ruleCode;
+        this.description = description;
+        this.severity = severity;
+        this.conditionsJson = conditionsJson;
+        this.active = active;
+    }
+
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

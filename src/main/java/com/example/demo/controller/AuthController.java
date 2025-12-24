@@ -1,40 +1,59 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.LoginEvent;
-import com.example.demo.service.LoginEventService;
+import com.example.demo.dto.JwtResponse;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.entity.UserAccount;
+import com.example.demo.security.JwtUtil;
+import com.example.demo.service.UserAccountService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/logins")
-@Tag(name = "Logins")
-public class LoginEventController {
+@RequestMapping("/auth")
+@Tag(name = "Auth")
+public class AuthController {
 
-    private final LoginEventService service;
+    private final UserAccountService userService;
+    private final PasswordEncoder encoder;
+    private final JwtUtil jwtUtil;
 
-    public LoginEventController(LoginEventService service) {
-        this.service = service;
+    public AuthController(UserAccountService userService,
+                          PasswordEncoder encoder,
+                          JwtUtil jwtUtil) {
+        this.userService = userService;
+        this.encoder = encoder;
+        this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/record")
-    public LoginEvent record(@RequestBody LoginEvent event) {
-        return service.recordLogin(event);
+    @PostMapping("/register")
+    public UserAccount register(@RequestBody RegisterRequest req) {
+        UserAccount user = new UserAccount();
+        user.setEmployeeId(req.getEmployeeId());
+        user.setUsername(req.getUsername());
+        user.setEmail(req.getEmail());
+        user.setPassword(req.getPassword());
+        user.setRole(req.getRole());
+        return userService.createUser(user);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<LoginEvent> byUser(@PathVariable Long userId) {
-        return service.getEventsByUser(userId);
-    }
+    @PostMapping("/login")
+    public JwtResponse login(@RequestBody LoginRequest req) {
+        UserAccount user = userService.findByUsername(req.getUsernameOrEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-    @GetMapping("/suspicious/{userId}")
-    public List<LoginEvent> suspicious(@PathVariable Long userId) {
-        return service.getSuspiciousLogins(userId);
-    }
+        if (!encoder.matches(req.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
 
-    @GetMapping
-    public List<LoginEvent> all() {
-        return service.getAllEvents();
+        String token = jwtUtil.generateToken(
+                user.getUsername(),
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
+
+        return new JwtResponse(token, user.getId(), user.getEmail(), user.getRole());
     }
 }
