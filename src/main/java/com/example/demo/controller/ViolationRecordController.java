@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/violations")
-public class ViolationController {
+public class ViolationRecordController {
 
     private final ViolationRecordService violationService;
 

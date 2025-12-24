@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/devices")
-public class DeviceController {
+public class DeviceProfileController {
 
     private final DeviceProfileService deviceService;
 
