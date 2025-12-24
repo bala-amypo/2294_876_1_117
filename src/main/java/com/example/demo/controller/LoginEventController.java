@@ -3,6 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.entity.LoginEvent;
 import com.example.demo.service.LoginEventService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
 
 import java.util.List;
 
