@@ -2,64 +2,67 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
+import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository userRepo;
-    private final PasswordEncoder passwordEncoder;
+    private final UserAccountRepository userRepository;
+    private final LoginEventRepository loginEventRepository; // Injected
 
-    public UserAccountServiceImpl(UserAccountRepository userRepo, PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
+    @Autowired
+    public UserAccountServiceImpl(UserAccountRepository userRepository,
+                                  LoginEventRepository loginEventRepository) {
+        this.userRepository = userRepository;
+        this.loginEventRepository = loginEventRepository;
     }
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
-        return userRepo.save(user);
+        if (user.getRole() == null) {
+            user.setRole("USER"); // default role
+        }
+        return userRepository.save(user);
     }
 
     @Override
-    public UserAccount getUserById(Long id) {
-        return userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public Optional<UserAccount> getUserById(Long id) {
+        return userRepository.findById(id);
     }
 
     @Override
     public List<UserAccount> getAllUsers() {
-        return userRepo.findAll();
+        return userRepository.findAll();
     }
 
     @Override
-    public UserAccount updateRole(Long userId, String role) {
-        UserAccount user = getUserById(userId);
-        user.setRole(role);
-        return userRepo.save(user);
+    public UserAccount updateUserStatus(Long id, String status) {
+        Optional<UserAccount> optUser = userRepository.findById(id);
+        if (optUser.isPresent()) {
+            UserAccount user = optUser.get();
+            user.setStatus(status);
+            return userRepository.save(user);
+        }
+        return null;
     }
 
-    @Override
-    public UserAccount updateUserStatus(Long userId, String status) {
-        UserAccount user = getUserById(userId);
-        user.setStatus(status);
-        return userRepo.save(user);
+    // Example of referencing LoginEvent if needed
+    public void logUserLoginEvent(UserAccount user, String ipAddress, String deviceId) {
+        // Create LoginEvent and save
+        com.example.demo.entity.LoginEvent event = new com.example.demo.entity.LoginEvent();
+        event.setUserId(user.getId());
+        event.setIpAddress(ipAddress);
+        event.setDeviceId(deviceId);
+        event.setLoginStatus("SUCCESS");
+        event.setLoginTime(LocalDateTime.now());
+        loginEventRepository.save(event);
     }
-
-    @Override
-    public UserAccount findByUsername(String username) {
-        return userRepo.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-    @Override
-public List<LoginEvent> getEventsByUserAndStatus(Long userId, String status) {
-    return loginEventRepository.findByUserIdAndStatus(userId, status);
-}
-
 }

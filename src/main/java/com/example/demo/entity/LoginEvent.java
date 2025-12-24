@@ -7,18 +7,30 @@ import java.time.LocalDateTime;
 public class LoginEvent {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long userId;
-    private String status; // LOGIN_SUCCESS / LOGIN_FAIL
+    private String loginStatus; // LOGIN_SUCCESS / LOGIN_FAIL
+    private String ipAddress;   // Added for getIpAddress()
+    private String deviceId;    // Added for getDeviceId()
     private LocalDateTime loginTime;
 
     // Getters and Setters
     public Long getId() { return id; }
+
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+
+    public String getLoginStatus() { return loginStatus; }
+    public void setLoginStatus(String loginStatus) { this.loginStatus = loginStatus; }
+
+    public String getIpAddress() { return ipAddress; }
+    public void setIpAddress(String ipAddress) { this.ipAddress = ipAddress; }
+
+    public String getDeviceId() { return deviceId; }
+    public void setDeviceId(String deviceId) { this.deviceId = deviceId; }
+
     public LocalDateTime getLoginTime() { return loginTime; }
     public void setLoginTime(LocalDateTime loginTime) { this.loginTime = loginTime; }
 }
