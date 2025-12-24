@@ -14,14 +14,12 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final UserAccountRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 
-    // Constructor used by Spring
     public UserAccountServiceImpl(UserAccountRepository userRepo,
                                   PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Constructor used by tests
     public UserAccountServiceImpl(UserAccountRepository userRepo) {
         this.userRepo = userRepo;
         this.passwordEncoder = null;
@@ -35,7 +33,6 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.save(user);
     }
 
-    // ✅ MUST return UserAccount (NOT Optional)
     @Override
     public UserAccount getUserById(Long id) {
         return userRepo.findById(id)
@@ -54,7 +51,6 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.save(user);
     }
 
-    // ✅ REQUIRED by interface
     @Override
     public UserAccount findByEmail(String email) {
         return userRepo.findByEmail(email)
