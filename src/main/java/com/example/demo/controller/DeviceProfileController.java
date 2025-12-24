@@ -10,7 +10,7 @@ public class DeviceProfileController {
 
     private final DeviceProfileService deviceService;
 
-    public DeviceController(DeviceProfileService deviceService) {
+    public DeviceProfileController(DeviceProfileService deviceService) {
         this.deviceService = deviceService;
     }
 
