@@ -28,7 +28,6 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
 
     @Override
     public List<PolicyRule> getActiveRules() {
-        // SAFE: filter in-memory (no repo method assumed)
         return ruleRepository.findAll()
                 .stream()
                 .filter(rule -> Boolean.TRUE.equals(rule.getActive()))
