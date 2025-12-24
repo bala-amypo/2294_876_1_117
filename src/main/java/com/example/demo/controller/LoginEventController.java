@@ -1,37 +1,32 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.DeviceProfile;
-import com.example.demo.service.DeviceProfileService;
+import com.example.demo.entity.LoginEvent;
+import com.example.demo.service.LoginEventService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/devices")
-public class DeviceProfileController {
+@RequestMapping("/api/logins")
+public class LoginEventController {   // <-- must match file name
+    private final LoginEventService loginService;
 
-    private final DeviceProfileService deviceService;
-
-    public DeviceProfileController(DeviceProfileService deviceService) {
-        this.deviceService = deviceService;
+    public LoginEventController(LoginEventService loginService) {
+        this.loginService = loginService;
     }
 
     @PostMapping
-    public ResponseEntity<DeviceProfile> registerDevice(@RequestBody DeviceProfile device) {
-        DeviceProfile saved = deviceService.registerDevice(device);
-        return ResponseEntity.ok(saved);
+    public ResponseEntity<LoginEvent> recordLogin(@RequestBody LoginEvent loginEvent) {
+        return ResponseEntity.ok(loginService.recordLogin(loginEvent));
     }
 
-    @GetMapping("/{deviceId}")
-    public ResponseEntity<DeviceProfile> getDevice(@PathVariable String deviceId) {
-        Optional<DeviceProfile> device = deviceService.findByDeviceId(deviceId);
-        return device.map(ResponseEntity::ok)
-                     .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<LoginEvent>> getUserEvents(@PathVariable Long userId) {
+        return ResponseEntity.ok(loginService.getEventsByUser(userId));
     }
 
-    @PutMapping("/{id}/trust")
-    public ResponseEntity<DeviceProfile> updateTrust(@PathVariable Long id, @RequestParam boolean trusted) {
-        DeviceProfile updated = deviceService.updateTrustStatus(id, trusted);
-        return ResponseEntity.ok(updated);
+    @GetMapping("/user/{userId}/suspicious")
+    public ResponseEntity<List<LoginEvent>> getSuspicious(@PathVariable Long userId) {
+        return ResponseEntity.ok(loginService.getSuspiciousLogins(userId));
     }
 }
