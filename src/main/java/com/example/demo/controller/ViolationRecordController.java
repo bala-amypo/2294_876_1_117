@@ -1,19 +1,33 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.*;
-import com.example.demo.service.*;
-import org.springframework.http.ResponseEntity;
-import java.util.*;
+import com.example.demo.entity.ViolationRecord;
+import com.example.demo.service.ViolationRecordService;
+import org.springframework.web.bind.annotation.*;
 
-public class ViolationRecordController {
+import java.util.List;
 
-    private final ViolationRecordService service;
+@RestController
+@RequestMapping("/api/violations")
+public class ViolationController {
 
-    public ViolationRecordController(ViolationRecordService service) {
-        this.service = service;
+    private final ViolationRecordService violationService;
+
+    public ViolationController(ViolationRecordService violationService) {
+        this.violationService = violationService;
     }
 
-    public ResponseEntity<ViolationRecord> log(ViolationRecord v) {
-        return ResponseEntity.ok(service.logViolation(v));
+    @PostMapping
+    public ViolationRecord logViolation(@RequestBody ViolationRecord record) {
+        return violationService.logViolation(record);
+    }
+
+    @GetMapping("/unresolved")
+    public List<ViolationRecord> getUnresolved() {
+        return violationService.getUnresolvedViolations();
+    }
+
+    @PutMapping("/{id}/resolve")
+    public ViolationRecord resolve(@PathVariable Long id) {
+        return violationService.markResolved(id);
     }
 }
