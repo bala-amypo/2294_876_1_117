@@ -2,9 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.service.DeviceProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/devices")
@@ -12,26 +12,40 @@ public class DeviceProfileController {
 
     private final DeviceProfileService deviceService;
 
+    @Autowired
     public DeviceProfileController(DeviceProfileService deviceService) {
         this.deviceService = deviceService;
     }
 
+    // Register a new device
     @PostMapping
     public ResponseEntity<DeviceProfile> registerDevice(@RequestBody DeviceProfile device) {
-        DeviceProfile saved = deviceService.registerDevice(device);
-        return ResponseEntity.ok(saved);
+        DeviceProfile savedDevice = deviceService.registerDevice(device);
+        return ResponseEntity.ok(savedDevice);
     }
 
+    // Get device by deviceId
     @GetMapping("/{deviceId}")
-    public ResponseEntity<DeviceProfile> getDevice(@PathVariable String deviceId) {
-        Optional<DeviceProfile> device = deviceService.findByDeviceId(deviceId);
-        return device.map(ResponseEntity::ok)
-                     .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<DeviceProfile> getDeviceById(@PathVariable String deviceId) {
+        DeviceProfile device = deviceService.findByDeviceId(deviceId);
+        if (device != null) {
+            return ResponseEntity.ok(device);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @PutMapping("/{id}/trust")
-    public ResponseEntity<DeviceProfile> updateTrust(@PathVariable Long id, @RequestParam boolean trusted) {
-        DeviceProfile updated = deviceService.updateTrustStatus(id, trusted);
-        return ResponseEntity.ok(updated);
+    // Update trust status of a device
+    @PutMapping("/{deviceId}/trust")
+    public ResponseEntity<DeviceProfile> updateTrustStatus(
+            @PathVariable Long deviceId,
+            @RequestParam boolean trusted
+    ) {
+        DeviceProfile updatedDevice = deviceService.updateTrustStatus(deviceId, trusted);
+        if (updatedDevice != null) {
+            return ResponseEntity.ok(updatedDevice);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
