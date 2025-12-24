@@ -69,9 +69,11 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.findByEmail(email);
     }
 
-    // === TEST COMPATIBILITY CONSTRUCTOR (DO NOT REMOVE EXISTING ONE) ===
-     public UserAccountServiceImpl(UserAccountRepository userRepo) {
-          this(userRepo, null);
+
+public UserAccountServiceImpl(UserAccountRepository userRepo,
+                              PasswordEncoder passwordEncoder) {
+    this.userRepo = userRepo;
+    this.passwordEncoder = passwordEncoder;
 }
 
 }
