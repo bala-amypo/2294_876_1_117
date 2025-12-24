@@ -37,9 +37,9 @@ public class PolicyRuleController {
         return ruleService.getAllRules();
     }
 
-    // === TEST ALIAS METHOD ===
 public List<PolicyRule> all() {
-    return getAll(); // your existing method
+    return getAllRules();
 }
+
 
 }
