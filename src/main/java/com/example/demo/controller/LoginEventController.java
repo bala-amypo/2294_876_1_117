@@ -2,42 +2,37 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.LoginEvent;
 import com.example.demo.service.LoginEventService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/logins")
+@RequestMapping("/logins")
 public class LoginEventController {
 
-    private final LoginEventService service;
+    private final LoginEventService loginService;
 
-    public LoginEventController(LoginEventService service) {
-        this.service = service;
+    public LoginEventController(LoginEventService loginService) {
+        this.loginService = loginService;
     }
 
-    // POST /api/logins/record
-    @PostMapping("/record")
-    public ResponseEntity<LoginEvent> recordLogin(@RequestBody LoginEvent event) {
-        return ResponseEntity.ok(service.recordLogin(event));
+    @PostMapping
+    public LoginEvent record(@RequestBody LoginEvent event) {
+        return loginService.recordLogin(event);
     }
 
-    // GET /api/logins/user/{userId}
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<LoginEvent>> getEventsByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(service.getEventsByUser(userId));
+    public List<LoginEvent> byUser(@PathVariable Long userId) {
+        return loginService.getEventsByUser(userId);
     }
 
-    // GET /api/logins/suspicious/{userId}
     @GetMapping("/suspicious/{userId}")
-    public ResponseEntity<List<LoginEvent>> getSuspiciousLogins(@PathVariable Long userId) {
-        return ResponseEntity.ok(service.getSuspiciousLogins(userId));
+    public List<LoginEvent> suspicious(@PathVariable Long userId) {
+        return loginService.getSuspiciousLogins(userId);
     }
 
-    // GET /api/logins
     @GetMapping
-    public ResponseEntity<List<LoginEvent>> getAllEvents() {
-        return ResponseEntity.ok(service.getAllEvents());
+    public List<LoginEvent> all() {
+        return loginService.getAllEvents();
     }
 }
