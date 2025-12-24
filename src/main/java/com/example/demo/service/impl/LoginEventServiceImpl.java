@@ -6,27 +6,17 @@ import com.example.demo.repository.*;
 import com.example.demo.service.*;
 import com.example.demo.util.RuleEvaluationUtil;
 
+@Service
 public class LoginEventServiceImpl implements LoginEventService {
 
     private final LoginEventRepository repo;
-    private final RuleEvaluationUtil evaluator;
 
-    public LoginEventServiceImpl(LoginEventRepository repo, RuleEvaluationUtil evaluator) {
+    public LoginEventServiceImpl(LoginEventRepository repo) {
         this.repo = repo;
-        this.evaluator = evaluator;
     }
 
-    public LoginEvent recordLogin(LoginEvent e) {
-        LoginEvent saved = repo.save(e);
-        evaluator.evaluateLoginEvent(saved);
-        return saved;
-    }
-
-    public List<LoginEvent> getEventsByUser(Long userId) {
-        return repo.findByUserId(userId);
-    }
-
-    public List<LoginEvent> getSuspiciousLogins(Long userId) {
-        return repo.findByUserIdAndLoginStatus(userId, "FAILED");
+    @Override
+    public List<LoginEvent> getSuspiciousEvents() {
+        return repo.findBySuspiciousTrue();
     }
 }

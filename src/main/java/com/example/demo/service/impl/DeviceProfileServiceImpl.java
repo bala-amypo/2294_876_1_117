@@ -5,6 +5,7 @@ import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.*;
 
+@Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
     private final DeviceProfileRepository repo;
@@ -13,17 +14,16 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
         this.repo = repo;
     }
 
-    public DeviceProfile registerDevice(DeviceProfile d) {
-        return repo.save(d);
+    @Override
+    public DeviceProfile getDeviceByDeviceId(String deviceId) {
+        return repo.findByDeviceId(deviceId)
+                   .orElseThrow(() -> new RuntimeException("Device not found"));
     }
 
-    public Optional<DeviceProfile> findByDeviceId(String deviceId) {
-        return repo.findByDeviceId(deviceId);
-    }
-
-    public DeviceProfile updateTrustStatus(Long id, Boolean trusted) {
-        DeviceProfile d = repo.findById(id).orElse(null);
-        d.setIsTrusted(trusted);
-        return repo.save(d);
+    @Override
+    public DeviceProfile updateDeviceTrust(String deviceId, boolean isTrusted) {
+        DeviceProfile device = getDeviceByDeviceId(deviceId);
+        device.setIsTrusted(isTrusted);
+        return repo.save(device);
     }
 }
