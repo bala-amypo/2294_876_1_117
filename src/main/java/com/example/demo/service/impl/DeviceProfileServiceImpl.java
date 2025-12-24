@@ -43,4 +43,5 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     public Optional<DeviceProfile> findByDeviceId(String deviceId) {
         return deviceRepo.findByDeviceId(deviceId);
     }
+    
 }

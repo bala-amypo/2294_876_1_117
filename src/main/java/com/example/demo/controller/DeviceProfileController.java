@@ -34,10 +34,12 @@ public class DeviceProfileController {
         return service.getDevicesByUser(userId);
     }
 
-    @GetMapping("/lookup/{deviceId}")
-    public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
-        DeviceProfile profile = service.findByDeviceId(deviceId);
-        return ResponseEntity.ok(profile);
-    }
+@GetMapping("/lookup/{deviceId}")
+public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
+    return service.findByDeviceId(deviceId)
+                  .map(ResponseEntity::ok)
+                  .orElse(ResponseEntity.notFound().build());
+}
+
 }
 

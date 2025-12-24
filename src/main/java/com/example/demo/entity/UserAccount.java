@@ -15,12 +15,20 @@ public class UserAccount {
     private String status;
     private LocalDateTime createdAt;
 
-    // ✅ Add setter/getter for createdAt
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public LocalDateTime getCreatedAt() { return this.createdAt; }
+    // ✅ Missing fields for AuthController
+    private String employeeId;
+    private String email;
+    private String role;
 
-    // ✅ Add getBody() to satisfy tests
-    public Object getBody() { return this; }
+    // Getters/Setters for new fields
+    public String getEmployeeId() { return employeeId; }
+    public void setEmployeeId(String employeeId) { this.employeeId = employeeId; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
     // existing getters/setters
     public Long getId() { return id; }
@@ -31,4 +39,9 @@ public class UserAccount {
     public void setPassword(String password) { this.password = password; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    // ✅ Needed for test cases
+    public Object getBody() { return this; }
 }
