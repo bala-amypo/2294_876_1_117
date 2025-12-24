@@ -2,10 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.service.DeviceProfileService;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-
+import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/devices")
@@ -18,29 +17,21 @@ public class DeviceProfileController {
     }
 
     @PostMapping
-    public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
-        return deviceService.registerDevice(device);
+    public ResponseEntity<DeviceProfile> registerDevice(@RequestBody DeviceProfile device) {
+        DeviceProfile saved = deviceService.registerDevice(device);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping("/{deviceId}")
-    public DeviceProfile getDevice(@PathVariable String deviceId) {
-        return deviceService.getDeviceByDeviceId(deviceId);
+    public ResponseEntity<DeviceProfile> getDevice(@PathVariable String deviceId) {
+        Optional<DeviceProfile> device = deviceService.findByDeviceId(deviceId);
+        return device.map(ResponseEntity::ok)
+                     .orElse(ResponseEntity.notFound().build());
     }
 
-   @GetMapping("/{deviceId}")
-public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
-    return deviceService.findByDeviceId(deviceId)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+    @PutMapping("/{id}/trust")
+    public ResponseEntity<DeviceProfile> updateTrust(@PathVariable Long id, @RequestParam boolean trusted) {
+        DeviceProfile updated = deviceService.updateTrustStatus(id, trusted);
+        return ResponseEntity.ok(updated);
+    }
 }
-
-@PutMapping("/{id}/trust")
-public ResponseEntity<DeviceProfile> updateTrust(
-        @PathVariable Long id,
-        @RequestParam boolean trusted) {
-    return ResponseEntity.ok(deviceService.updateTrustStatus(id, trusted));
-}
-
-}
-
-

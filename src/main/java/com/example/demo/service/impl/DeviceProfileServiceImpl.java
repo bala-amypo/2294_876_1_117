@@ -4,6 +4,7 @@ import com.example.demo.entity.DeviceProfile;
 import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
@@ -20,15 +21,14 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     }
 
     @Override
-    public DeviceProfile findByDeviceId(String deviceId) {
-        return repo.findByDeviceId(deviceId)
-                   .orElseThrow(() -> new RuntimeException("Device not found"));
+    public Optional<DeviceProfile> findByDeviceId(String deviceId) {
+        return repo.findByDeviceId(deviceId);
     }
 
     @Override
     public DeviceProfile updateTrustStatus(Long id, boolean isTrusted) {
         DeviceProfile device = repo.findById(id)
-                   .orElseThrow(() -> new RuntimeException("Device not found"));
+                .orElseThrow(() -> new RuntimeException("Device not found"));
         device.setIsTrusted(isTrusted);
         return repo.save(device);
     }
