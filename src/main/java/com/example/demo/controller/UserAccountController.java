@@ -1,10 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.*;
-import com.example.demo.service.*;
-import org.springframework.http.ResponseEntity;
-import java.util.*;
+import com.example.demo.entity.UserAccount;
+import com.example.demo.service.UserAccountService;
+import org.springframework.web.bind.annotation.*;
 
+@RestController
+@RequestMapping("/api/users")
 public class UserAccountController {
 
     private final UserAccountService service;
@@ -13,7 +14,18 @@ public class UserAccountController {
         this.service = service;
     }
 
-    public ResponseEntity<UserAccount> create(UserAccount u) {
-        return ResponseEntity.ok(service.createUser(u));
+    @PostMapping
+    public UserAccount createUser(@RequestBody UserAccount user) {
+        return service.createUser(user);
+    }
+
+    @GetMapping("/{id}")
+    public UserAccount getUser(@PathVariable Long id) {
+        return service.getUserById(id);
+    }
+
+    @GetMapping
+    public Iterable<UserAccount> getAllUsers() {
+        return service.getAllUsers();
     }
 }
