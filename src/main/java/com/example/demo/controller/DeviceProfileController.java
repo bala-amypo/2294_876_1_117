@@ -24,10 +24,20 @@ public class DeviceProfileController {
         return deviceService.getDeviceByDeviceId(deviceId);
     }
 
-    @PutMapping("/{deviceId}/trust")
-    public DeviceProfile updateTrust(
-            @PathVariable String deviceId,
-            @RequestParam boolean trusted) {
-        return deviceService.updateDeviceTrust(deviceId, trusted);
-    }
+   @GetMapping("/{deviceId}")
+public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
+    return deviceService.findByDeviceId(deviceId)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
 }
+
+@PutMapping("/{id}/trust")
+public ResponseEntity<DeviceProfile> updateTrust(
+        @PathVariable Long id,
+        @RequestParam boolean trusted) {
+    return ResponseEntity.ok(deviceService.updateTrustStatus(id, trusted));
+}
+
+}
+
+

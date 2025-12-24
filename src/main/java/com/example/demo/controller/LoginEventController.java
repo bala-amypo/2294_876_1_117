@@ -26,8 +26,9 @@ public class LoginEventController {
         return loginService.getEventsByUser(userId);
     }
 
-    @GetMapping("/suspicious")
-    public List<LoginEvent> getSuspicious() {
-        return loginService.getSuspiciousEvents();
-    }
+@GetMapping("/suspicious/{userId}")
+public ResponseEntity<List<LoginEvent>> suspicious(@PathVariable Long userId) {
+    return ResponseEntity.ok(loginService.getSuspiciousLogins(userId));
+}
+
 }
