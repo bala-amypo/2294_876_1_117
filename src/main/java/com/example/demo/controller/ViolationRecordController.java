@@ -18,27 +18,27 @@ public class ViolationRecordController {
     }
 
     @PostMapping
-    public ViolationRecord log(@RequestBody ViolationRecord violation) {
-        return service.logViolation(violation);
+    public ViolationRecord create(@RequestBody ViolationRecord record) {
+        return service.create(record); // ❌ NOT Object
     }
 
     @GetMapping("/user/{userId}")
-    public List<ViolationRecord> byUser(@PathVariable Long userId) {
-        return service.getViolationsByUser(userId);
+    public List<ViolationRecord> getByUser(@PathVariable Long userId) {
+        return service.getByUserId(userId);
     }
 
     @PutMapping("/{id}/resolve")
     public ViolationRecord resolve(@PathVariable Long id) {
-        return service.markResolved(id);
+        return service.resolve(id);
     }
 
     @GetMapping("/unresolved")
     public List<ViolationRecord> unresolved() {
-        return service.getUnresolvedViolations();
+        return service.getUnresolved();
     }
 
     @GetMapping
     public List<ViolationRecord> all() {
-        return service.getAllViolations();
+        return service.getAll();
     }
 }

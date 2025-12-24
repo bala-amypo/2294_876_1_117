@@ -9,47 +9,38 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserAccountServiceImpl implements UserAccountService {
+public class ViolationRecordServiceImpl implements ViolationRecordService {
 
-    private final UserAccountRepository userRepository;
+    private final ViolationRecordRepository repo;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepository) {
-        this.userRepository = userRepository;
+    public ViolationRecordServiceImpl(ViolationRecordRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public List<UserAccount> getAllUsers() {
-        return userRepository.findAll();
+    public ViolationRecord create(ViolationRecord record) {
+        return repo.save(record);
     }
 
     @Override
-    public Optional<UserAccount> getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public List<ViolationRecord> getByUserId(Long userId) {
+        return repo.findByUserId(userId);
     }
 
     @Override
-    public Optional<UserAccount> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public ViolationRecord resolve(Long id) {
+        ViolationRecord v = repo.findById(id).orElseThrow();
+        v.setResolved(true);
+        return repo.save(v);
     }
 
     @Override
-    public UserAccount createUser(UserAccount user) {
-        return userRepository.save(user);
+    public List<ViolationRecord> getUnresolved() {
+        return repo.findByResolvedFalse();
     }
 
     @Override
-    public Optional<UserAccount> getUserById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    @Override
-    public UserAccount updateUserStatus(Long id, String status) {
-        Optional<UserAccount> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            UserAccount user = optionalUser.get();
-            user.setStatus(status); // Make sure UserAccount entity has a 'status' field
-            return userRepository.save(user);
-        }
-        return null; // or throw exception if preferred
+    public List<ViolationRecord> getAll() {
+        return repo.findAll();
     }
 }

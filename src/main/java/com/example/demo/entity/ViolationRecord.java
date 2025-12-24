@@ -8,14 +8,30 @@ public class ViolationRecord {
 
     @Id
     private Long id;
-    private Long userId;
-    private Long policyRuleId;
-    private Long eventId;
-    private String violationType;
-    private String details;
-    private String severity;
-    private Boolean resolved;
-    private LocalDateTime detectedAt;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    private String employeeId;
+
+    private String password;
+
+    private String role;
+
+    private String status;
+
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = "ACTIVE";
+        }
+    }
 
     // ✅ Setter/getter for detectedAt
     public void setDetectedAt(LocalDateTime detectedAt) { this.detectedAt = detectedAt; }
@@ -42,5 +58,4 @@ public class ViolationRecord {
     public Boolean getResolved() { return resolved; }
     public void setResolved(Boolean resolved) { this.resolved = resolved; }
 }
-
 
