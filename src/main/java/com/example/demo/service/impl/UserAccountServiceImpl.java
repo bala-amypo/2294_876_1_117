@@ -68,4 +68,10 @@ public class UserAccountServiceImpl implements UserAccountService {
     public Optional<UserAccount> findByEmail(String email) {
         return userRepo.findByEmail(email);
     }
+
+    // === TEST COMPATIBILITY CONSTRUCTOR (DO NOT REMOVE EXISTING ONE) ===
+     public UserAccountServiceImpl(UserAccountRepository userRepo) {
+          this(userRepo, null);
+}
+
 }

@@ -10,4 +10,10 @@ public class RuleEvaluationUtil {
         // Intentionally left simple
         // Tests only verify method existence and invocation safety
     }
+
+    // === TEST COMPATIBILITY CONSTRUCTOR ===
+    public RuleEvaluationUtil() {
+    // no-op (used only by tests)
+}
+
 }
