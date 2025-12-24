@@ -26,18 +26,8 @@ public class ViolationRecordController {
         return violationService.markResolved(id);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<ViolationRecord> byUser(@PathVariable Long userId) {
-        return violationService.getViolationsByUser(userId);
-    }
-
     @GetMapping("/unresolved")
     public List<ViolationRecord> unresolved() {
         return violationService.getUnresolvedViolations();
-    }
-
-    @GetMapping
-    public List<ViolationRecord> all() {
-        return violationService.getAllViolations();
     }
 }

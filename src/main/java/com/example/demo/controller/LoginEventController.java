@@ -30,9 +30,4 @@ public class LoginEventController {
     public List<LoginEvent> suspicious(@PathVariable Long userId) {
         return loginService.getSuspiciousLogins(userId);
     }
-
-    @GetMapping
-    public List<LoginEvent> all() {
-        return loginService.getAllEvents();
-    }
 }

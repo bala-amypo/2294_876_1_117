@@ -5,7 +5,6 @@ import com.example.demo.service.DeviceProfileService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/devices")
@@ -28,13 +27,8 @@ public class DeviceProfileController {
         return deviceService.updateTrustStatus(id, trusted);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<DeviceProfile> getByUser(@PathVariable Long userId) {
-        return deviceService.getDevicesByUser(userId);
-    }
-
     @GetMapping("/lookup/{deviceId}")
-    public Optional<DeviceProfile> lookup(@PathVariable String deviceId) {
+    public DeviceProfile lookup(@PathVariable String deviceId) {
         return deviceService.findByDeviceId(deviceId);
     }
 }

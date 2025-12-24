@@ -21,12 +21,6 @@ public class PolicyRuleController {
         return ruleService.createRule(rule);
     }
 
-    @PutMapping("/{id}")
-    public PolicyRule updateRule(@PathVariable Long id,
-                                 @RequestBody PolicyRule rule) {
-        return ruleService.updateRule(id, rule);
-    }
-
     @GetMapping("/active")
     public List<PolicyRule> activeRules() {
         return ruleService.getActiveRules();
