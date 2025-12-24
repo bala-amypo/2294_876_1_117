@@ -10,22 +10,27 @@ public class LoginEvent {
     private Long id;
 
     private Long userId;
-    private String deviceId;
-    private String location;
-    private LocalDateTime timestamp;
+
     private String ipAddress;
-    private String loginStatus; // SUCCESS, FAILED, etc.
 
-    public LoginEvent() {}
+    private LocalDateTime loginTime;
 
-    // Getters and Setters
+    // 🔥 THIS FIELD WAS MISSING
+    private String status;
+
+    public LoginEvent() {
+    }
+
+    public LoginEvent(Long userId, String ipAddress, LocalDateTime loginTime, String status) {
+        this.id=id;
+        this.userId = userId;
+        this.ipAddress = ipAddress;
+        this.loginTime = loginTime;
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getUserId() {
@@ -36,30 +41,6 @@ public class LoginEvent {
         this.userId = userId;
     }
 
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public String getIpAddress() {
         return ipAddress;
     }
@@ -68,11 +49,19 @@ public class LoginEvent {
         this.ipAddress = ipAddress;
     }
 
-    public String getLoginStatus() {
-        return loginStatus;
+    public LocalDateTime getLoginTime() {
+        return loginTime;
     }
 
-    public void setLoginStatus(String loginStatus) {
-        this.loginStatus = loginStatus;
+    public void setLoginTime(LocalDateTime loginTime) {
+        this.loginTime = loginTime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
