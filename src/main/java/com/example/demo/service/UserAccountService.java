@@ -9,11 +9,10 @@ public interface UserAccountService {
 
     UserAccount createUser(UserAccount user);
 
-    UserAccount getUserById(Long id);
-
-    UserAccount updateUserStatus(Long id, String status);
-
+    UserAccount getUserById(Long id);           // Must return UserAccount, not Optional
     List<UserAccount> getAllUsers();
 
-    Optional<UserAccount> findByUsername(String username);
+    UserAccount updateRole(Long userId, String role);
+
+    UserAccount findByUsername(String username); // <-- needed by test cases
 }

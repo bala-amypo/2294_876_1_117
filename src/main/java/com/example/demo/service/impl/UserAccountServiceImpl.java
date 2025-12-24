@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -23,15 +22,15 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        // Encode password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setCreatedAt(LocalDateTime.now()); // for test case
+        user.setCreatedAt(LocalDateTime.now());
         return userRepo.save(user);
     }
 
     @Override
-    public Optional<UserAccount> getUserById(Long id) {
-        return userRepo.findById(id);
+    public UserAccount getUserById(Long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
@@ -41,13 +40,14 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount updateRole(Long userId, String role) {
-        UserAccount user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        UserAccount user = getUserById(userId);
         user.setRole(role);
         return userRepo.save(user);
     }
 
     @Override
-    public Optional<UserAccount> findByEmail(String email) {
-        return userRepo.findByEmail(email);
+    public UserAccount findByUsername(String username) {
+        return userRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
