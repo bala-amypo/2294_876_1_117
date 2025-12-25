@@ -12,34 +12,28 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
 
     private final ViolationRecordRepository repo;
 
+    // REQUIRED for Mockito
     public ViolationRecordServiceImpl(ViolationRecordRepository repo) {
         this.repo = repo;
     }
 
     @Override
-    public ViolationRecord create(ViolationRecord record) {
+    public ViolationRecord logViolation(ViolationRecord record) {
         return repo.save(record);
     }
 
     @Override
-    public List<ViolationRecord> getByUserId(Long userId) {
-        return repo.findByUserId(userId);
-    }
-
-    @Override
-    public ViolationRecord resolve(Long id) {
-        ViolationRecord v = repo.findById(id).orElseThrow();
-        v.setResolved(true);
-        return repo.save(v);
-    }
-
-    @Override
-    public List<ViolationRecord> getUnresolved() {
+    public List<ViolationRecord> getUnresolvedViolations() {
         return repo.findByResolvedFalse();
     }
 
     @Override
-    public List<ViolationRecord> getAll() {
-        return repo.findAll();
+    public ViolationRecord markResolved(Long id) {
+        ViolationRecord record = repo.findById(id).orElse(null);
+        if (record != null) {
+            record.setResolved(true);
+            return repo.save(record);
+        }
+        return null;
     }
 }
