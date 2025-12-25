@@ -10,30 +10,37 @@ import java.util.List;
 @Service
 public class ViolationRecordServiceImpl implements ViolationRecordService {
 
-    private final ViolationRecordRepository repo;
+    private final ViolationRecordRepository violationRepo;
 
-    // REQUIRED for Mockito
-    public ViolationRecordServiceImpl(ViolationRecordRepository repo) {
-        this.repo = repo;
+    public ViolationRecordServiceImpl(ViolationRecordRepository violationRepo) {
+        this.violationRepo = violationRepo;
     }
 
     @Override
-    public ViolationRecord logViolation(ViolationRecord record) {
-        return repo.save(record);
+    public ViolationRecord log(ViolationRecord record) {
+        return violationRepo.save(record);
     }
 
     @Override
-    public List<ViolationRecord> getUnresolvedViolations() {
-        return repo.findByResolvedFalse();
+    public List<ViolationRecord> getByUserId(Long userId) {
+        return violationRepo.findByUserId(userId);
     }
 
     @Override
     public ViolationRecord markResolved(Long id) {
-        ViolationRecord record = repo.findById(id).orElse(null);
-        if (record != null) {
-            record.setResolved(true);
-            return repo.save(record);
-        }
-        return null;
+        ViolationRecord record = violationRepo.findById(id).orElse(null);
+        if (record == null) return null;
+        record.setResolved(true);
+        return violationRepo.save(record);
+    }
+
+    @Override
+    public List<ViolationRecord> getUnresolved() {
+        return violationRepo.findByResolvedFalse();
+    }
+
+    @Override
+    public List<ViolationRecord> getAll() {
+        return violationRepo.findAll();
     }
 }

@@ -1,37 +1,46 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.LoginEvent;
-import com.example.demo.repository.LoginEventRepository;
-import com.example.demo.service.LoginEventService;
-import com.example.demo.util.RuleEvaluationUtil;
+import com.example.demo.entity.PolicyRule;
+import com.example.demo.repository.PolicyRuleRepository;
+import com.example.demo.service.PolicyRuleService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class LoginEventServiceImpl implements LoginEventService {
+@Service
+public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    private final LoginEventRepository repo;
-    private final RuleEvaluationUtil evaluator;
+    private final PolicyRuleRepository ruleRepo;
 
-    public LoginEventServiceImpl(LoginEventRepository repo,
-                                 RuleEvaluationUtil evaluator) {
-        this.repo = repo;
-        this.evaluator = evaluator;
+    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepo) {
+        this.ruleRepo = ruleRepo;
     }
 
     @Override
-    public LoginEvent recordLogin(LoginEvent event) {
-        LoginEvent saved = repo.save(event);
-        evaluator.evaluateLoginEvent(saved);
-        return saved;
+    public PolicyRule create(PolicyRule rule) {
+        return ruleRepo.save(rule);
     }
 
     @Override
-    public List<LoginEvent> getEventsByUser(Long userId) {
-        return repo.findByUserId(userId);
+    public PolicyRule update(Long id, PolicyRule rule) {
+        PolicyRule existing = ruleRepo.findById(id).orElse(null);
+        if (existing == null) return null;
+
+        existing.setRuleCode(rule.getRuleCode());
+        existing.setDescription(rule.getDescription());
+        existing.setSeverity(rule.getSeverity());
+        existing.setActive(rule.getActive());
+
+        return ruleRepo.save(existing);
     }
 
     @Override
-    public List<LoginEvent> getSuspiciousLogins(Long userId) {
-        return repo.findByUserIdAndLoginStatus(userId, "FAILED");
+    public List<PolicyRule> getActiveRules() {
+        return ruleRepo.findByActiveTrue();
+    }
+
+    @Override
+    public List<PolicyRule> getAllRules() {
+        return ruleRepo.findAll();
     }
 }

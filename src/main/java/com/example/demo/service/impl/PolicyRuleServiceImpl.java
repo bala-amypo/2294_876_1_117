@@ -10,25 +10,37 @@ import java.util.List;
 @Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    private final PolicyRuleRepository repo;
+    private final PolicyRuleRepository ruleRepo;
 
-    // REQUIRED for Mockito
-    public PolicyRuleServiceImpl(PolicyRuleRepository repo) {
-        this.repo = repo;
+    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepo) {
+        this.ruleRepo = ruleRepo;
     }
 
     @Override
-    public PolicyRule createRule(PolicyRule rule) {
-        return repo.save(rule);
+    public PolicyRule create(PolicyRule rule) {
+        return ruleRepo.save(rule);
+    }
+
+    @Override
+    public PolicyRule update(Long id, PolicyRule rule) {
+        PolicyRule existing = ruleRepo.findById(id).orElse(null);
+        if (existing == null) return null;
+
+        existing.setRuleCode(rule.getRuleCode());
+        existing.setDescription(rule.getDescription());
+        existing.setSeverity(rule.getSeverity());
+        existing.setActive(rule.getActive());
+
+        return ruleRepo.save(existing);
+    }
+
+    @Override
+    public List<PolicyRule> getActiveRules() {
+        return ruleRepo.findByActiveTrue();
     }
 
     @Override
     public List<PolicyRule> getAllRules() {
-        return repo.findAll();
-    }
-
-        @Override
-        public List<PolicyRule> getActiveRules() {
-        return repo.findByActiveTrue();
+        return ruleRepo.findAll();
     }
 }

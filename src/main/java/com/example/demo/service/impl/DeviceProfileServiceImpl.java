@@ -5,38 +5,37 @@ import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository repo;
+    private final DeviceProfileRepository deviceRepo;
 
-    // REQUIRED for Mockito
-    public DeviceProfileServiceImpl(DeviceProfileRepository repo) {
-        this.repo = repo;
+    public DeviceProfileServiceImpl(DeviceProfileRepository deviceRepo) {
+        this.deviceRepo = deviceRepo;
     }
 
     @Override
-    public DeviceProfile registerDevice(DeviceProfile device) {
-        return repo.save(device);
+    public DeviceProfile register(DeviceProfile device) {
+        return deviceRepo.save(device);
     }
 
     @Override
-    public Optional<DeviceProfile> findByDeviceId(String deviceId) {
-        return repo.findByDeviceId(deviceId);
-    }
-
-    @Override
-    public DeviceProfile updateTrustStatus(Long id, Boolean trusted) {
-
-    DeviceProfile device = repo.findById(id).orElse(null);
-
-        if (device == null) {
-            return null;
-        }
-
+    public DeviceProfile updateTrust(Long id, Boolean trusted) {
+        DeviceProfile device = deviceRepo.findById(id).orElse(null);
+        if (device == null) return null;
         device.setIsTrusted(trusted);
-        return repo.save(device);
+        return deviceRepo.save(device);
+    }
+
+    @Override
+    public List<DeviceProfile> getByUserId(Long userId) {
+        return deviceRepo.findByUserId(userId);
+    }
+
+    @Override
+    public DeviceProfile lookup(String deviceId) {
+        return deviceRepo.findByDeviceId(deviceId);
     }
 }
