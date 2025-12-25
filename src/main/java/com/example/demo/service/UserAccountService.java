@@ -6,10 +6,8 @@ import java.util.Optional;
 
 public interface UserAccountService {
 
-    // MAIN method used internally
     UserAccount create(UserAccount user);
 
-    // METHOD REQUIRED BY TESTS
     default UserAccount createUser(UserAccount user) {
         return create(user);
     }
