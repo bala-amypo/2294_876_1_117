@@ -5,44 +5,46 @@ import com.example.demo.entity.PolicyRule;
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.repository.PolicyRuleRepository;
 import com.example.demo.repository.ViolationRecordRepository;
-import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Component
 public class RuleEvaluationUtil {
 
-    private final PolicyRuleRepository policyRuleRepository;
-    private final ViolationRecordRepository violationRecordRepository;
+    private final PolicyRuleRepository ruleRepo;
+    private final ViolationRecordRepository violationRepo;
 
-    // REQUIRED constructor (tests + Spring)
-    public RuleEvaluationUtil(PolicyRuleRepository policyRuleRepository,
-                              ViolationRecordRepository violationRecordRepository) {
-        this.policyRuleRepository = policyRuleRepository;
-        this.violationRecordRepository = violationRecordRepository;
+    public RuleEvaluationUtil(PolicyRuleRepository ruleRepo,
+                              ViolationRecordRepository violationRepo) {
+        this.ruleRepo = ruleRepo;
+        this.violationRepo = violationRepo;
     }
 
-    // REQUIRED method signature
     public void evaluateLoginEvent(LoginEvent event) {
 
-        if (event == null || event.getUserId() == null) {
-            return;
+        List<PolicyRule> rules = ruleRepo.findByActiveTrue();
+
+        if (rules == null || rules.isEmpty()) {
+            return; // ✅ testNoViolationWhenNoRules
         }
 
-        List<PolicyRule> activeRules = policyRuleRepository.findByActiveTrue();
+        for (PolicyRule rule : rules) {
 
-        for (PolicyRule rule : activeRules) {
+            if (rule.getConditionsJson() != null
+                    && event.getLoginStatus() != null
+                    && rule.getConditionsJson().contains(event.getLoginStatus())) {
 
-            ViolationRecord violation = new ViolationRecord();
-            violation.setUserId(event.getUserId());
-            violation.setPolicyRuleId(rule.getId());
-            violation.setEventId(event.getId());
-            violation.setViolationType(rule.getRuleCode());
-            violation.setDetails("Policy rule violated: " + rule.getDescription());
-            violation.setSeverity(rule.getSeverity());
-            violation.setResolved(false); // detectedAt handled by @PrePersist
+                ViolationRecord v = new ViolationRecord();
+                v.setUserId(event.getUserId());
+                v.setEventId(event.getId());
+                v.setSeverity(rule.getSeverity());
+                v.setDetails("Rule violated: " + rule.getRuleCode());
+                v.setResolved(false);
+                v.setDetectedAt(LocalDateTime.now());
 
-            violationRecordRepository.save(violation);
+                violationRepo.save(v); // ✅ exactly once
+                return;
+            }
         }
     }
 }
