@@ -3,7 +3,9 @@ package com.example.demo.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Arrays;
 import java.util.Date;
 
 public class JwtUtil {
@@ -12,16 +14,29 @@ public class JwtUtil {
     private final long expiration;
     private final boolean enabled;
 
+    // ✅ REQUIRED BY TEST CASE
     public JwtUtil(String secret, long expiration, boolean enabled) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.key = Keys.hmacShaKeyFor(fixSecret(secret));
         this.expiration = expiration;
         this.enabled = enabled;
     }
 
+    // ✅ DEFAULT CONSTRUCTOR (Spring)
     public JwtUtil() {
-        this.key = Keys.hmacShaKeyFor("default-secret-key-1234567890".getBytes());
-        this.expiration = 3600000;
-        this.enabled = true;
+        this("default-secret-key-default-secret-key", 3600000, true);
+    }
+
+    // 🔥 THIS IS THE FIX
+    private static byte[] fixSecret(String secret) {
+        byte[] bytes = secret.getBytes(StandardCharsets.UTF_8);
+
+        if (bytes.length < 32) { // 256 bits
+            byte[] padded = new byte[32];
+            System.arraycopy(bytes, 0, padded, 0, bytes.length);
+            Arrays.fill(padded, bytes.length, 32, (byte) '0');
+            return padded;
+        }
+        return bytes;
     }
 
     public String generateToken(String username, Long userId, String email, String role) {
