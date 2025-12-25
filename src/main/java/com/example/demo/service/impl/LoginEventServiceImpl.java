@@ -1,46 +1,38 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.PolicyRule;
-import com.example.demo.repository.PolicyRuleRepository;
-import com.example.demo.service.PolicyRuleService;
+import com.example.demo.entity.LoginEvent;
+import com.example.demo.repository.LoginEventRepository;
+import com.example.demo.service.LoginEventService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class PolicyRuleServiceImpl implements PolicyRuleService {
+public class LoginEventServiceImpl implements LoginEventService {
 
-    private final PolicyRuleRepository ruleRepo;
+    private final LoginEventRepository repo;
 
-    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepo) {
-        this.ruleRepo = ruleRepo;
+    public LoginEventServiceImpl(LoginEventRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public PolicyRule create(PolicyRule rule) {
-        return ruleRepo.save(rule);
+    public LoginEvent record(LoginEvent event) {
+        return repo.save(event);
     }
 
     @Override
-    public PolicyRule update(Long id, PolicyRule rule) {
-        PolicyRule existing = ruleRepo.findById(id).orElse(null);
-        if (existing == null) return null;
-
-        existing.setRuleCode(rule.getRuleCode());
-        existing.setDescription(rule.getDescription());
-        existing.setSeverity(rule.getSeverity());
-        existing.setActive(rule.getActive());
-
-        return ruleRepo.save(existing);
+    public List<LoginEvent> getEventsByUser(Long userId) {
+        return repo.findByUserId(userId);
     }
 
     @Override
-    public List<PolicyRule> getActiveRules() {
-        return ruleRepo.findByActiveTrue();
+    public List<LoginEvent> getAllEvents() {
+        return repo.findAll();
     }
 
     @Override
-    public List<PolicyRule> getAllRules() {
-        return ruleRepo.findAll();
+    public List<LoginEvent> getSuspiciousEvents(Long userId) {
+        return repo.findByUserIdAndLoginStatus(userId, "FAILED");
     }
 }
