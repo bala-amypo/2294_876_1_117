@@ -32,8 +32,9 @@ public class PolicyRuleController {
         return ruleService.getActiveRules();
     }
 
-    @GetMapping
-    public List<PolicyRule> allRules() {
-        return ruleService.getAllRules();
-    }
+@GetMapping
+public List<PolicyRule> all() {   // <-- changed method name from allRules() to all()
+    return ruleService.getAllRules();
+}
+
 }
