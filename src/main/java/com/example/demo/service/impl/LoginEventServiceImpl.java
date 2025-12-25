@@ -13,9 +13,10 @@ import java.util.List;
 public class LoginEventServiceImpl implements LoginEventService {
 
     private final LoginEventRepository loginRepo;
-    private final RuleEvaluationUtil ruleUtil; // added
+    private final RuleEvaluationUtil ruleUtil;
 
-    public LoginEventServiceImpl(LoginEventRepository loginRepo, RuleEvaluationUtil ruleUtil) {
+    public LoginEventServiceImpl(LoginEventRepository loginRepo,
+                                 RuleEvaluationUtil ruleUtil) {
         this.loginRepo = loginRepo;
         this.ruleUtil = ruleUtil;
     }
@@ -23,24 +24,26 @@ public class LoginEventServiceImpl implements LoginEventService {
     @Override
     public LoginEvent recordLogin(LoginEvent event) {
 
-    if (event.getIpAddress() == null) {
-        event.setIpAddress("127.0.0.1");
-    }
+        // ✅ Defaults required by test suite
+        if (event.getIpAddress() == null) {
+            event.setIpAddress("127.0.0.1");
+        }
 
-    if (event.getDeviceId() == null) {
-        event.setDeviceId("UNKNOWN_DEVICE");
-    }
+        if (event.getDeviceId() == null) {
+            event.setDeviceId("UNKNOWN_DEVICE");
+        }
 
-    if (event.getStatus() == null) {
-        event.setStatus("SUCCESS");
-    }
+        // ✅ CORRECT FIELD NAME
+        if (event.getLoginStatus() == null) {
+            event.setLoginStatus("SUCCESS");
+        }
 
-    if (event.getTimestamp() == null) {
-        event.setTimestamp(LocalDateTime.now());
-    }
+        if (event.getTimestamp() == null) {
+            event.setTimestamp(LocalDateTime.now());
+        }
 
-    return loginEventRepo.save(event);
-}
+        return loginRepo.save(event); // ✅ correct variable
+    }
 
     @Override
     public List<LoginEvent> getEventsByUser(Long userId) {
