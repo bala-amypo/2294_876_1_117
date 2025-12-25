@@ -18,17 +18,22 @@ public class ViolationRecordController {
         this.violationService = violationService;
     }
 
-@PostMapping
-public ResponseEntity<ViolationRecord> create(@RequestBody ViolationRecord violation) {
-    ViolationRecord saved = violationService.logViolation(violation);
-    return ResponseEntity.ok(saved);
-}
+    // ✅ REQUIRED BY TESTS
+    @PostMapping("/log")
+    public ViolationRecord log(@RequestBody ViolationRecord violation) {
+        return violationService.logViolation(violation);
+    }
 
-@PutMapping("/{id}/resolve")
-public ResponseEntity<ViolationRecord> resolve(@PathVariable Long id) {
-    ViolationRecord resolved = violationService.markResolved(id);
-    return ResponseEntity.ok(resolved);
-}
+    // You can keep this also (Swagger / REST usage)
+    @PostMapping
+    public ResponseEntity<ViolationRecord> create(@RequestBody ViolationRecord violation) {
+        return ResponseEntity.ok(violationService.logViolation(violation));
+    }
+
+    @PutMapping("/{id}/resolve")
+    public ViolationRecord resolve(@PathVariable Long id) {
+        return violationService.markResolved(id);
+    }
 
     @GetMapping("/user/{userId}")
     public List<ViolationRecord> byUser(@PathVariable Long userId) {
