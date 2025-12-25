@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -17,15 +16,13 @@ public class UserAccountController {
         this.userService = userService;
     }
 
-    // 🔹 REQUIRED FOR TEST (DIRECT CALL)
     public UserAccount create(UserAccount user) {
         return userService.create(user);
     }
 
-    // 🔹 REQUIRED FOR API (HTTP)
     @PostMapping
-    public ResponseEntity<UserAccount> createUser(@RequestBody UserAccount user) {
-        return ResponseEntity.ok(userService.create(user));
+    public UserAccount createUser(@RequestBody UserAccount user) {
+        return userService.create(user);
     }
 
     @GetMapping("/{id}")

@@ -22,9 +22,3 @@ public interface UserAccountService {
 
     Optional<UserAccount> findByEmail(String email);
 }
-public interface UserAccountService {
-    UserAccount create(UserAccount user);
-    UserAccount getUserById(Long id);
-    UserAccount updateUserStatus(Long id, String status);
-    List<UserAccount> getAllUsers();
-}
