@@ -7,7 +7,9 @@ public interface LoginEventService {
 
     LoginEvent recordLogin(LoginEvent event);
 
-    List<LoginEvent> getEventsByUser(Long userId);
+    List<LoginEvent> getByUserId(Long userId);
 
-    List<LoginEvent> getSuspiciousLogins(Long userId);
+    List<LoginEvent> getSuspiciousEvents(Long userId);
+
+    List<LoginEvent> getAll();
 }
