@@ -121,7 +121,6 @@ public ViolationRecord(Long id, Long userId, Long policyRuleId, Long eventId,
     this.resolved = resolved;
 }
 
-// ✅ REQUIRED ONLY FOR TEST COMPATIBILITY
 public ViolationRecord getBody() {
     return this;
 }
