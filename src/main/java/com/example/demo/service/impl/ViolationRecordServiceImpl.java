@@ -19,20 +19,8 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     }
 
     @Override
-    public ViolationRecord logViolation(ViolationRecord record) {
-        return repo.save(record);
-    }
-
-    @Override
-    public List<ViolationRecord> getByUser(Long userId) {
-        return repo.findByUserId(userId);
-    }
-
-    @Override
-    public ViolationRecord resolveViolation(Long id) {
-        ViolationRecord record = repo.findById(id).orElseThrow(() -> new RuntimeException("Violation not found"));
-        record.setResolved(true);
-        return repo.save(record);
+    public List<ViolationRecord> getAllViolations() {
+        return repo.findAll();
     }
 
     @Override
@@ -41,7 +29,10 @@ public class ViolationRecordServiceImpl implements ViolationRecordService {
     }
 
     @Override
-    public List<ViolationRecord> getAll() {
-        return repo.findAll();
+    public ViolationRecord resolveViolation(Long id) {
+        ViolationRecord record = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Violation not found"));
+        record.setResolved(true);
+        return repo.save(record);
     }
 }

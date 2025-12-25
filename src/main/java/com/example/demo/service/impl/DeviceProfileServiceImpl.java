@@ -19,24 +19,21 @@ public class DeviceProfileServiceImpl implements DeviceProfileService {
     }
 
     @Override
-    public DeviceProfile registerDevice(DeviceProfile device) {
-        return repo.save(device);
+    public DeviceProfile getByDeviceId(String deviceId) {
+        return repo.findByDeviceId(deviceId)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
     }
 
     @Override
-    public DeviceProfile updateTrust(Long id, boolean isTrusted) {
-        DeviceProfile device = repo.findById(id).orElseThrow(() -> new RuntimeException("Device not found"));
+    public DeviceProfile updateTrustStatus(Long id, Boolean isTrusted) {
+        DeviceProfile device = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
         device.setIsTrusted(isTrusted);
         return repo.save(device);
     }
 
     @Override
-    public List<DeviceProfile> getDevicesByUser(Long userId) {
-        return repo.findByUserId(userId);
-    }
-
-    @Override
-    public DeviceProfile getByDeviceId(String deviceId) {
-        return repo.findByDeviceId(deviceId).orElseThrow(() -> new RuntimeException("Device not found"));
+    public List<DeviceProfile> getAllDevices() {
+        return repo.findAll();
     }
 }

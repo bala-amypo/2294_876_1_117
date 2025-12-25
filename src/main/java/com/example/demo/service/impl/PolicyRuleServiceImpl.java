@@ -26,7 +26,7 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     @Override
     public PolicyRule updateRule(Long id, PolicyRule ruleDetails) {
         PolicyRule rule = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Policy Rule not found"));
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
         rule.setRuleName(ruleDetails.getRuleName());
         rule.setConditionsJson(ruleDetails.getConditionsJson());
         rule.setActive(ruleDetails.getActive());
