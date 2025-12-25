@@ -17,9 +17,10 @@ public class UserAccountController {
     }
 
     @PostMapping
-    public UserAccount create(UserAccount user) {   // rename from createUser to create
-      return userService.create(user);
+      public ResponseEntity<UserAccount> create(@RequestBody UserAccount user) {
+           return ResponseEntity.ok(userService.create(user));
 }
+
 
 
     @GetMapping("/{id}")

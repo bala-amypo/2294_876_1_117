@@ -6,8 +6,10 @@ import java.time.LocalDateTime;
 @Entity
 public class UserAccount {
 
-    @Id
-    private Long id;
+   @Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+
 
     @Column(unique = true)
     private String employeeId;
