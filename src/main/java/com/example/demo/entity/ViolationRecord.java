@@ -10,27 +10,26 @@ public class ViolationRecord {
     private Long id;
 
     private Long userId;
-
     private Long policyRuleId;
-
     private Long eventId;
-
     private String violationType;
-
     private String details;
-
     private String severity;
-
-    private Boolean resolved = false;
-
+    private boolean resolved = false;
     private LocalDateTime detectedAt;
 
-    @PrePersist
-    public void onCreate() {
+    public ViolationRecord() {}
+
+    public ViolationRecord(Long userId, Long policyRuleId, Long eventId, String violationType, String details, String severity) {
+        this.userId = userId;
+        this.policyRuleId = policyRuleId;
+        this.eventId = eventId;
+        this.violationType = violationType;
+        this.details = details;
+        this.severity = severity;
         this.detectedAt = LocalDateTime.now();
     }
 
-    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -52,8 +51,9 @@ public class ViolationRecord {
     public String getSeverity() { return severity; }
     public void setSeverity(String severity) { this.severity = severity; }
 
-    public Boolean getResolved() { return resolved; }
-    public void setResolved(Boolean resolved) { this.resolved = resolved; }
+    public boolean isResolved() { return resolved; }
+    public void setResolved(boolean resolved) { this.resolved = resolved; }
 
     public LocalDateTime getDetectedAt() { return detectedAt; }
+    public void setDetectedAt(LocalDateTime detectedAt) { this.detectedAt = detectedAt; }
 }
