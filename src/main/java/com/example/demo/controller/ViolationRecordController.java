@@ -16,9 +16,9 @@ public class ViolationRecordController {
         this.violationService = violationService;
     }
 
-@PostMapping
-public ViolationRecord log(@RequestBody ViolationRecord violation) {  // <-- renamed from create() to log()
-    return violationService.logViolation(violation);
+     @PostMapping
+    public ViolationRecord log(@RequestBody ViolationRecord violation) {  // <-- renamed from create() to log()
+      return violationService.logViolation(violation);
 }
 
     @PutMapping("/{id}/resolve")
