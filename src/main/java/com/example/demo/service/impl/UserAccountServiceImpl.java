@@ -4,28 +4,31 @@ import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
 import com.example.demo.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository repo;
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private UserAccountRepository repo;
 
     @Autowired
-    public UserAccountServiceImpl(UserAccountRepository repo, JwtUtil jwtUtil) {
-        this.repo = repo;
-        this.jwtUtil = jwtUtil;
+    private JwtUtil jwtUtil;
+
+    @Override
+    public String login(String username, String password) {
+        UserAccount user = repo.findByUsernameAndPassword(username, password)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setToken(jwtUtil.generateToken(user.getUsername()));
+        return user.getToken();
     }
 
     @Override
-    public UserAccount login(String username, String password) {
-        UserAccount user = repo.findByUsernameAndPassword(username, password)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        String token = jwtUtil.generateToken(user.getUsername());
-        user.setToken(token);
-        return user;
+    public List<UserAccount> getAllUsers() {
+        return repo.findAll();
     }
 
     @Override
