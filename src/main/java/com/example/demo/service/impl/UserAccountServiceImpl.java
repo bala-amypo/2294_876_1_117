@@ -3,45 +3,69 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import com.example.demo.util.JwtUtil;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    @Autowired
-    private UserAccountRepository repo;
+    private final UserAccountRepository userRepo;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Override
-    public String login(String username, String password) {
-        UserAccount user = repo.findByUsernameAndPassword(username, password)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setToken(jwtUtil.generateToken(user.getUsername()));
-        return user.getToken();
+    public UserAccountServiceImpl(UserAccountRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
     @Override
-    public List<UserAccount> getAllUsers() {
-        return repo.findAll();
-    }
+    public UserAccount createUser(UserAccount user) {
+        if (user.getUsername() == null || user.getEmail() == null || user.getEmployeeId() == null) {
+            throw new IllegalArgumentException("Employee ID, username, and email are required");
+        }
 
-    @Override
-    public UserAccount updateUserStatus(Long userId, String status) {
-        UserAccount user = repo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setStatus(status);
-        return repo.save(user);
+        if (userRepo.findByUsername(user.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
+        if (userRepo.findByEmail(user.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        if (user.getStatus() == null) {
+            user.setStatus("ACTIVE");
+        }
+        if (user.getRole() == null) {
+            user.setRole("USER");
+        }
+
+        return userRepo.save(user);
     }
 
     @Override
     public UserAccount getUserById(Long id) {
-        return repo.findById(id)
+        return userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public UserAccount updateUserStatus(Long id, String status) {
+        UserAccount user = getUserById(id);
+        user.setStatus(status);
+        return userRepo.save(user);
+    }
+
+    @Override
+    public List<UserAccount> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    @Override
+    public Optional<UserAccount> findByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
+
+    @Override
+    public Optional<UserAccount> findByEmail(String email) {
+        return userRepo.findByEmail(email);
     }
 }
