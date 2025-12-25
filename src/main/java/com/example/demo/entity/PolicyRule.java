@@ -6,25 +6,79 @@ import jakarta.persistence.*;
 public class PolicyRule {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String ruleName;
+    @Column(unique = true)
     private String ruleCode;
-    private Boolean active;
 
-    public PolicyRule() {}
+    private String description;
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    private String severity; 
 
-    public String getRuleName() { return ruleName; }
-    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
+    @Column(columnDefinition = "TEXT")
+    private String conditionsJson;
 
-    public String getRuleCode() { return ruleCode; }
-    public void setRuleCode(String ruleCode) { this.ruleCode = ruleCode; }
+    private Boolean active = true;
 
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRuleCode() {
+        return ruleCode;
+    }
+
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+
+    public String getConditionsJson() {
+        return conditionsJson;
+    }
+
+    public void setConditionsJson(String conditionsJson) {
+        this.conditionsJson = conditionsJson;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public PolicyRule() {
+}
+
+public PolicyRule(Long id, String ruleCode, String description,
+                  String severity, String conditionsJson, Boolean active) {
+    this.id = id;
+    this.ruleCode = ruleCode;
+    this.description = description;
+    this.severity = severity;
+    this.conditionsJson = conditionsJson;
+    this.active = active;
+}
+
 }
