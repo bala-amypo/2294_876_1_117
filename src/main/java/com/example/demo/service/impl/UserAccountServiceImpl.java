@@ -21,34 +21,34 @@ public class UserAccountServiceImpl implements UserAccountService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    public UserAccount createUser(UserAccount user) {
-        if (user.getUsername() == null || user.getEmail() == null || user.getEmployeeId() == null) {
-            throw new IllegalArgumentException("Employee ID, username, and email are required");
-        }
-
-        if (userRepo.findByUsername(user.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
-        }
-
-        if (userRepo.findByEmail(user.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
-        }
-
-        if (user.getStatus() == null) {
-            user.setStatus("ACTIVE");
-        }
-        if (user.getRole() == null) {
-            user.setRole("USER");
-        }
-
-        // Encode password if provided
-        if (user.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-
-        return userRepo.save(user);
+   @Override
+   public UserAccount create(UserAccount user) {
+    if (user.getUsername() == null || user.getEmail() == null || user.getEmployeeId() == null) {
+        throw new IllegalArgumentException("Employee ID, username, and email are required");
     }
+
+    if (userRepo.findByUsername(user.getUsername()).isPresent()) {
+        throw new IllegalArgumentException("Username already exists");
+    }
+
+    if (userRepo.findByEmail(user.getEmail()).isPresent()) {
+        throw new IllegalArgumentException("Email already exists");
+    }
+
+    if (user.getStatus() == null) {
+        user.setStatus("ACTIVE");
+    }
+    if (user.getRole() == null) {
+        user.setRole("USER");
+    }
+
+    if (user.getPassword() != null) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    }
+
+    return userRepo.save(user);
+}
+
 
     @Override
     public UserAccount getUserById(Long id) {
