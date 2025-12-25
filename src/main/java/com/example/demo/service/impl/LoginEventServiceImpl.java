@@ -24,7 +24,6 @@ public class LoginEventServiceImpl implements LoginEventService {
     @Override
     public LoginEvent recordLogin(LoginEvent event) {
 
-        // ✅ Defaults required by test suite
         if (event.getIpAddress() == null) {
             event.setIpAddress("127.0.0.1");
         }
@@ -33,7 +32,6 @@ public class LoginEventServiceImpl implements LoginEventService {
             event.setDeviceId("UNKNOWN_DEVICE");
         }
 
-        // ✅ CORRECT FIELD NAME
         if (event.getLoginStatus() == null) {
             event.setLoginStatus("SUCCESS");
         }
@@ -42,7 +40,7 @@ public class LoginEventServiceImpl implements LoginEventService {
             event.setTimestamp(LocalDateTime.now());
         }
 
-        return loginRepo.save(event); // ✅ correct variable
+        return loginRepo.save(event); 
     }
 
     @Override
