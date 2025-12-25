@@ -17,10 +17,15 @@ public class UserAccountController {
         this.userService = userService;
     }
 
+    // 🔹 REQUIRED FOR TEST (DIRECT CALL)
+    public UserAccount create(UserAccount user) {
+        return userService.create(user);
+    }
+
+    // 🔹 REQUIRED FOR API (HTTP)
     @PostMapping
     public ResponseEntity<UserAccount> createUser(@RequestBody UserAccount user) {
-        UserAccount savedUser = userService.createUser(user);
-        return ResponseEntity.ok(savedUser);
+        return ResponseEntity.ok(userService.create(user));
     }
 
     @GetMapping("/{id}")
