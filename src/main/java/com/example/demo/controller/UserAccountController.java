@@ -32,7 +32,7 @@ public class UserAccountController {
         return userService.getUserById(id);
     }
 
-    @PutMapping("/{id}/status}")
+    @PutMapping("/{id}/status")
     public UserAccount updateStatus(@PathVariable Long id,
                                     @RequestParam String status) {
         return userService.updateUserStatus(id, status);
