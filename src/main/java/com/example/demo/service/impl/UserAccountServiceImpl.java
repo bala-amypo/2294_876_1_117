@@ -26,21 +26,41 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.findByUsername(username);
     }
 
-    @Override
-    public UserAccount getUserById(Long id) {
-        return userRepo.findById(id).orElse(null);
-    }
-
+@Override
+public UserAccount getUserById(Long id) {
+    return repo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+}
     @Override
     public List<UserAccount> getAllUsers() {
         return userRepo.findAll();
     }
 
+@Override
+public UserAccount updateStatus(Long id, String status) {
+    UserAccount user = repo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    user.setStatus(status);
+    return repo.save(user);
+}
+
+
     @Override
-    public UserAccount updateStatus(Long id, String status) {
-        UserAccount user = userRepo.findById(id).orElse(null);
-        if (user == null) return null;
-        user.setStatus(status);
-        return userRepo.save(user);
+public String login(String username, String password) {
+    UserAccount user = repo.findByUsername(username)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+    if (!passwordEncoder.matches(password, user.getPassword())) {
+        throw new RuntimeException("Invalid credentials");
     }
+    return jwtUtil.generateToken(username);
+}
+
+
+
+
+@Override
+public UserAccount updateUserStatus(Long id, String status) {
+    UserAccount user = repo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    user.setStatus(status);
+    return repo.save(user);
+}
+
 }

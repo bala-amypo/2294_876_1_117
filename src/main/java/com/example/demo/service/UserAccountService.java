@@ -9,9 +9,16 @@ public interface UserAccountService {
 
     UserAccount authenticate(String username, String password);
 
-    UserAccount getById(Long id);
 
     List<UserAccount> getAllUsers();
 
     UserAccount updateUserStatus(Long id, String status);
+
+    // For AuthController login
+String login(String username, String password);
+
+// For UserAccountController
+UserAccount getUserById(Long id);
+UserAccount updateStatus(Long id, String status);
+
 }
