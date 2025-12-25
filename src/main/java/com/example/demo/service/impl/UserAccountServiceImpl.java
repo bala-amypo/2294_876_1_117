@@ -21,10 +21,10 @@ public class UserAccountServiceImpl implements UserAccountService {
         this.passwordEncoder = passwordEncoder;
     }
 
-   @Override
+    @Override
     public UserAccount create(UserAccount user) {
 
-    // ✅ Auto-fill missing fields for test compatibility
+    // ✅ Provide defaults instead of throwing exception
     if (user.getEmployeeId() == null) {
         user.setEmployeeId("EMP-" + System.currentTimeMillis());
     }
@@ -51,7 +51,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     return userRepo.save(user);
 }
-
 
 
     @Override
