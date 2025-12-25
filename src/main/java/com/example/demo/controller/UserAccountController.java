@@ -23,8 +23,6 @@ public class UserAccountController {
            return ResponseEntity.ok(userService.create(user));
 }
 
-
-
     @GetMapping("/{id}")
     public UserAccount getUser(@PathVariable Long id) {
         return userService.getUserById(id);
