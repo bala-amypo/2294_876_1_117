@@ -18,7 +18,7 @@ public class UserAccountController {
 
     @PostMapping
     public UserAccount create(UserAccount user) {   // rename from createUser to create
-      return userService.createUser(user);
+      return userService.create(user);
 }
 
 

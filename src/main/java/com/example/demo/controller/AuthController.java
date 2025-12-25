@@ -20,7 +20,7 @@ public class AuthController {
         if (user.getRole() == null) {
             user.setRole("USER");
         }
-        return userService.createUser(user);
+        return userService.create(user);
     }
 
     @PostMapping("/login")
