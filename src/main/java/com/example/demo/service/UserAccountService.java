@@ -1,24 +1,20 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.UserAccount;
+
 import java.util.List;
 
 public interface UserAccountService {
 
     UserAccount createUser(UserAccount user);
 
-    UserAccount authenticate(String username, String password);
+    String login(String username, String password); // added for AuthController
 
+    UserAccount getUserById(Long id); // added for UserAccountController
+
+    UserAccount updateStatus(Long id, String status); // added for UserAccountController
+
+    UserAccount updateUserStatus(Long id, String status); // added for tests
 
     List<UserAccount> getAllUsers();
-
-    UserAccount updateUserStatus(Long id, String status);
-
-    // For AuthController login
-String login(String username, String password);
-
-// For UserAccountController
-UserAccount getUserById(Long id);
-UserAccount updateStatus(Long id, String status);
-
 }

@@ -17,7 +17,7 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
-    public LoginEvent record(LoginEvent event) {
+    public LoginEvent recordLogin(LoginEvent event) {
         return repo.save(event);
     }
 
@@ -27,12 +27,12 @@ public class LoginEventServiceImpl implements LoginEventService {
     }
 
     @Override
-    public List<LoginEvent> getAllEvents() {
-        return repo.findAll();
+    public List<LoginEvent> getSuspiciousEvents(Long userId) {
+        return repo.findByUserIdAndLoginStatus(userId, "FAILED");
     }
 
     @Override
-    public List<LoginEvent> getSuspiciousEvents(Long userId) {
-        return repo.findByUserIdAndLoginStatus(userId, "FAILED");
+    public List<LoginEvent> getAllEvents() {
+        return repo.findAll();
     }
 }

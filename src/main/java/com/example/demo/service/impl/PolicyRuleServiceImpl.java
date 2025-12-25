@@ -10,37 +10,34 @@ import java.util.List;
 @Service
 public class PolicyRuleServiceImpl implements PolicyRuleService {
 
-    private final PolicyRuleRepository ruleRepo;
+    private final PolicyRuleRepository repo;
 
-    public PolicyRuleServiceImpl(PolicyRuleRepository ruleRepo) {
-        this.ruleRepo = ruleRepo;
+    public PolicyRuleServiceImpl(PolicyRuleRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public PolicyRule create(PolicyRule rule) {
-        return ruleRepo.save(rule);
+    public PolicyRule createRule(PolicyRule rule) {
+        return repo.save(rule);
     }
 
     @Override
-    public PolicyRule update(Long id, PolicyRule rule) {
-        PolicyRule existing = ruleRepo.findById(id).orElse(null);
-        if (existing == null) return null;
-
-        existing.setRuleCode(rule.getRuleCode());
+    public PolicyRule updateRule(Long id, PolicyRule rule) {
+        PolicyRule existing = repo.findById(id).orElseThrow(() -> new RuntimeException("Rule not found"));
         existing.setDescription(rule.getDescription());
         existing.setSeverity(rule.getSeverity());
-        existing.setActive(rule.getActive());
-
-        return ruleRepo.save(existing);
+        existing.setActive(rule.isActive());
+        existing.setConditionsJson(rule.getConditionsJson());
+        return repo.save(existing);
     }
 
     @Override
     public List<PolicyRule> getActiveRules() {
-        return ruleRepo.findByActiveTrue();
+        return repo.findByActive(true);
     }
 
     @Override
     public List<PolicyRule> getAllRules() {
-        return ruleRepo.findAll();
+        return repo.findAll();
     }
 }
