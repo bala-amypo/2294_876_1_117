@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface UserAccountService {
 
-    UserAccount createUser(UserAccount user);
+    UserAccount create(UserAccount user);
 
     UserAccount getUserById(Long id);
 

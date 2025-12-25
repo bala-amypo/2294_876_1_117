@@ -22,7 +22,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount createUser(UserAccount user) {
+    public UserAccount create(UserAccount user) {
         if (user.getUsername() == null || user.getEmail() == null || user.getEmployeeId() == null) {
             throw new IllegalArgumentException("Employee ID, username, and email are required");
         }
