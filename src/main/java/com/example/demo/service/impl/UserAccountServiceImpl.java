@@ -15,7 +15,6 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final UserAccountRepository userRepo;
     private final PasswordEncoder passwordEncoder; // added
 
-    // Updated constructor to include PasswordEncoder
     public UserAccountServiceImpl(UserAccountRepository userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
@@ -24,7 +23,6 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount create(UserAccount user) {
 
-    // ✅ Provide defaults instead of throwing exception
     if (user.getEmployeeId() == null) {
         user.setEmployeeId("EMP-" + System.currentTimeMillis());
     }
