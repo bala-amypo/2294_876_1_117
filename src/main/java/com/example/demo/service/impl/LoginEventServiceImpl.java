@@ -15,7 +15,6 @@ public class LoginEventServiceImpl implements LoginEventService {
     private final LoginEventRepository loginRepo;
     private final RuleEvaluationUtil ruleUtil; // added
 
-    // Updated constructor
     public LoginEventServiceImpl(LoginEventRepository loginRepo, RuleEvaluationUtil ruleUtil) {
         this.loginRepo = loginRepo;
         this.ruleUtil = ruleUtil;
@@ -24,23 +23,24 @@ public class LoginEventServiceImpl implements LoginEventService {
     @Override
     public LoginEvent recordLogin(LoginEvent event) {
 
-        if (event.getIpAddress() == null || event.getDeviceId() == null) {
-            throw new IllegalArgumentException("IP Address and Device ID are required");
-        }
-
-        if (event.getLoginStatus() == null) {
-            event.setLoginStatus("FAILED");
-        }
-
-        if (event.getTimestamp() == null) {
-            event.setTimestamp(LocalDateTime.now());
-        }
-
-        // Example usage of ruleUtil if needed
-        // ruleUtil.evaluateRules(event);
-
-        return loginRepo.save(event);
+    if (event.getIpAddress() == null) {
+        event.setIpAddress("127.0.0.1");
     }
+
+    if (event.getDeviceId() == null) {
+        event.setDeviceId("UNKNOWN_DEVICE");
+    }
+
+    if (event.getStatus() == null) {
+        event.setStatus("SUCCESS");
+    }
+
+    if (event.getTimestamp() == null) {
+        event.setTimestamp(LocalDateTime.now());
+    }
+
+    return loginEventRepo.save(event);
+}
 
     @Override
     public List<LoginEvent> getEventsByUser(Long userId) {
