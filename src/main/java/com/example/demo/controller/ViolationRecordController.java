@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity; // <-- add this import
+
 
 import java.util.List;
 
