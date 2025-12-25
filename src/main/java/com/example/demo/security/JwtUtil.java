@@ -23,14 +23,13 @@ public class JwtUtil {
         this.enabled = enabled;
     }
 
-    // ✅ MUST match test signature
     public String generateToken(String email, long userId, String role, String dummy) {
         long now = System.currentTimeMillis();
 
         return Jwts.builder()
-                .claim("email", email)     // ✅ EMAIL CLAIM
-                .claim("role", role)       // ✅ ROLE CLAIM
-                .claim("userId", userId)   // ✅ USER ID CLAIM
+                .claim("email", email)     
+                .claim("role", role)      
+                .claim("userId", userId)  
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + expirationMillis))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -50,11 +49,11 @@ public class JwtUtil {
     }
 
     public String getEmail(String token) {
-        return extractAllClaims(token).get("email", String.class); // ✅ FIX
+        return extractAllClaims(token).get("email", String.class); 
     }
 
     public String getRole(String token) {
-        return extractAllClaims(token).get("role", String.class);  // ✅ FIX
+        return extractAllClaims(token).get("role", String.class);  
     }
 
     public Long getUserId(String token) {
