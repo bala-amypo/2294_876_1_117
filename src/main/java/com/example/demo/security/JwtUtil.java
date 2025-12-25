@@ -12,26 +12,22 @@ public class JwtUtil {
 
     private final Key key;
     private final long expirationMillis;
-    private final boolean someFlag; // can be used if needed for test
+    private final boolean someFlag;
 
-    // Constructor expected by your test
     public JwtUtil(String secret, long expirationMillis, boolean someFlag) {
         if (secret.length() < 32) {
-            // ensure secure key >= 256 bits (32 bytes)
-            secret = secret + "00000000000000000000000000000000";
-            secret = secret.substring(0, 32);
+            secret = (secret + "00000000000000000000000000000000").substring(0, 32);
         }
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.expirationMillis = expirationMillis;
         this.someFlag = someFlag;
     }
 
-    // Generate token with email, userId, role, something
+    // Corrected: email goes into subject, role in "role" claim
     public String generateToken(String email, long userId, String role, String something) {
         Claims claims = Jwts.claims();
-        claims.put("email", email);
-        claims.put("userId", userId);
         claims.put("role", role);
+        claims.put("userId", userId);
         claims.put("something", something);
 
         long nowMillis = System.currentTimeMillis();
@@ -40,14 +36,13 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(email)
+                .setSubject(email)  // <--- subject is email
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // Validate token (just check signature & expiration)
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -57,25 +52,18 @@ public class JwtUtil {
         }
     }
 
-    // Extract email from token
     public String getEmail(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("email", String.class);
+        return extractAllClaims(token).getSubject(); // <--- subject is email
     }
 
-    // Extract role from token
     public String getRole(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("role", String.class);
+        return extractAllClaims(token).get("role", String.class);
     }
 
-    // Extract userId from token
     public Long getUserId(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("userId", Long.class);
+        return extractAllClaims(token).get("userId", Long.class);
     }
 
-    // Internal helper
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
