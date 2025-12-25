@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity; // <-- add this import at the top
 
 import java.util.List;
 
@@ -16,12 +17,11 @@ public class UserAccountController {
         this.userService = userService;
     }
 
-    // This method MUST exist exactly as "create" for the test
-    public UserAccount create(UserAccount user) {
-        return userService.create(user);
-    }
+    @PostMapping
+    public ResponseEntity<UserAccount> create(@RequestBody UserAccount user) {
+       return ResponseEntity.ok(userService.create(user));
+}
 
-    // Optional REST endpoint (you can keep this for actual API calls)
     @PostMapping
     public UserAccount createUser(@RequestBody UserAccount user) {
         return userService.create(user);
