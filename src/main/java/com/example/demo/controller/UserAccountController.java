@@ -3,8 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity; // <-- add this import at the top
-
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -18,15 +17,11 @@ public class UserAccountController {
         this.userService = userService;
     }
 
-@PostMapping
-public ResponseEntity<UserAccount> createUser(@RequestBody UserAccount user) {
-
-    UserAccount savedUser = userAccountService.createUser(user);
-
-    return ResponseEntity.ok(savedUser);
-}
-
-
+    @PostMapping
+    public ResponseEntity<UserAccount> createUser(@RequestBody UserAccount user) {
+        UserAccount savedUser = userService.createUser(user);
+        return ResponseEntity.ok(savedUser);
+    }
 
     @GetMapping("/{id}")
     public UserAccount getUser(@PathVariable Long id) {
