@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.repository.DeviceProfileRepository;
 import com.example.demo.service.DeviceProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,32 +11,32 @@ import java.util.List;
 @Service
 public class DeviceProfileServiceImpl implements DeviceProfileService {
 
-    private final DeviceProfileRepository deviceRepo;
+    private final DeviceProfileRepository repo;
 
-    public DeviceProfileServiceImpl(DeviceProfileRepository deviceRepo) {
-        this.deviceRepo = deviceRepo;
+    @Autowired
+    public DeviceProfileServiceImpl(DeviceProfileRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public DeviceProfile register(DeviceProfile device) {
-        return deviceRepo.save(device);
+    public DeviceProfile registerDevice(DeviceProfile device) {
+        return repo.save(device);
     }
 
     @Override
-    public DeviceProfile updateTrust(Long id, Boolean trusted) {
-        DeviceProfile device = deviceRepo.findById(id).orElse(null);
-        if (device == null) return null;
-        device.setIsTrusted(trusted);
-        return deviceRepo.save(device);
+    public DeviceProfile updateTrust(Long id, boolean isTrusted) {
+        DeviceProfile device = repo.findById(id).orElseThrow(() -> new RuntimeException("Device not found"));
+        device.setIsTrusted(isTrusted);
+        return repo.save(device);
     }
 
     @Override
-    public List<DeviceProfile> getByUserId(Long userId) {
-        return deviceRepo.findByUserId(userId);
+    public List<DeviceProfile> getDevicesByUser(Long userId) {
+        return repo.findByUserId(userId);
     }
 
     @Override
-    public DeviceProfile lookup(String deviceId) {
-        return deviceRepo.findByDeviceId(deviceId);
+    public DeviceProfile getByDeviceId(String deviceId) {
+        return repo.findByDeviceId(deviceId).orElseThrow(() -> new RuntimeException("Device not found"));
     }
 }

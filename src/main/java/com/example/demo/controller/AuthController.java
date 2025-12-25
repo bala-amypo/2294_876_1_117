@@ -1,11 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.JwtResponse;
 import com.example.demo.entity.UserAccount;
-import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,37 +12,21 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserAccountService userAccountService;
-    private final JwtUtil jwtUtil;
 
-    public AuthController(UserAccountService userAccountService, JwtUtil jwtUtil) {
+    @Autowired
+    public AuthController(UserAccountService userAccountService) {
         this.userAccountService = userAccountService;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
-    public UserAccount register(@RequestBody RegisterRequest request) {
-        UserAccount user = new UserAccount();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        user.setRole(request.getRole());
-        return userAccountService.createUser(user);
+    public ResponseEntity<UserAccount> register(@RequestBody UserAccount request) {
+        UserAccount createdUser = userAccountService.createUser(request);
+        return ResponseEntity.ok(createdUser);
     }
 
     @PostMapping("/login")
-    public JwtResponse login(@RequestBody LoginRequest request) {
-        UserAccount user = userAccountService.login(
-                request.getUsername(),
-                request.getPassword()
-        );
-
-        String token = jwtUtil.generateToken(
-                user.getUsername(),
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
-        );
-
-        return new JwtResponse(token);
+    public ResponseEntity<UserAccount> login(@RequestBody LoginRequest request) {
+        UserAccount user = userAccountService.login(request.getUsername(), request.getPassword());
+        return ResponseEntity.ok(user);
     }
 }

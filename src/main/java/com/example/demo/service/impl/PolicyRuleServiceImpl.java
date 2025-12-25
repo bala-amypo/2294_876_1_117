@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.PolicyRule;
 import com.example.demo.repository.PolicyRuleRepository;
 import com.example.demo.service.PolicyRuleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
 
     private final PolicyRuleRepository repo;
 
+    @Autowired
     public PolicyRuleServiceImpl(PolicyRuleRepository repo) {
         this.repo = repo;
     }
@@ -22,13 +24,13 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     }
 
     @Override
-    public PolicyRule updateRule(Long id, PolicyRule rule) {
-        PolicyRule existing = repo.findById(id).orElseThrow(() -> new RuntimeException("Rule not found"));
-        existing.setDescription(rule.getDescription());
-        existing.setSeverity(rule.getSeverity());
-        existing.setActive(rule.isActive());
-        existing.setConditionsJson(rule.getConditionsJson());
-        return repo.save(existing);
+    public PolicyRule updateRule(Long id, PolicyRule ruleDetails) {
+        PolicyRule rule = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Policy Rule not found"));
+        rule.setRuleName(ruleDetails.getRuleName());
+        rule.setConditionsJson(ruleDetails.getConditionsJson());
+        rule.setActive(ruleDetails.getActive());
+        return repo.save(rule);
     }
 
     @Override
