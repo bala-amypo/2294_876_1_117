@@ -21,6 +21,10 @@ public class DeviceProfile {
     private Boolean isTrusted = false;
 
     private LocalDateTime lastSeen;
+    private Boolean isTrusted;
+
+
+
 
     @PrePersist
     public void onCreate() {
@@ -28,6 +32,8 @@ public class DeviceProfile {
     }
 
     // getters & setters
+    public void setIsTrusted(Boolean isTrusted) { this.isTrusted = isTrusted; }
+public Boolean getIsTrusted() { return isTrusted; }
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

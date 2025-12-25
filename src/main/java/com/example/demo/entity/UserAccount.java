@@ -24,6 +24,9 @@ public class UserAccount {
     private Long employeeId;
 
     private LocalDateTime createdAt;
+    private String token;
+
+
 
     @PrePersist
     public void onCreate() {
@@ -34,6 +37,9 @@ public class UserAccount {
     }
 
     // getters & setters
+    public void setToken(String token) { this.token = token; }
+public String getToken() { return token; }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

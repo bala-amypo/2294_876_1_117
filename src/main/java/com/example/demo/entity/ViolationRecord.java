@@ -17,6 +17,9 @@ public class ViolationRecord {
     private String severity;
     private boolean resolved = false;
     private LocalDateTime detectedAt;
+    private Boolean active;
+private String ruleName;
+
 
     public ViolationRecord() {}
 
@@ -28,7 +31,12 @@ public class ViolationRecord {
         this.details = details;
         this.severity = severity;
         this.detectedAt = LocalDateTime.now();
+        this.ruleName=ruleName;
     }
+
+
+public Boolean getActive() { return active; }
+public String getRuleName() { return ruleName; }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
