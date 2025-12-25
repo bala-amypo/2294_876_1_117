@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.LoginEvent;
 import com.example.demo.repository.LoginEventRepository;
 import com.example.demo.service.LoginEventService;
+import com.example.demo.util.RuleEvaluationUtil;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,9 +13,12 @@ import java.util.List;
 public class LoginEventServiceImpl implements LoginEventService {
 
     private final LoginEventRepository loginRepo;
+    private final RuleEvaluationUtil ruleUtil; // added
 
-    public LoginEventServiceImpl(LoginEventRepository loginRepo) {
+    // Updated constructor
+    public LoginEventServiceImpl(LoginEventRepository loginRepo, RuleEvaluationUtil ruleUtil) {
         this.loginRepo = loginRepo;
+        this.ruleUtil = ruleUtil;
     }
 
     @Override
@@ -31,6 +35,9 @@ public class LoginEventServiceImpl implements LoginEventService {
         if (event.getTimestamp() == null) {
             event.setTimestamp(LocalDateTime.now());
         }
+
+        // Example usage of ruleUtil if needed
+        // ruleUtil.evaluateRules(event);
 
         return loginRepo.save(event);
     }
