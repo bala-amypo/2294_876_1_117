@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,28 +10,34 @@ import java.util.List;
 @RequestMapping("/api/violations")
 public class ViolationRecordController {
 
-    private final ViolationRecordService service;
+    private final ViolationRecordService violationRecordService;
 
-    // REQUIRED for Mockito test
-    public ViolationRecordController(ViolationRecordService service) {
-        this.service = service;
+    public ViolationRecordController(ViolationRecordService violationRecordService) {
+        this.violationRecordService = violationRecordService;
     }
 
-    // testViolationControllerLog
     @PostMapping
-    public ResponseEntity<ViolationRecord> log(@RequestBody ViolationRecord record) {
-        return ResponseEntity.ok(service.logViolation(record));
+    public ViolationRecord logViolation(@RequestBody ViolationRecord record) {
+        return violationRecordService.logViolation(record);
     }
 
-    // Swagger support
-    @GetMapping("/unresolved")
-    public ResponseEntity<List<ViolationRecord>> unresolved() {
-        return ResponseEntity.ok(service.getUnresolvedViolations());
+    @GetMapping("/user/{userId}")
+    public List<ViolationRecord> getByUser(@PathVariable Long userId) {
+        return violationRecordService.getByUser(userId);
     }
 
-    // Swagger support
     @PutMapping("/{id}/resolve")
-    public ResponseEntity<ViolationRecord> resolve(@PathVariable Long id) {
-        return ResponseEntity.ok(service.markResolved(id));
+    public ViolationRecord resolve(@PathVariable Long id) {
+        return violationRecordService.resolveViolation(id);
+    }
+
+    @GetMapping("/unresolved")
+    public List<ViolationRecord> unresolved() {
+        return violationRecordService.getUnresolved();
+    }
+
+    @GetMapping
+    public List<ViolationRecord> getAll() {
+        return violationRecordService.getAll();
     }
 }

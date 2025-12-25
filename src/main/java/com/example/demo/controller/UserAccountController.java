@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.UserAccountService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,36 +10,32 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserAccountController {
 
-    private final UserAccountService service;
+    private final UserAccountService userAccountService;
 
-    // REQUIRED for Mockito test
-    public UserAccountController(UserAccountService service) {
-        this.service = service;
+    public UserAccountController(UserAccountService userAccountService) {
+        this.userAccountService = userAccountService;
     }
 
-    // testUserControllerCreate
     @PostMapping
-    public ResponseEntity<UserAccount> create(@RequestBody UserAccount user) {
-        return ResponseEntity.ok(service.createUser(user));
+    public UserAccount createUser(@RequestBody UserAccount user) {
+        return userAccountService.createUser(user);
     }
 
-    // Swagger support
     @GetMapping("/{id}")
-    public ResponseEntity<UserAccount> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getUserById(id));
+    public UserAccount getUserById(@PathVariable Long id) {
+        return userAccountService.getUserById(id);
     }
 
-    // Swagger support
     @PutMapping("/{id}/status")
-    public ResponseEntity<UserAccount> updateStatus(
+    public UserAccount updateStatus(
             @PathVariable Long id,
-            @RequestParam String status) {
-        return ResponseEntity.ok(service.updateUserStatus(id, status));
+            @RequestParam String status
+    ) {
+        return userAccountService.updateStatus(id, status);
     }
 
-    // Swagger support
     @GetMapping
-    public ResponseEntity<List<UserAccount>> all() {
-        return ResponseEntity.ok(service.getAllUsers());
+    public List<UserAccount> getAllUsers() {
+        return userAccountService.getAllUsers();
     }
 }

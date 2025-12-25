@@ -2,33 +2,37 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.service.DeviceProfileService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/devices")
 public class DeviceProfileController {
 
-    private final DeviceProfileService service;
+    private final DeviceProfileService deviceProfileService;
 
-    // REQUIRED for Mockito test
-    public DeviceProfileController(DeviceProfileService service) {
-        this.service = service;
+    public DeviceProfileController(DeviceProfileService deviceProfileService) {
+        this.deviceProfileService = deviceProfileService;
     }
 
-    // testDeviceControllerLookup
-    @GetMapping("/lookup/{deviceId}")
-    public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
-        Optional<DeviceProfile> device = service.findByDeviceId(deviceId);
-        return device.map(ResponseEntity::ok)
-                     .orElse(ResponseEntity.notFound().build());
-    }
-
-    // Swagger support
     @PostMapping
-    public ResponseEntity<DeviceProfile> register(@RequestBody DeviceProfile device) {
-        return ResponseEntity.ok(service.registerDevice(device));
+    public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
+        return deviceProfileService.registerDevice(device);
+    }
+
+    @PutMapping("/{id}/trust")
+    public DeviceProfile trustDevice(@PathVariable Long id) {
+        return deviceProfileService.updateTrust(id, true);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<DeviceProfile> getByUser(@PathVariable Long userId) {
+        return deviceProfileService.getDevicesByUser(userId);
+    }
+
+    @GetMapping("/lookup/{deviceId}")
+    public DeviceProfile lookup(@PathVariable String deviceId) {
+        return deviceProfileService.getByDeviceId(deviceId);
     }
 }

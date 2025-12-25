@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.PolicyRule;
 import com.example.demo.service.PolicyRuleService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,22 +10,30 @@ import java.util.List;
 @RequestMapping("/api/rules")
 public class PolicyRuleController {
 
-    private final PolicyRuleService service;
+    private final PolicyRuleService policyRuleService;
 
-    // REQUIRED for Mockito test
-    public PolicyRuleController(PolicyRuleService service) {
-        this.service = service;
+    public PolicyRuleController(PolicyRuleService policyRuleService) {
+        this.policyRuleService = policyRuleService;
     }
 
-    // testRuleControllerList
-    @GetMapping
-    public ResponseEntity<List<PolicyRule>> all() {
-        return ResponseEntity.ok(service.getAllRules());
-    }
-
-    // Swagger support
     @PostMapping
-    public ResponseEntity<PolicyRule> create(@RequestBody PolicyRule rule) {
-        return ResponseEntity.ok(service.createRule(rule));
+    public PolicyRule createRule(@RequestBody PolicyRule rule) {
+        return policyRuleService.createRule(rule);
+    }
+
+    @PutMapping("/{id}")
+    public PolicyRule updateRule(@PathVariable Long id,
+                                 @RequestBody PolicyRule rule) {
+        return policyRuleService.updateRule(id, rule);
+    }
+
+    @GetMapping("/active")
+    public List<PolicyRule> getActiveRules() {
+        return policyRuleService.getActiveRules();
+    }
+
+    @GetMapping
+    public List<PolicyRule> getAllRules() {
+        return policyRuleService.getAllRules();
     }
 }
