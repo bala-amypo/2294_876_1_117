@@ -26,4 +26,9 @@ public class PolicyRuleServiceImpl implements PolicyRuleService {
     public List<PolicyRule> getAllRules() {
         return repo.findAll();
     }
+
+        @Override
+        public List<PolicyRule> getActiveRules() {
+        return repo.findByActiveTrue();
+    }
 }
