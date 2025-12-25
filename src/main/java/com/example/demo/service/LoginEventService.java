@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface LoginEventService {
 
-    LoginEvent recordLogin(LoginEvent event);
+    LoginEvent record(LoginEvent event);
 
-    List<LoginEvent> getByUserId(Long userId);
+    List<LoginEvent> getEventsByUser(Long userId);
 
     List<LoginEvent> getSuspiciousEvents(Long userId);
 
-    List<LoginEvent> getAll();
+    List<LoginEvent> getAllEvents();
 }

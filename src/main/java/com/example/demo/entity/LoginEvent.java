@@ -7,26 +7,23 @@ import java.time.LocalDateTime;
 public class LoginEvent {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long userId;
-
     private String ipAddress;
-
-    private String location;
-
-    private String device;
-
-    private String status; // SUCCESS / FAILED
-
+    private String loginStatus;  // Needed for RuleEvaluationUtil
     private LocalDateTime timestamp;
 
-    @PrePersist
-    public void onCreate() {
-        this.timestamp = LocalDateTime.now();
+    public LoginEvent() {}
+
+    public LoginEvent(Long userId, String ipAddress, String loginStatus, LocalDateTime timestamp) {
+        this.userId = userId;
+        this.ipAddress = ipAddress;
+        this.loginStatus = loginStatus;
+        this.timestamp = timestamp;
     }
 
-    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -36,14 +33,9 @@ public class LoginEvent {
     public String getIpAddress() { return ipAddress; }
     public void setIpAddress(String ipAddress) { this.ipAddress = ipAddress; }
 
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-
-    public String getDevice() { return device; }
-    public void setDevice(String device) { this.device = device; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getLoginStatus() { return loginStatus; }
+    public void setLoginStatus(String loginStatus) { this.loginStatus = loginStatus; }
 
     public LocalDateTime getTimestamp() { return timestamp; }
+    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 }
