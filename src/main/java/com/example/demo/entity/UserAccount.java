@@ -1,58 +1,41 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.PrePersist;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "user_account")
 public class UserAccount {
 
     @Id
     private Long id;
 
-    @Column(unique = true)
-    private String employeeId;
-
-    @Column(unique = true)
     private String username;
 
     @Column(unique = true)
     private String email;
 
     private String password;
+
     private String role;
+
     private String status;
+
+    private Long employeeId;
+
     private LocalDateTime createdAt;
 
     @PrePersist
-    protected void onCreate() {
-        if (createdAt == null) createdAt = LocalDateTime.now();
-        if (status == null) status = "ACTIVE";
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = "ACTIVE";
+        }
     }
 
-    public UserAccount() {}
-
-    public UserAccount(Long id, String employeeId, String username,
-                       String email, String password,
-                       String role, String status, LocalDateTime createdAt) {
-        this.id = id;
-        this.employeeId = employeeId;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.status = status;
-        this.createdAt = createdAt;
-    }
-
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    public String getEmployeeId() { return employeeId; }
-    public void setEmployeeId(String employeeId) { this.employeeId = employeeId; }
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
@@ -69,6 +52,8 @@ public class UserAccount {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
+    public Long getEmployeeId() { return employeeId; }
+    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

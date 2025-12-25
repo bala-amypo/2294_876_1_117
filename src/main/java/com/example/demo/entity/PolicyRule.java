@@ -1,8 +1,6 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 
 @Entity
 public class PolicyRule {
@@ -10,29 +8,15 @@ public class PolicyRule {
     @Id
     private Long id;
 
-    @Column(unique = true)
     private String ruleCode;
 
     private String description;
-    private String severity;
 
-    @Column(columnDefinition = "TEXT")
-    private String conditionsJson;
+    private String severity; // LOW / MEDIUM / HIGH / CRITICAL
 
-    private Boolean active;
+    private Boolean active = true;
 
-    public PolicyRule() {}
-
-    public PolicyRule(Long id, String ruleCode, String description,
-                      String severity, String conditionsJson, Boolean active) {
-        this.id = id;
-        this.ruleCode = ruleCode;
-        this.description = description;
-        this.severity = severity;
-        this.conditionsJson = conditionsJson;
-        this.active = active;
-    }
-
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -44,9 +28,6 @@ public class PolicyRule {
 
     public String getSeverity() { return severity; }
     public void setSeverity(String severity) { this.severity = severity; }
-
-    public String getConditionsJson() { return conditionsJson; }
-    public void setConditionsJson(String conditionsJson) { this.conditionsJson = conditionsJson; }
 
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }

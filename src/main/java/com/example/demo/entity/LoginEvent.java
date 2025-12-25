@@ -1,9 +1,6 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,31 +10,23 @@ public class LoginEvent {
     private Long id;
 
     private Long userId;
+
     private String ipAddress;
+
     private String location;
-    private String deviceId;
+
+    private String device;
+
+    private String status; // SUCCESS / FAILED
+
     private LocalDateTime timestamp;
-    private String loginStatus;
 
     @PrePersist
-    protected void onCreate() {
-        if (timestamp == null) timestamp = LocalDateTime.now();
+    public void onCreate() {
+        this.timestamp = LocalDateTime.now();
     }
 
-    public LoginEvent() {}
-
-    public LoginEvent(Long id, Long userId, String ipAddress,
-                      String location, String deviceId,
-                      LocalDateTime timestamp, String loginStatus) {
-        this.id = id;
-        this.userId = userId;
-        this.ipAddress = ipAddress;
-        this.location = location;
-        this.deviceId = deviceId;
-        this.timestamp = timestamp;
-        this.loginStatus = loginStatus;
-    }
-
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -50,12 +39,11 @@ public class LoginEvent {
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
 
-    public String getDeviceId() { return deviceId; }
-    public void setDeviceId(String deviceId) { this.deviceId = deviceId; }
+    public String getDevice() { return device; }
+    public void setDevice(String device) { this.device = device; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
     public LocalDateTime getTimestamp() { return timestamp; }
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
-
-    public String getLoginStatus() { return loginStatus; }
-    public void setLoginStatus(String loginStatus) { this.loginStatus = loginStatus; }
 }
