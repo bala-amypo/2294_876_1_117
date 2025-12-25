@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,32 +13,26 @@ public class ViolationRecordController {
 
     private final ViolationRecordService service;
 
+    // REQUIRED for Mockito test
     public ViolationRecordController(ViolationRecordService service) {
         this.service = service;
     }
 
+    // testViolationControllerLog
     @PostMapping
-    public ViolationRecord create(@RequestBody ViolationRecord record) {
-        return service.create(record); // ❌ NOT Object
+    public ResponseEntity<ViolationRecord> log(@RequestBody ViolationRecord record) {
+        return ResponseEntity.ok(service.logViolation(record));
     }
 
-    @GetMapping("/user/{userId}")
-    public List<ViolationRecord> getByUser(@PathVariable Long userId) {
-        return service.getByUserId(userId);
-    }
-
-    @PutMapping("/{id}/resolve")
-    public ViolationRecord resolve(@PathVariable Long id) {
-        return service.resolve(id);
-    }
-
+    // Swagger support
     @GetMapping("/unresolved")
-    public List<ViolationRecord> unresolved() {
-        return service.getUnresolved();
+    public ResponseEntity<List<ViolationRecord>> unresolved() {
+        return ResponseEntity.ok(service.getUnresolvedViolations());
     }
 
-    @GetMapping
-    public List<ViolationRecord> all() {
-        return service.getAll();
+    // Swagger support
+    @PutMapping("/{id}/resolve")
+    public ResponseEntity<ViolationRecord> resolve(@PathVariable Long id) {
+        return ResponseEntity.ok(service.markResolved(id));
     }
 }

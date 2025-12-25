@@ -1,34 +1,49 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "violation_record")
 public class ViolationRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long userId;
     private Long policyRuleId;
     private Long eventId;
-
     private String violationType;
     private String details;
     private String severity;
-
-    private Boolean resolved = false;
-
     private LocalDateTime detectedAt;
+    private Boolean resolved;
 
     @PrePersist
-    public void onCreate() {
-        this.detectedAt = LocalDateTime.now();
+    protected void onCreate() {
+        if (detectedAt == null) detectedAt = LocalDateTime.now();
+        if (resolved == null) resolved = false;
     }
 
-    // getters & setters
+    public ViolationRecord() {}
+
+    public ViolationRecord(Long id, Long userId, Long policyRuleId,
+                           Long eventId, String violationType,
+                           String details, String severity,
+                           LocalDateTime detectedAt, Boolean resolved) {
+        this.id = id;
+        this.userId = userId;
+        this.policyRuleId = policyRuleId;
+        this.eventId = eventId;
+        this.violationType = violationType;
+        this.details = details;
+        this.severity = severity;
+        this.detectedAt = detectedAt;
+        this.resolved = resolved;
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -50,8 +65,9 @@ public class ViolationRecord {
     public String getSeverity() { return severity; }
     public void setSeverity(String severity) { this.severity = severity; }
 
+    public LocalDateTime getDetectedAt() { return detectedAt; }
+    public void setDetectedAt(LocalDateTime detectedAt) { this.detectedAt = detectedAt; }
+
     public Boolean getResolved() { return resolved; }
     public void setResolved(Boolean resolved) { this.resolved = resolved; }
-
-    public LocalDateTime getDetectedAt() { return detectedAt; }
 }

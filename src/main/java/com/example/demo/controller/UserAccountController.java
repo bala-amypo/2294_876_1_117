@@ -5,7 +5,7 @@ import com.example.demo.service.UserAccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -13,33 +13,34 @@ public class UserAccountController {
 
     private final UserAccountService service;
 
+    // REQUIRED for Mockito test
     public UserAccountController(UserAccountService service) {
         this.service = service;
     }
 
+    // testUserControllerCreate
     @PostMapping
-    public ResponseEntity<UserAccount> createUser(@RequestBody UserAccount user) {
+    public ResponseEntity<UserAccount> create(@RequestBody UserAccount user) {
         return ResponseEntity.ok(service.createUser(user));
     }
 
+    // Swagger support
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
-        Optional<UserAccount> user = service.getUserById(id);
-        return user.map(ResponseEntity::ok)
-                   .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<UserAccount> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getUserById(id));
     }
 
+    // Swagger support
     @PutMapping("/{id}/status")
-    public ResponseEntity<?> updateUserStatus(
+    public ResponseEntity<UserAccount> updateStatus(
             @PathVariable Long id,
             @RequestParam String status) {
+        return ResponseEntity.ok(service.updateUserStatus(id, status));
+    }
 
-        UserAccount updatedUser = service.updateUserStatus(id, status);
-
-        if (updatedUser == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(updatedUser);
+    // Swagger support
+    @GetMapping
+    public ResponseEntity<List<UserAccount>> all() {
+        return ResponseEntity.ok(service.getAllUsers());
     }
 }
