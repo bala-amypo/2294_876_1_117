@@ -16,15 +16,17 @@ public class ViolationRecordController {
         this.violationService = violationService;
     }
 
-     @PostMapping
-    public ViolationRecord log(@RequestBody ViolationRecord violation) {  // <-- renamed from create() to log()
-      return violationService.logViolation(violation);
+@PostMapping
+public ResponseEntity<ViolationRecord> create(@RequestBody ViolationRecord violation) {
+    ViolationRecord saved = violationService.logViolation(violation);
+    return ResponseEntity.ok(saved);
 }
 
-    @PutMapping("/{id}/resolve")
-    public ViolationRecord resolve(@PathVariable Long id) {
-        return violationService.markResolved(id);
-    }
+@PutMapping("/{id}/resolve")
+public ResponseEntity<ViolationRecord> resolve(@PathVariable Long id) {
+    ViolationRecord resolved = violationService.markResolved(id);
+    return ResponseEntity.ok(resolved);
+}
 
     @GetMapping("/user/{userId}")
     public List<ViolationRecord> byUser(@PathVariable Long userId) {
