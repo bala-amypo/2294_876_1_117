@@ -17,11 +17,12 @@ public class UserAccountController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<UserAccount> create(@RequestBody UserAccount user) {
-        UserAccount savedUser = userService.create(user);
-        return ResponseEntity.ok(savedUser);
-    }
+@PostMapping
+public ResponseEntity<UserAccount> create(@RequestBody UserAccount user) {
+    UserAccount savedUser = userService.createUser(user); // <-- call createUser() here
+    return ResponseEntity.ok(savedUser);
+}
+
 
     @GetMapping("/{id}")
     public UserAccount getUser(@PathVariable Long id) {
