@@ -10,34 +10,34 @@ import java.util.List;
 @RequestMapping("/api/violations")
 public class ViolationRecordController {
 
-    private final ViolationRecordService violationRecordService;
+    private final ViolationRecordService violationService;
 
-    public ViolationRecordController(ViolationRecordService violationRecordService) {
-        this.violationRecordService = violationRecordService;
+    public ViolationRecordController(ViolationRecordService violationService) {
+        this.violationService = violationService;
     }
 
     @PostMapping
-    public ViolationRecord logViolation(@RequestBody ViolationRecord record) {
-        return violationRecordService.logViolation(record);
-    }
-
-    @GetMapping("/user/{userId}")
-    public List<ViolationRecord> getByUser(@PathVariable Long userId) {
-        return violationRecordService.getByUser(userId);
+    public ViolationRecord create(@RequestBody ViolationRecord violation) {
+        return violationService.logViolation(violation);
     }
 
     @PutMapping("/{id}/resolve")
     public ViolationRecord resolve(@PathVariable Long id) {
-        return violationRecordService.resolveViolation(id);
+        return violationService.markResolved(id);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<ViolationRecord> byUser(@PathVariable Long userId) {
+        return violationService.getViolationsByUser(userId);
     }
 
     @GetMapping("/unresolved")
     public List<ViolationRecord> unresolved() {
-        return violationRecordService.getUnresolved();
+        return violationService.getUnresolvedViolations();
     }
 
     @GetMapping
-    public List<ViolationRecord> getAll() {
-        return violationRecordService.getAll();
+    public List<ViolationRecord> all() {
+        return violationService.getAllViolations();
     }
 }

@@ -10,29 +10,29 @@ import java.util.List;
 @RequestMapping("/api/logins")
 public class LoginEventController {
 
-    private final LoginEventService loginEventService;
+    private final LoginEventService loginService;
 
-    public LoginEventController(LoginEventService loginEventService) {
-        this.loginEventService = loginEventService;
+    public LoginEventController(LoginEventService loginService) {
+        this.loginService = loginService;
     }
 
-    @PostMapping("/record")
-    public LoginEvent recordLogin(@RequestBody LoginEvent event) {
-        return loginEventService.recordLogin(event);
+    @PostMapping
+    public LoginEvent record(@RequestBody LoginEvent event) {
+        return loginService.recordLogin(event);
     }
 
     @GetMapping("/user/{userId}")
-    public List<LoginEvent> getByUser(@PathVariable Long userId) {
-        return loginEventService.getEventsByUser(userId);
+    public List<LoginEvent> byUser(@PathVariable Long userId) {
+        return loginService.getEventsByUser(userId);
     }
 
     @GetMapping("/suspicious/{userId}")
-    public List<LoginEvent> getSuspicious(@PathVariable Long userId) {
-        return loginEventService.getSuspiciousEvents(userId);
+    public List<LoginEvent> suspicious(@PathVariable Long userId) {
+        return loginService.getSuspiciousLogins(userId);
     }
 
     @GetMapping
-    public List<LoginEvent> getAll() {
-        return loginEventService.getAllEvents();
+    public List<LoginEvent> all() {
+        return loginService.getAllEvents();
     }
 }

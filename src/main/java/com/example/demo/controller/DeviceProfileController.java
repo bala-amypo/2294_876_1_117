@@ -5,34 +5,36 @@ import com.example.demo.service.DeviceProfileService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/devices")
 public class DeviceProfileController {
 
-    private final DeviceProfileService deviceProfileService;
+    private final DeviceProfileService deviceService;
 
-    public DeviceProfileController(DeviceProfileService deviceProfileService) {
-        this.deviceProfileService = deviceProfileService;
+    public DeviceProfileController(DeviceProfileService deviceService) {
+        this.deviceService = deviceService;
     }
 
     @PostMapping
     public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
-        return deviceProfileService.registerDevice(device);
+        return deviceService.registerDevice(device);
     }
 
     @PutMapping("/{id}/trust")
-    public DeviceProfile trustDevice(@PathVariable Long id) {
-        return deviceProfileService.updateTrust(id, true);
+    public DeviceProfile updateTrust(@PathVariable Long id,
+                                     @RequestParam boolean trusted) {
+        return deviceService.updateTrustStatus(id, trusted);
     }
 
     @GetMapping("/user/{userId}")
     public List<DeviceProfile> getByUser(@PathVariable Long userId) {
-        return deviceProfileService.getDevicesByUser(userId);
+        return deviceService.getDevicesByUser(userId);
     }
 
     @GetMapping("/lookup/{deviceId}")
-    public DeviceProfile lookup(@PathVariable String deviceId) {
-        return deviceProfileService.getByDeviceId(deviceId);
+    public Optional<DeviceProfile> lookup(@PathVariable String deviceId) {
+        return deviceService.findByDeviceId(deviceId);
     }
 }
