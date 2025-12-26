@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.entity.ViolationRecord;
 import com.example.demo.service.ViolationRecordService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity; // <-- add this import
+
 
 import java.util.List;
 
@@ -16,39 +18,35 @@ public class ViolationRecordController {
         this.violationService = violationService;
     }
 
-    // 1️⃣ Primary POST
+    // ✅ REQUIRED BY TESTS
+    @PostMapping("/log")
+    public ViolationRecord log(@RequestBody ViolationRecord violation) {
+        return violationService.logViolation(violation);
+    }
+
+    // You can keep this also (Swagger / REST usage)
     @PostMapping
-    public ViolationRecord create(@RequestBody ViolationRecord record) {
-        return violationService.logViolation(record);
+    public ResponseEntity<ViolationRecord> create(@RequestBody ViolationRecord violation) {
+        return ResponseEntity.ok(violationService.logViolation(violation));
     }
 
-    // 2️⃣ Secondary POST (same service method reused)
-    @PostMapping("/secondary")
-    public ViolationRecord createSecond(@RequestBody ViolationRecord record) {
-        return violationService.logViolation(record);
-    }
-
-    // 3️⃣ GET all violations
-    @GetMapping
-    public List<ViolationRecord> getAll() {
-        return violationService.getAllViolations();
-    }
-
-    // 4️⃣ GET violations by user
-    @GetMapping("/user/{userId}")
-    public List<ViolationRecord> getByUser(@PathVariable Long userId) {
-        return violationService.getViolationsByUser(userId);
-    }
-
-    // 5️⃣ GET unresolved violations
-    @GetMapping("/unresolved")
-    public List<ViolationRecord> getUnresolved() {
-        return violationService.getUnresolvedViolations();
-    }
-
-    // 6️⃣ Mark violation resolved
     @PutMapping("/{id}/resolve")
     public ViolationRecord resolve(@PathVariable Long id) {
         return violationService.markResolved(id);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<ViolationRecord> byUser(@PathVariable Long userId) {
+        return violationService.getViolationsByUser(userId);
+    }
+
+    @GetMapping("/unresolved")
+    public List<ViolationRecord> unresolved() {
+        return violationService.getUnresolvedViolations();
+    }
+
+    @GetMapping
+    public List<ViolationRecord> all() {
+        return violationService.getAllViolations();
     }
 }

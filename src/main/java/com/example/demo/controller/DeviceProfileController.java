@@ -3,8 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/devices")
@@ -17,15 +20,14 @@ public class DeviceProfileController {
     }
 
     @PostMapping
-    public DeviceProfile register(@RequestBody DeviceProfile device) {
+    public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
         return deviceService.registerDevice(device);
     }
 
     @PutMapping("/{id}/trust")
-    public DeviceProfile updateTrust(
-            @PathVariable Long id,
-            @RequestParam boolean trust) {
-        return deviceService.updateTrustStatus(id, trust);
+    public DeviceProfile updateTrust(@PathVariable Long id,
+                                     @RequestParam boolean trusted) {
+        return deviceService.updateTrustStatus(id, trusted);
     }
 
     @GetMapping("/user/{userId}")
@@ -33,9 +35,11 @@ public class DeviceProfileController {
         return deviceService.getDevicesByUser(userId);
     }
 
-    @GetMapping("/device/{deviceId}")
-    public DeviceProfile getByDeviceId(@PathVariable String deviceId) {
-        return deviceService.findByDeviceId(deviceId)
-                .orElseThrow(() -> new RuntimeException("Device not found"));
-    }
+@GetMapping("/lookup/{deviceId}")
+public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
+    return deviceService.findByDeviceId(deviceId)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+}
+
 }
