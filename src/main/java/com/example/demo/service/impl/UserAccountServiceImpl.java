@@ -47,4 +47,9 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
         return null;
     }
+
+    @Override
+    public UserAccount getUserById(Long id) {
+        return userRepo.findById(id).orElse(null);
+    }
 }
