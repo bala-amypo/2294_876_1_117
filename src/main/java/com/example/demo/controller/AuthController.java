@@ -1,43 +1,75 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.JwtResponse;
 import com.example.demo.entity.UserAccount;
+import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     private final UserAccountService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserAccountService userService) {
+    // ✅ Constructor injection (Mockito friendly)
+    public AuthController(UserAccountService userService,
+                          PasswordEncoder passwordEncoder,
+                          JwtUtil jwtUtil) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
+    /**
+     * POST /auth/register
+     * Accepts RegisterRequest
+     * Delegates to UserAccountService.createUser
+     */
     @PostMapping("/register")
-    public UserAccount registerUser(@RequestBody UserAccount user) {
-        if (user.getRole() == null) {
-            user.setRole("USER");
-        }
-        return userService.create(user);
+    public UserAccount register(@RequestBody RegisterRequest request) {
+
+        UserAccount user = new UserAccount();
+        user.setEmployeeId(request.getEmployeeId());
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword()); // encoded in service
+        user.setRole(request.getRole());
+
+        return userService.createUser(user);
     }
 
+    /**
+     * POST /auth/login
+     * Accepts LoginRequest
+     * Returns JwtResponse
+     */
     @PostMapping("/login")
-    public String loginUser(@RequestParam String usernameOrEmail,
-                            @RequestParam String password) {
+    public JwtResponse login(@RequestBody LoginRequest request) {
 
-        Optional<UserAccount> userOpt = userService.findByUsername(usernameOrEmail);
-        if (userOpt.isEmpty()) {
-            return "User not found";
+        UserAccount user = userService
+                .findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(
+                request.getPassword(),
+                user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
         }
 
-        UserAccount user = userOpt.get();
+        String token = jwtUtil.generateToken(
+                user.getUsername(),
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
 
-        if (!user.getPassword().equals(password)) {
-            return "Invalid password";
-        }
-
-        return "Login successful for user: " + user.getUsername();
+        return new JwtResponse(token);
     }
 }
