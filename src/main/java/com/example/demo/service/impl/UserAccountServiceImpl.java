@@ -3,80 +3,61 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository userRepo;
-    private final PasswordEncoder passwordEncoder;
+    private final UserAccountRepository userAccountRepository;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepo,
-                                  PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
+    public UserAccountServiceImpl(UserAccountRepository userAccountRepository) {
+        this.userAccountRepository = userAccountRepository;
     }
 
     @Override
-    public UserAccount create(UserAccount user) {
+    public UserAccount createUser(UserAccount user) {
 
-        if (user.getEmployeeId() == null) {
-            user.setEmployeeId("EMP-" + System.currentTimeMillis());
-        }
-
-        if (user.getUsername() == null) {
-            user.setUsername("user_" + System.currentTimeMillis());
-        }
-
-        if (user.getEmail() == null) {
-            user.setEmail(user.getUsername() + "@example.com");
-        }
-
-        if (user.getStatus() == null) {
-            user.setStatus("ACTIVE");
-        }
-
-        if (user.getRole() == null) {
+        // ✅ DEFAULTS — CLIENT DOES NOT SEND THESE
+        if (user.getRole() == null || user.getRole().isBlank()) {
             user.setRole("USER");
         }
 
-        // Safety: encode if not encoded
-        if (user.getPassword() != null && !user.getPassword().startsWith("$2")) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getStatus() == null || user.getStatus().isBlank()) {
+            user.setStatus("ACTIVE");
         }
 
-        return userRepo.save(user);
+        if (user.getEmployeeId() == null || user.getEmployeeId().isBlank()) {
+            user.setEmployeeId("EMP-" + UUID.randomUUID().toString().substring(0, 8));
+        }
+
+        if (user.getCreatedAt() == null) {
+            user.setCreatedAt(LocalDateTime.now());
+        }
+
+        return userAccountRepository.save(user);
     }
 
     @Override
-    public UserAccount getUserById(Long id) {
-        return userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    @Override
-    public UserAccount updateUserStatus(Long id, String status) {
-        UserAccount user = getUserById(id);
-        user.setStatus(status);
-        return userRepo.save(user);
+    public Optional<UserAccount> getUserById(Long id) {
+        return userAccountRepository.findById(id);
     }
 
     @Override
     public List<UserAccount> getAllUsers() {
-        return userRepo.findAll();
+        return userAccountRepository.findAll();
     }
 
     @Override
-    public Optional<UserAccount> findByUsername(String username) {
-        return userRepo.findByUsername(username);
-    }
+    public UserAccount updateUserStatus(Long id, String status) {
+        UserAccount user = userAccountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-    @Override
-    public Optional<UserAccount> findByEmail(String email) {
-        return userRepo.findByEmail(email);
+        user.setStatus(status);
+        return userAccountRepository.save(user);
     }
 }
