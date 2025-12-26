@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.entity.Role;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
@@ -24,45 +25,24 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount create(UserAccount user) {
 
-        if (user.getEmployeeId() == null) {
-            user.setEmployeeId("EMP-" + System.currentTimeMillis());
-        }
-
-        if (user.getUsername() == null) {
-            user.setUsername("user_" + System.currentTimeMillis());
-        }
-
-        if (user.getEmail() == null) {
-            user.setEmail(user.getUsername() + "@example.com");
-        }
-
-        if (user.getStatus() == null) {
-            user.setStatus("ACTIVE");
-        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         if (user.getRole() == null) {
-            user.setRole("USER");
-        }
-
-        if (user.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRole(Role.USER);
         }
 
         return userRepo.save(user);
     }
 
-    // ✅ MUST return UserAccount (NOT Optional)
     @Override
     public UserAccount getUserById(Long id) {
-        return userRepo.findById(id).orElse(null);
+        return userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
     public UserAccount updateUserStatus(Long id, String status) {
         UserAccount user = getUserById(id);
-        if (user == null) {
-            return null;
-        }
         user.setStatus(status);
         return userRepo.save(user);
     }
@@ -72,13 +52,11 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.findAll();
     }
 
-    // ✅ MUST return Optional (as per interface)
     @Override
     public Optional<UserAccount> findByUsername(String username) {
         return userRepo.findByUsername(username);
     }
 
-    // ✅ MUST return Optional (as per interface)
     @Override
     public Optional<UserAccount> findByEmail(String email) {
         return userRepo.findByEmail(email);

@@ -1,65 +1,60 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Role;
-import com.example.demo.entity.UserAccount;
-import com.example.demo.repository.UserAccountRepository;
-import com.example.demo.service.UserAccountService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.demo.entity.ViolationRecord;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.ViolationRecordRepository;
+import com.example.demo.service.ViolationRecordService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class UserAccountServiceImpl implements UserAccountService {
+public class ViolationRecordServiceImpl implements ViolationRecordService {
 
-    private final UserAccountRepository userRepo;
-    private final PasswordEncoder passwordEncoder;
+    private final ViolationRecordRepository violationRepo;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepo,
-                                  PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
+    public ViolationRecordServiceImpl(ViolationRecordRepository violationRepo) {
+        this.violationRepo = violationRepo;
     }
 
     @Override
-    public UserAccount create(UserAccount user) {
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        // default role safety
-        if (user.getRole() == null) {
-            user.setRole(Role.USER);
+    public ViolationRecord logViolation(ViolationRecord violation) {
+        if (violation.getDetectedAt() == null) {
+            violation.setDetectedAt(LocalDateTime.now());
         }
+        if (violation.getResolved() == null) {
+            violation.setResolved(false);
+        }
+        return violationRepo.save(violation);
+    }
 
-        return userRepo.save(user);
+    // 🔥 THIS IS THE CRITICAL FIX
+    @Override
+    @Transactional
+    public ViolationRecord markResolved(Long id) {
+        ViolationRecord violation = violationRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Violation not found"));
+
+        violation.setResolved(true);
+
+        // Explicit save to guarantee update
+        return violationRepo.save(violation);
     }
 
     @Override
-    public UserAccount getUserById(Long id) {
-        return userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public List<ViolationRecord> getViolationsByUser(Long userId) {
+        return violationRepo.findByUserId(userId);
     }
 
     @Override
-    public UserAccount updateUserStatus(Long id, String status) {
-        UserAccount user = getUserById(id);
-        user.setStatus(status);
-        return userRepo.save(user);
+    public List<ViolationRecord> getUnresolvedViolations() {
+        return violationRepo.findByResolvedFalse();
     }
 
     @Override
-    public List<UserAccount> getAllUsers() {
-        return userRepo.findAll();
-    }
-
-    @Override
-    public Optional<UserAccount> findByUsername(String username) {
-        return userRepo.findByUsername(username);
-    }
-
-    @Override
-    public Optional<UserAccount> findByEmail(String email) {
-        return userRepo.findByEmail(email);
+    public List<ViolationRecord> getAllViolations() {
+        return violationRepo.findAll();
     }
 }
