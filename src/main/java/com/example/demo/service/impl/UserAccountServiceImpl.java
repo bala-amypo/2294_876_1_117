@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -17,7 +18,6 @@ public class UserAccountServiceImpl implements UserAccountService {
         this.userRepo = userRepo;
     }
 
-    // ✅ REQUIRED by interface
     @Override
     public UserAccount createUser(UserAccount user) {
         if (user.getCreatedAt() == null) {
@@ -26,29 +26,27 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.save(user);
     }
 
-    // ✅ FIXED: return type MUST be UserAccount (not Optional)
     @Override
-    public UserAccount getUserById(Long id) {
-        return userRepo.findById(id).orElse(null);
+    public Optional<UserAccount> getUserById(Long id) {
+        return userRepo.findById(id);
     }
 
-    // ✅ REQUIRED by interface (THIS WAS MISSING)
+    // ✅ MUST RETURN Optional<UserAccount>
     @Override
-    public UserAccount findByEmail(String email) {
-        return userRepo.findByEmail(email).orElse(null);
+    public Optional<UserAccount> findByEmail(String email) {
+        return userRepo.findByEmail(email);
     }
 
-    // ✅ REQUIRED by interface
     @Override
     public List<UserAccount> getAllUsers() {
         return userRepo.findAll();
     }
 
-    // ✅ REQUIRED by interface
     @Override
     public UserAccount updateUserStatus(Long id, String status) {
-        UserAccount user = userRepo.findById(id).orElse(null);
-        if (user != null) {
+        Optional<UserAccount> userOpt = userRepo.findById(id);
+        if (userOpt.isPresent()) {
+            UserAccount user = userOpt.get();
             user.setStatus(status);
             return userRepo.save(user);
         }
