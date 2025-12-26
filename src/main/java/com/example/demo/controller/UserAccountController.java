@@ -28,8 +28,7 @@ public ResponseEntity<UserAccount> create(@Valid @RequestBody UserAccount user) 
 
     @GetMapping("/{id}")
     public UserAccount getUser(@PathVariable Long id) {
-        return userService.getUserById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+        return userService.getUserById(id);
     }
 
     @PutMapping("/{id}/status")

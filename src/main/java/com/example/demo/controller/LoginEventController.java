@@ -23,14 +23,12 @@ public class LoginEventController {
 
     @GetMapping("/user/{userId}")
     public List<LoginEvent> byUser(@PathVariable Long userId) {
-        return loginService.getEventsByUser(userId)
-        .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+        return loginService.getEventsByUser(userId);
     }
 
     @GetMapping("/suspicious/{userId}")
     public List<LoginEvent> suspicious(@PathVariable Long userId) {
-        return loginService.getSuspiciousLogins(userId)
-        .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+        return loginService.getSuspiciousLogins(userId);
     }
 
     @GetMapping

@@ -36,7 +36,6 @@ public class DeviceProfileController {
 
     @GetMapping("/lookup/{deviceId}")
     public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
-        return ResponseEntity.of(deviceService.findByDeviceId(deviceId))
-        .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+        return ResponseEntity.of(deviceService.findByDeviceId(deviceId));
     }
 }
