@@ -1,10 +1,10 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class UserAccount {
@@ -13,27 +13,24 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(unique = true)
     private String employeeId;
 
     @Column(unique = true)
     private String username;
 
-    @Column(unique = true)
-    @NotBlank(message = "Email is required")
-    @Email(message = "Please enter a valid email")
+    @Column(unique = true, nullable = false)
+    @NotBlank
+    @Email
     private String email;
 
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private Role role;   // ✅ ENUM (DO NOT DELETE)
 
-    private String status; // ACTIVE / SUSPENDED
+    private String status;
 
     private LocalDateTime createdAt;
 
@@ -41,7 +38,10 @@ public class UserAccount {
     protected void onCreate() {
         if (status == null) status = "ACTIVE";
         if (createdAt == null) createdAt = LocalDateTime.now();
+        if (role == null) role = Role.USER; // ✅ default role
     }
+
+    // ===== GETTERS / SETTERS =====
 
     public Long getId() {
         return id;
@@ -83,14 +83,19 @@ public class UserAccount {
         this.password = password;
     }
 
-public Role getRole() {
-    return role;
-}
+    // ✅ ENUM SETTER
+    public Role getRole() {
+        return role;
+    }
 
-public void setRole(Role role) {
-    this.role = role;
-}
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
+    // ✅ STRING ADAPTER (THIS FIXES TESTS)
+    public void setRole(String role) {
+        this.role = Role.valueOf(role.toUpperCase());
+    }
 
     public String getStatus() {
         return status;
@@ -103,26 +108,4 @@ public void setRole(Role role) {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public UserAccount() {
-}
-
-public UserAccount(Long id, String employeeId, String username, String email,
-                   String password, Role role, String status,
-                   LocalDateTime createdAt) {
-    this.id = id;
-    this.employeeId = employeeId;
-    this.username = username;
-    this.email = email;
-    this.password = password;
-    this.role = role;          
-    this.status = status;
-    this.createdAt = createdAt;
-}
-
-
 }
