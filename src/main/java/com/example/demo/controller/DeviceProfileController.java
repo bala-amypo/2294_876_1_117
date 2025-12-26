@@ -33,7 +33,6 @@ public class DeviceProfileController {
         return deviceService.getDevicesByUser(userId);
     }
 
-    // 4️⃣ Get device by deviceId
     @GetMapping("/device/{deviceId}")
     public DeviceProfile getByDeviceId(@PathVariable String deviceId) {
         return deviceService.findByDeviceId(deviceId)
