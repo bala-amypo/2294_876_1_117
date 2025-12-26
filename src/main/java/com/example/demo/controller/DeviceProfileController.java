@@ -17,13 +17,11 @@ public class DeviceProfileController {
         this.deviceService = deviceService;
     }
 
-    // ✅ POST /api/devices
     @PostMapping
     public DeviceProfile register(@RequestBody DeviceProfile device) {
         return deviceService.registerDevice(device);
     }
 
-    // ✅ PUT /api/devices/{id}/trust
     @PutMapping("/{id}/trust")
     public DeviceProfile updateTrust(
             @PathVariable Long id,
@@ -31,13 +29,11 @@ public class DeviceProfileController {
         return deviceService.updateTrustStatus(id, trust);
     }
 
-    // ✅ GET /api/devices/user/{userId}
     @GetMapping("/user/{userId}")
     public List<DeviceProfile> byUser(@PathVariable Long userId) {
         return deviceService.getDevicesByUser(userId);
     }
 
-    // ✅ GET /api/devices/lookup/{deviceId}
     @GetMapping("/lookup/{deviceId}")
     public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
         return ResponseEntity.of(deviceService.findByDeviceId(deviceId));

@@ -38,7 +38,6 @@ public class AuthController {
             return "Invalid password";
         }
 
-        // Return simple success message (no JWT)
         return "Login successful for user: " + user.getUsername();
     }
 }
