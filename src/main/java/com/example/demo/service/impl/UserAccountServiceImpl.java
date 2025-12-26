@@ -11,56 +11,39 @@ import java.util.Optional;
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository userRepository;
+    private final UserAccountRepository userRepo;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserAccountServiceImpl(UserAccountRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        if (user.getRole() == null || user.getRole().isEmpty()) {
-            user.setRole("USER");
-        }
-        if (user.getStatus() == null || user.getStatus().isEmpty()) {
-            user.setStatus("ACTIVE"); 
-        }
-        return userRepository.save(user);
+        return userRepo.save(user);
     }
 
     @Override
     public Optional<UserAccount> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepo.findByEmail(email);
     }
 
     @Override
-    public Optional<UserAccount> findById(Long id) {
-        return userRepository.findById(id);
+    public Optional<UserAccount> findByUsername(String username) {
+        return userRepo.findByUsername(username);
     }
 
     @Override
     public List<UserAccount> getAllUsers() {
-        return userRepository.findAll();
+        return userRepo.findAll();
     }
 
     @Override
-    public UserAccount updateStatus(Long id, String status) {
-        Optional<UserAccount> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            UserAccount user = optionalUser.get();
+    public UserAccount updateUserStatus(Long id, String status) {
+        Optional<UserAccount> userOpt = userRepo.findById(id);
+        if (userOpt.isPresent()) {
+            UserAccount user = userOpt.get();
             user.setStatus(status);
-            return userRepository.save(user);
-        }
-        return null;
-    }
-
-    @Override
-    public UserAccount updateRole(Long id, String role) {
-        Optional<UserAccount> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            UserAccount user = optionalUser.get();
-            user.setRole(role); // now just a string
-            return userRepository.save(user);
+            return userRepo.save(user);
         }
         return null;
     }
