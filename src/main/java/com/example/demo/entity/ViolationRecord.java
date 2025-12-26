@@ -121,8 +121,6 @@ public ViolationRecord(Long id, Long userId, Long policyRuleId, Long eventId,
     this.resolved = resolved;
 }
 
-public ViolationRecord getBody() {
-    return this;
-}
+
 
 }
