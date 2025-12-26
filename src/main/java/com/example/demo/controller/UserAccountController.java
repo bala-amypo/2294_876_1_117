@@ -18,7 +18,7 @@ public class UserAccountController {
     }
 
 @PostMapping
-public ResponseEntity<UserAccount> create(@RequestBody UserAccount user) {
+public ResponseEntity<UserAccount> create(@Valid @RequestBody UserAccount user) {
     UserAccount savedUser = userService.createUser(user); // <-- call createUser() here
     return ResponseEntity.ok(savedUser);
 }
