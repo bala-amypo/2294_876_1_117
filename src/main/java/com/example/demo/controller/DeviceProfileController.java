@@ -31,8 +31,7 @@ public class DeviceProfileController {
 
     @GetMapping("/user/{userId}")
     public List<DeviceProfile> byUser(@PathVariable Long userId) {
-        return deviceService.getDevicesByUser(userId)
-        .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+        return deviceService.getDevicesByUser(userId);
     }
 
     @GetMapping("/lookup/{deviceId}")
