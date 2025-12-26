@@ -13,9 +13,10 @@ import java.util.Optional;
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository userRepo;
-    private final PasswordEncoder passwordEncoder; // added
+    private final PasswordEncoder passwordEncoder;
 
-    public UserAccountServiceImpl(UserAccountRepository userRepo, PasswordEncoder passwordEncoder) {
+    public UserAccountServiceImpl(UserAccountRepository userRepo,
+                                  PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
     }
@@ -23,33 +24,33 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount create(UserAccount user) {
 
-    if (user.getEmployeeId() == null) {
-        user.setEmployeeId("EMP-" + System.currentTimeMillis());
+        if (user.getEmployeeId() == null) {
+            user.setEmployeeId("EMP-" + System.currentTimeMillis());
+        }
+
+        if (user.getUsername() == null) {
+            user.setUsername("user_" + System.currentTimeMillis());
+        }
+
+        if (user.getEmail() == null) {
+            user.setEmail(user.getUsername() + "@example.com");
+        }
+
+        if (user.getStatus() == null) {
+            user.setStatus("ACTIVE");
+        }
+
+        if (user.getRole() == null) {
+            user.setRole("USER");
+        }
+
+        // Safety: encode if not encoded
+        if (user.getPassword() != null && !user.getPassword().startsWith("$2")) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        return userRepo.save(user);
     }
-
-    if (user.getUsername() == null) {
-        user.setUsername("user_" + System.currentTimeMillis());
-    }
-
-    if (user.getEmail() == null) {
-        user.setEmail(user.getUsername() + "@example.com");
-    }
-
-    if (user.getStatus() == null) {
-        user.setStatus("ACTIVE");
-    }
-
-    if (user.getRole() == null) {
-        user.setRole("USER");
-    }
-
-    if (user.getPassword() != null) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-    }
-
-    return userRepo.save(user);
-}
-
 
     @Override
     public UserAccount getUserById(Long id) {

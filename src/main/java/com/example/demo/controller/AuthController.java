@@ -1,59 +1,70 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.JwtResponse;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private UserAccountService userService;
+    private final UserAccountService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest registerRequest) {
-
-        UserAccount user = new UserAccount();
-        user.setEmployeeId(registerRequest.getEmployeeId());
-        user.setUsername(registerRequest.getUsername());
-        user.setEmail(registerRequest.getEmail());
-        user.setPassword(registerRequest.getPassword());
-        user.setRole(registerRequest.getRole());
-
-        userService.create(user); // Pass UserAccount object
-
-        return "User registered successfully";
+    public AuthController(UserAccountService userService,
+                          PasswordEncoder passwordEncoder,
+                          JwtUtil jwtUtil) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/login")
-    public JwtResponse login(@RequestBody LoginRequest loginRequest) {
+    // ✅ REGISTER
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody UserAccount request) {
 
-        // First try email
-        UserAccount user = userService.findByEmail(loginRequest.getUsernameOrEmail())
-                .orElse(userService.findByUsername(loginRequest.getUsernameOrEmail())
+        UserAccount user = new UserAccount();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setEmployeeId(request.getEmployeeId());
+        user.setRole(request.getRole() == null ? "USER" : request.getRole());
+        user.setStatus("ACTIVE");
+
+        // IMPORTANT: encode password
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        UserAccount savedUser = userService.create(user);
+
+        return ResponseEntity.ok(savedUser);
+    }
+
+    // ✅ LOGIN
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
+
+        String usernameOrEmail = request.get("username");
+        String password = request.get("password");
+
+        UserAccount user = userService.findByUsername(usernameOrEmail)
+                .orElseGet(() -> userService.findByEmail(usernameOrEmail)
                         .orElseThrow(() -> new RuntimeException("User not found")));
 
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
-        // Generate JWT with correct parameters
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
+        String token = jwtUtil.generateToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
 
-        return new JwtResponse(token, user.getId(), user.getEmail(), user.getRole());
+        return ResponseEntity.ok(Map.of("token", token));
     }
 }
