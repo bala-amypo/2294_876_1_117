@@ -31,11 +31,13 @@ public class DeviceProfileController {
 
     @GetMapping("/user/{userId}")
     public List<DeviceProfile> byUser(@PathVariable Long userId) {
-        return deviceService.getDevicesByUser(userId);
+        return deviceService.getDevicesByUser(userId)
+        .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
     }
 
     @GetMapping("/lookup/{deviceId}")
     public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
-        return ResponseEntity.of(deviceService.findByDeviceId(deviceId));
+        return ResponseEntity.of(deviceService.findByDeviceId(deviceId))
+        .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
     }
 }

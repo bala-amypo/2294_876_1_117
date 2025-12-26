@@ -27,7 +27,8 @@ public class ViolationRecordController {
     // GET /api/violations/user/{userId}
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ViolationRecord>> byUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(violationService.getViolationsByUser(userId));
+        return ResponseEntity.ok(violationService.getViolationsByUser(userId))
+        .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
     }
 
     // PUT /api/violations/{id}/resolve
