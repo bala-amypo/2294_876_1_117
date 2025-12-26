@@ -2,12 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.service.DeviceProfileService;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/devices")
@@ -19,27 +17,29 @@ public class DeviceProfileController {
         this.deviceService = deviceService;
     }
 
+    // ✅ POST /api/devices
     @PostMapping
-    public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
+    public DeviceProfile register(@RequestBody DeviceProfile device) {
         return deviceService.registerDevice(device);
     }
 
+    // ✅ PUT /api/devices/{id}/trust
     @PutMapping("/{id}/trust")
-    public DeviceProfile updateTrust(@PathVariable Long id,
-                                     @RequestParam boolean trusted) {
-        return deviceService.updateTrustStatus(id, trusted);
+    public DeviceProfile updateTrust(
+            @PathVariable Long id,
+            @RequestParam boolean trust) {
+        return deviceService.updateTrustStatus(id, trust);
     }
 
+    // ✅ GET /api/devices/user/{userId}
     @GetMapping("/user/{userId}")
-    public List<DeviceProfile> getByUser(@PathVariable Long userId) {
+    public List<DeviceProfile> byUser(@PathVariable Long userId) {
         return deviceService.getDevicesByUser(userId);
     }
 
-@GetMapping("/lookup/{deviceId}")
-public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
-    return deviceService.findByDeviceId(deviceId)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
-}
-
+    // ✅ GET /api/devices/lookup/{deviceId}
+    @GetMapping("/lookup/{deviceId}")
+    public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
+        return ResponseEntity.of(deviceService.findByDeviceId(deviceId));
+    }
 }
