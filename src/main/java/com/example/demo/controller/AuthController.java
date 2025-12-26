@@ -1,12 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.JwtResponse;
+import com.example.demo.dto.*;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserAccountService;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +15,6 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    // ✅ Constructor injection (Mockito friendly)
     public AuthController(UserAccountService userService,
                           PasswordEncoder passwordEncoder,
                           JwtUtil jwtUtil) {
@@ -27,49 +23,41 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    /**
-     * POST /auth/register
-     * Accepts RegisterRequest
-     * Delegates to UserAccountService.createUser
-     */
     @PostMapping("/register")
     public UserAccount register(@RequestBody RegisterRequest request) {
 
-        UserAccount user = new UserAccount();
-        user.setEmployeeId(request.getEmployeeId());
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword()); // encoded in service
-        user.setRole(request.getRole());
-
-        return userService.createUser(user);
+        return userService.createUser(
+                request.getEmployeeId(),
+                request.getUsername(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getRole()
+        );
     }
 
-    /**
-     * POST /auth/login
-     * Accepts LoginRequest
-     * Returns JwtResponse
-     */
     @PostMapping("/login")
     public JwtResponse login(@RequestBody LoginRequest request) {
 
         UserAccount user = userService
-                .findByUsername(request.getUsername())
+                .findByUsernameOrEmail(request.getUsernameOrEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!passwordEncoder.matches(
-                request.getPassword(),
-                user.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
         String token = jwtUtil.generateToken(
-                user.getUsername(),
+                user.getEmail(),
                 user.getId(),
                 user.getEmail(),
                 user.getRole()
         );
 
-        return new JwtResponse(token);
+        return new JwtResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
     }
 }
