@@ -14,19 +14,8 @@ public class JwtResponse {
         this.role = role;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getRole() {
-        return role;
-    }
+    public String getToken() { return token; }
+    public Long getUserId() { return userId; }
+    public String getEmail() { return email; }
+    public String getRole() { return role; }
 }
