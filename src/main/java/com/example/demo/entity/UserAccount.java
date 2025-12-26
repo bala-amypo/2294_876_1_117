@@ -28,8 +28,8 @@ public class UserAccount {
 
 
     @Enumerated(EnumType.STRING)
-   @Column(nullable = false)
-    private String role; // ADMIN / USER / AUDITOR
+    @Column(nullable = false)
+    private Role role;
 
     private String status; // ACTIVE / SUSPENDED
 
@@ -81,13 +81,14 @@ public class UserAccount {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
+public Role getRole() {
+    return role;
+}
 
-    public void setRole(String role) {
-        this.role = role;
-    }
+public void setRole(Role role) {
+    this.role = role;
+}
+
 
     public String getStatus() {
         return status;
