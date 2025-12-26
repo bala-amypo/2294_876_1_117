@@ -17,17 +17,26 @@ public class DeviceProfileController {
     }
 
     @PostMapping
-    public DeviceProfile add(@RequestBody DeviceProfile device) {
-        return deviceService.addDevice(device);
+    public DeviceProfile register(@RequestBody DeviceProfile device) {
+        return deviceService.registerDevice(device);
     }
 
-    @GetMapping("/{id}")
-    public DeviceProfile getById(@PathVariable Long id) {
-        return deviceService.getDeviceById(id);
+    @PutMapping("/{id}/trust")
+    public DeviceProfile updateTrust(
+            @PathVariable Long id,
+            @RequestParam boolean trust) {
+        return deviceService.updateTrustStatus(id, trust);
     }
 
-    @GetMapping
-    public List<DeviceProfile> getAll() {
-        return deviceService.getAllDevices();
+    @GetMapping("/user/{userId}")
+    public List<DeviceProfile> getByUser(@PathVariable Long userId) {
+        return deviceService.getDevicesByUser(userId);
+    }
+
+    // 4️⃣ Get device by deviceId
+    @GetMapping("/device/{deviceId}")
+    public DeviceProfile getByDeviceId(@PathVariable String deviceId) {
+        return deviceService.findByDeviceId(deviceId)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
     }
 }
