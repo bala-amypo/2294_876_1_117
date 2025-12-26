@@ -2,6 +2,8 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class UserAccount {
@@ -18,6 +20,8 @@ public class UserAccount {
     private String username;
 
     @Column(unique = true)
+    @NotBlank(message = "Email is required")
+    @Email(message = "Please enter a valid email")
     private String email;
 
     private String password;
