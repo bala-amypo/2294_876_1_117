@@ -27,9 +27,9 @@ public class UserAccount {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role; // ADMIN / USER / AUDITOR
+    private Role role;
 
-    private String status; // ACTIVE / SUSPENDED
+    private String status;
 
     private LocalDateTime createdAt;
 
@@ -40,81 +40,39 @@ public class UserAccount {
     }
 
     // --- Getters & Setters ---
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getEmployeeId() { return employeeId; }
+    public void setEmployeeId(String employeeId) { this.employeeId = employeeId; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getEmployeeId() {
-        return employeeId;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getUsername() {
-        return username;
-    }
+    public Role getRole() { return role; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    // Accept Role enum directly
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    // Accept String for tests and controller requests
+    // ✅ Fix: Add a String setter to support Mockito tests
     public void setRole(String role) {
         if (role != null) {
             this.role = Role.valueOf(role.toUpperCase());
         }
     }
 
-    public String getStatus() {
-        return status;
-    }
+    public void setRole(Role role) { this.role = role; }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     // --- Constructors ---
-
     public UserAccount() {}
 
     public UserAccount(Long id, String employeeId, String username, String email,
