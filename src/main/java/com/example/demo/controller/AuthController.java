@@ -29,7 +29,6 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ✅ REGISTER
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserAccount user) {
 
@@ -42,7 +41,6 @@ public class AuthController {
                     .body("Email already registered");
         }
 
-        // ✅ Encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         UserAccount savedUser = userService.createUser(user);
@@ -55,7 +53,6 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    // ✅ LOGIN
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserAccount request) {
 
@@ -70,7 +67,6 @@ public class AuthController {
 
         UserAccount user = userOpt.get();
 
-        // ✅ Password check
         if (!passwordEncoder.matches(
                 request.getPassword(),
                 user.getPassword())) {
@@ -80,7 +76,6 @@ public class AuthController {
                     .body("Invalid email or password");
         }
 
-        // ✅ enum → string for JWT
         String token = jwtUtil.generateToken(
                 user.getId(),
                 user.getEmail(),
