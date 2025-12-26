@@ -19,7 +19,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount createUser(UserAccount user) {
+    public UserAccount create(UserAccount user) {
         if (user.getCreatedAt() == null) {
             user.setCreatedAt(LocalDateTime.now());
         }
@@ -31,17 +31,6 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userRepo.findById(id);
     }
 
-    // ✅ MUST RETURN Optional<UserAccount>
-    @Override
-    public Optional<UserAccount> findByEmail(String email) {
-        return userRepo.findByEmail(email);
-    }
-
-    @Override
-    public List<UserAccount> getAllUsers() {
-        return userRepo.findAll();
-    }
-
     @Override
     public UserAccount updateUserStatus(Long id, String status) {
         Optional<UserAccount> userOpt = userRepo.findById(id);
@@ -51,5 +40,20 @@ public class UserAccountServiceImpl implements UserAccountService {
             return userRepo.save(user);
         }
         return null;
+    }
+
+    @Override
+    public List<UserAccount> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    @Override
+    public Optional<UserAccount> findByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
+
+    @Override
+    public Optional<UserAccount> findByEmail(String email) {
+        return userRepo.findByEmail(email);
     }
 }

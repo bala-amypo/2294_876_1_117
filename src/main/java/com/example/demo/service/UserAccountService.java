@@ -12,7 +12,8 @@ public interface UserAccountService {
         return create(user);
     }
 
-    UserAccount getUserById(Long id);
+    // Must return Optional<UserAccount>
+    Optional<UserAccount> getUserById(Long id);
 
     UserAccount updateUserStatus(Long id, String status);
 
