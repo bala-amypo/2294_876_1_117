@@ -27,6 +27,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        // default role safety
         if (user.getRole() == null) {
             user.setRole(Role.USER);
         }
