@@ -22,7 +22,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccount create(UserAccount user) {
         // Ensure role is stored as a String for compatibility with tests
         if (user.getRole() != null) {
-            user.setRole(user.getRole().name());
+            user.setRole(user.getRole());  // just assign the string
         }
         return userRepo.save(user);
     }
