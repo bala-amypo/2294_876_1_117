@@ -1,9 +1,9 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 
 @Entity
 public class UserAccount {
@@ -25,9 +25,8 @@ public class UserAccount {
 
     private String password;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role; // ADMIN / USER / AUDITOR
+    private String role; // ADMIN / USER / AUDITOR
 
     private String status; // ACTIVE / SUSPENDED
 
@@ -42,7 +41,7 @@ public class UserAccount {
     public UserAccount() {}
 
     public UserAccount(Long id, String employeeId, String username, String email,
-                       String password, Role role, String status,
+                       String password, String role, String status,
                        LocalDateTime createdAt) {
         this.id = id;
         this.employeeId = employeeId;
@@ -54,7 +53,7 @@ public class UserAccount {
         this.createdAt = createdAt;
     }
 
-    // ===== Getters & Setters =====
+    // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -70,19 +69,8 @@ public class UserAccount {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
-
-    // Test-friendly getter/setter for String-based role
-    public String getRoleString() {
-        return role != null ? role.name() : null;
-    }
-
-    public void setRoleString(String roleStr) {
-        if (roleStr != null) {
-            this.role = Role.valueOf(roleStr.toUpperCase());
-        }
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
