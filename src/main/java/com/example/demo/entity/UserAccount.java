@@ -27,9 +27,9 @@ public class UserAccount {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private Role role; // ADMIN / USER / AUDITOR
 
-    private String status;
+    private String status; // ACTIVE / SUSPENDED
 
     private LocalDateTime createdAt;
 
@@ -39,7 +39,22 @@ public class UserAccount {
         if (createdAt == null) createdAt = LocalDateTime.now();
     }
 
-    // --- Getters & Setters ---
+    public UserAccount() {}
+
+    public UserAccount(Long id, String employeeId, String username, String email,
+                       String password, Role role, String status,
+                       LocalDateTime createdAt) {
+        this.id = id;
+        this.employeeId = employeeId;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.status = status;
+        this.createdAt = createdAt;
+    }
+
+    // ===== Getters & Setters =====
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -56,35 +71,22 @@ public class UserAccount {
     public void setPassword(String password) { this.password = password; }
 
     public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 
-    // ✅ Fix: Add a String setter to support Mockito tests
-    public void setRole(String role) {
-        if (role != null) {
-            this.role = Role.valueOf(role.toUpperCase());
-        }
+    // Test-friendly getter/setter for String-based role
+    public String getRoleString() {
+        return role != null ? role.name() : null;
     }
 
-    public void setRole(Role role) { this.role = role; }
+    public void setRoleString(String roleStr) {
+        if (roleStr != null) {
+            this.role = Role.valueOf(roleStr.toUpperCase());
+        }
+    }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    // --- Constructors ---
-    public UserAccount() {}
-
-    public UserAccount(Long id, String employeeId, String username, String email,
-                       String password, Role role, String status,
-                       LocalDateTime createdAt) {
-        this.id = id;
-        this.employeeId = employeeId;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.status = status;
-        this.createdAt = createdAt;
-    }
 }
