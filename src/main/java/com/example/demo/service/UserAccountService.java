@@ -1,24 +1,56 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.repository.UserAccountRepository;
+import com.example.demo.service.UserAccountService;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
-public interface UserAccountService {
+@Service
+public class UserAccountServiceImpl implements UserAccountService {
 
-    UserAccount create(UserAccount user);
+    private final UserAccountRepository userRepo;
 
-    default UserAccount createUser(UserAccount user) {
-        return create(user);
+    public UserAccountServiceImpl(UserAccountRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
-    UserAccount getUserById(Long id);
+    @Override
+    public UserAccount createUser(UserAccount user) {
+        return userRepo.save(user);
+    }
 
-    UserAccount updateUserStatus(Long id, String status);
+    @Override
+    public Optional<UserAccount> findByEmail(String email) {
+        return userRepo.findByEmail(email);
+    }
 
-    List<UserAccount> getAllUsers();
+    @Override
+    public Optional<UserAccount> findByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
 
-    Optional<UserAccount> findByUsername(String username);
+    @Override
+    public List<UserAccount> getAllUsers() {
+        return userRepo.findAll();
+    }
 
-    Optional<UserAccount> findByEmail(String email);
+    @Override
+    public UserAccount updateUserStatus(Long id, String status) {
+        Optional<UserAccount> userOpt = userRepo.findById(id);
+        if (userOpt.isPresent()) {
+            UserAccount user = userOpt.get();
+            user.setStatus(status);
+            return userRepo.save(user);
+        }
+        return null;
+    }
+
+    // ✅ Implement the missing method
+    @Override
+    public UserAccount getUserById(Long id) {
+        return userRepo.findById(id).orElse(null);
+    }
 }
