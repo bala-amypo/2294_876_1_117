@@ -5,40 +5,41 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    // ===== DEFAULT VALUES (USED BY SPRING) =====
     private static final String DEFAULT_SECRET =
-            "sdjhgbwubwwbgwiub8QFQ8qg87G1bfewifbiuwg7iu8wefqhjk"; // >=256-bit
-    private static final long DEFAULT_VALIDITY_MS = 10 * 60 * 1000; // 10 minutes
-
-    // ===== CONFIGURABLE FIELDS (USED BY TESTS) =====
-    private String secret;
-    private long validityInMs;
-    private boolean testMode;
+            "sdjhgbwubwwbgwiub8QFQ8qg87G1bfewifbiuwg7iu8wefqhjkEXTRAKEYDATA"; // >256 bits
+    private static final long DEFAULT_VALIDITY_MS = 10 * 60 * 1000;
 
     private SecretKey key;
+    private long validityInMs;
 
-    // ===== NO-ARG CONSTRUCTOR (SPRING USES THIS) =====
     public JwtUtil() {
-        this.secret = DEFAULT_SECRET;
         this.validityInMs = DEFAULT_VALIDITY_MS;
-        this.testMode = false;
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.key = createSafeKey(DEFAULT_SECRET);
     }
 
-    // ===== TEST CONSTRUCTOR (TEST SUITE EXPECTS THIS) =====
     public JwtUtil(String secret, long validityInMs, boolean testMode) {
-        this.secret = secret;
         this.validityInMs = validityInMs;
-        this.testMode = testMode;
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.key = createSafeKey(secret);
     }
 
-    // ===== ORIGINAL METHOD (USED BY YOUR APP) =====
+    private SecretKey createSafeKey(String secret) {
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+
+        if (keyBytes.length < 32) {
+            byte[] padded = new byte[32];
+            System.arraycopy(keyBytes, 0, padded, 0, keyBytes.length);
+            keyBytes = padded;
+        }
+
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
     public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
@@ -50,12 +51,10 @@ public class JwtUtil {
                 .compact();
     }
 
-    // ===== OVERLOADED METHOD (TEST SUITE EXPECTS THIS) =====
     public String generateToken(String subject, long userId, String email, String role) {
-        return generateToken(Long.valueOf(userId), email, role);
+        return generateToken(userId, email, role);
     }
 
-    // ===== TOKEN VALIDATION =====
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -68,7 +67,6 @@ public class JwtUtil {
         }
     }
 
-    // ===== CLAIM READERS =====
     public String getEmail(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
