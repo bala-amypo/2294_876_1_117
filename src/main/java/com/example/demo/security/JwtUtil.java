@@ -2,53 +2,27 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Arrays;
+import javax.crypto.SecretKey;
 import java.util.Date;
 
+@Component
 public class JwtUtil {
 
-    private final Key key;
-    private final long expiration;
-    private final boolean enabled;
+    private static final String SECRET = "sdjhgbwubwwbgwiub8QFQ8qg87G1bfewifbiuwg7iu8wefqhjk"; // 256-bit minimum
 
-    // ✅ REQUIRED BY TEST CASE
-    public JwtUtil(String secret, long expiration, boolean enabled) {
-        this.key = Keys.hmacShaKeyFor(fixSecret(secret));
-        this.expiration = expiration;
-        this.enabled = enabled;
-    }
+    private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
-    // ✅ DEFAULT CONSTRUCTOR (Spring)
-    public JwtUtil() {
-        this("default-secret-key-default-secret-key", 3600000, true);
-    }
+    private static final long VALIDITY_MS = 10 * 60 * 1000; // 10 minutes
 
-    // 🔥 THIS IS THE FIX
-    private static byte[] fixSecret(String secret) {
-        byte[] bytes = secret.getBytes(StandardCharsets.UTF_8);
-
-        if (bytes.length < 32) { // 256 bits
-            byte[] padded = new byte[32];
-            System.arraycopy(bytes, 0, padded, 0, bytes.length);
-            Arrays.fill(padded, bytes.length, 32, (byte) '0');
-            return padded;
-        }
-        return bytes;
-    }
-
-    public String generateToken(String username, Long userId, String email, String role) {
-        if (!enabled) return null;
-
+    public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(email)
                 .claim("userId", userId)
-                .claim("email", email)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setExpiration(new Date(System.currentTimeMillis() + VALIDITY_MS))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -63,22 +37,29 @@ public class JwtUtil {
     }
 
     public String getEmail(String token) {
-        return getClaims(token).get("email", String.class);
-    }
-
-    public String getRole(String token) {
-        return getClaims(token).get("role", String.class);
-    }
-
-    public Long getUserId(String token) {
-        return getClaims(token).get("userId", Long.class);
-    }
-
-    private Claims getClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody();
+                .getBody()
+                .getSubject();
+    }
+
+    public Long getUserId(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId", Long.class);
+    }
+
+    public String getRole(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
     }
 }
