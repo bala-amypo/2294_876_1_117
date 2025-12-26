@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class UserAccount {
@@ -24,8 +25,9 @@ public class UserAccount {
     @Email(message = "Please enter a valid email")
     private String email;
 
-    private String password;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
