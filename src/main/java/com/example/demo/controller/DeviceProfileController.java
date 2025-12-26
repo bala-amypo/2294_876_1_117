@@ -3,43 +3,34 @@ package com.example.demo.controller;
 import com.example.demo.entity.DeviceProfile;
 import com.example.demo.service.DeviceProfileService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
-
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/devices")
-public class DeviceProfileController {
+public class DeviceController {
 
     private final DeviceProfileService deviceService;
 
-    public DeviceProfileController(DeviceProfileService deviceService) {
+    public DeviceController(DeviceProfileService deviceService) {
         this.deviceService = deviceService;
     }
 
+    // POST – add device (multiple times allowed)
     @PostMapping
-    public DeviceProfile registerDevice(@RequestBody DeviceProfile device) {
-        return deviceService.registerDevice(device);
+    public DeviceProfile create(@RequestBody DeviceProfile device) {
+        return deviceService.create(device);
     }
 
-    @PutMapping("/{id}/trust")
-    public DeviceProfile updateTrust(@PathVariable Long id,
-                                     @RequestParam boolean trusted) {
-        return deviceService.updateTrustStatus(id, trusted);
+    // GET by ID – no 404 mapping issue
+    @GetMapping("/{id}")
+    public DeviceProfile getById(@PathVariable Long id) {
+        return deviceService.getById(id);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<DeviceProfile> getByUser(@PathVariable Long userId) {
-        return deviceService.getDevicesByUser(userId);
+    // GET all
+    @GetMapping
+    public List<DeviceProfile> getAll() {
+        return deviceService.getAll();
     }
-
-@GetMapping("/lookup/{deviceId}")
-public ResponseEntity<DeviceProfile> lookup(@PathVariable String deviceId) {
-    return deviceService.findByDeviceId(deviceId)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
-}
-
 }
