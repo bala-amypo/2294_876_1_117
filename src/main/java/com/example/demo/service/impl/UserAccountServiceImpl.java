@@ -7,57 +7,51 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final UserAccountRepository userAccountRepository;
+    private final UserAccountRepository userRepo;
 
-    public UserAccountServiceImpl(UserAccountRepository userAccountRepository) {
-        this.userAccountRepository = userAccountRepository;
+    public UserAccountServiceImpl(UserAccountRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
+    // ✅ REQUIRED by interface
     @Override
     public UserAccount createUser(UserAccount user) {
-
-        // ✅ DEFAULTS — CLIENT DOES NOT SEND THESE
-        if (user.getRole() == null || user.getRole().isBlank()) {
-            user.setRole("USER");
-        }
-
-        if (user.getStatus() == null || user.getStatus().isBlank()) {
-            user.setStatus("ACTIVE");
-        }
-
-        if (user.getEmployeeId() == null || user.getEmployeeId().isBlank()) {
-            user.setEmployeeId("EMP-" + UUID.randomUUID().toString().substring(0, 8));
-        }
-
         if (user.getCreatedAt() == null) {
             user.setCreatedAt(LocalDateTime.now());
         }
-
-        return userAccountRepository.save(user);
+        return userRepo.save(user);
     }
 
+    // ✅ FIXED: return type MUST be UserAccount (not Optional)
     @Override
-    public Optional<UserAccount> getUserById(Long id) {
-        return userAccountRepository.findById(id);
+    public UserAccount getUserById(Long id) {
+        return userRepo.findById(id).orElse(null);
     }
 
+    // ✅ REQUIRED by interface (THIS WAS MISSING)
+    @Override
+    public UserAccount findByEmail(String email) {
+        return userRepo.findByEmail(email).orElse(null);
+    }
+
+    // ✅ REQUIRED by interface
     @Override
     public List<UserAccount> getAllUsers() {
-        return userAccountRepository.findAll();
+        return userRepo.findAll();
     }
 
+    // ✅ REQUIRED by interface
     @Override
     public UserAccount updateUserStatus(Long id, String status) {
-        UserAccount user = userAccountRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        user.setStatus(status);
-        return userAccountRepository.save(user);
+        UserAccount user = userRepo.findById(id).orElse(null);
+        if (user != null) {
+            user.setStatus(status);
+            return userRepo.save(user);
+        }
+        return null;
     }
 }
