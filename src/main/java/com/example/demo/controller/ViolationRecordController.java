@@ -5,6 +5,7 @@ import com.example.demo.service.ViolationRecordService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class ViolationRecordController {
 
     // POST /api/violations
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ViolationRecord> log(@RequestBody ViolationRecord record) {
         return ResponseEntity.ok(violationService.logViolation(record));
     }
@@ -32,6 +34,7 @@ public class ViolationRecordController {
 
     // PUT /api/violations/{id}/resolve
     @PutMapping("/{id}/resolve")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ViolationRecord> resolve(@PathVariable Long id) {
         return ResponseEntity.ok(violationService.markResolved(id));
     }
