@@ -28,6 +28,7 @@ public class ViolationRecordController {
 
     // GET /api/violations/user/{userId}
     @GetMapping("/user/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     public ResponseEntity<List<ViolationRecord>> byUser(@PathVariable Long userId) {
         return ResponseEntity.ok(violationService.getViolationsByUser(userId));
     }
@@ -41,12 +42,14 @@ public class ViolationRecordController {
 
     // GET /api/violations/unresolved
     @GetMapping("/unresolved")
+    @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     public ResponseEntity<List<ViolationRecord>> unresolved() {
         return ResponseEntity.ok(violationService.getUnresolvedViolations());
     }
 
     // GET /api/violations
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     public ResponseEntity<List<ViolationRecord>> all() {
         return ResponseEntity.ok(violationService.getAllViolations());
     }
