@@ -6,7 +6,7 @@ public class RegisterRequest {
     private String username;
     private String email;
     private String password;
-    private String role; // optional
+    private String role; 
 
     public String getEmployeeId() { return employeeId; }
     public String getUsername() { return username; }
