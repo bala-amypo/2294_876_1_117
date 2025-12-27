@@ -30,7 +30,6 @@ public class SecurityConfig {
                 sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
-                // Swagger
                 .requestMatchers(
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
