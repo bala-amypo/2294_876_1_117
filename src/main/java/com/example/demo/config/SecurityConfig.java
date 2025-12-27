@@ -10,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
+
 
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
@@ -38,7 +40,6 @@ public class SecurityConfig {
 
                 .requestMatchers("/auth/**", "/status").permitAll()
 
-                // 🔒 API security handled by @PreAuthorize
                 .requestMatchers("/api/**").authenticated()
 
                 .anyRequest().denyAll()
@@ -48,7 +49,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 🔥 IMPORTANT FIX
     @Bean
     public GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults("ROLE_");
