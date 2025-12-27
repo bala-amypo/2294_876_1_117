@@ -19,21 +19,18 @@ public class UserAccountController {
         this.userService = userService;
     }
 
-    // 🔐 Only ADMIN can create users
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<UserAccount> create(@Valid @RequestBody UserAccount user) {
         return ResponseEntity.ok(userService.createUser(user));
     }
 
-    // 🔐 ADMIN & AUDITOR can view user
     @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     @GetMapping("/{id}")
     public UserAccount getUser(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
-    // 🔐 Only ADMIN can update status
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/status")
     public UserAccount updateStatus(@PathVariable Long id,
@@ -41,7 +38,6 @@ public class UserAccountController {
         return userService.updateUserStatus(id, status);
     }
 
-    // 🔐 ADMIN & AUDITOR can list users
     @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     @GetMapping
     public List<UserAccount> getAllUsers() {
