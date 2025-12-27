@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
@@ -38,17 +38,20 @@ public class SecurityConfig {
 
                 .requestMatchers("/auth/**", "/status").permitAll()
 
+                // 🔒 API security handled by @PreAuthorize
                 .requestMatchers("/api/**").authenticated()
 
                 .anyRequest().denyAll()
-            );
-
-        http.addFilterBefore(
-            jwtFilter,
-            UsernamePasswordAuthenticationFilter.class
-        );
+            )
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    // 🔥 IMPORTANT FIX
+    @Bean
+    public GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults("ROLE_");
     }
 
     @Bean
