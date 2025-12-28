@@ -20,7 +20,7 @@ public class UserAccountController {
     }
 
     @PostMapping
-    
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserAccount> create(@Valid @RequestBody UserAccount user) {
         return ResponseEntity.ok(userService.createUser(user));
     }
