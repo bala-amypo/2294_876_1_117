@@ -1,4 +1,4 @@
-package com.example.OneToMany.config;
+package com.example.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
@@ -9,14 +9,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.OneToMany.security.JwtFilter;
+import com.example.demo.security.JwtFilter;
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
-    private JwtFilter jwtFilter;
+    private JwtAuthenticationFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
