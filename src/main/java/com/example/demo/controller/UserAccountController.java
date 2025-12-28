@@ -19,27 +19,27 @@ public class UserAccountController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
+    
     public ResponseEntity<UserAccount> create(@Valid @RequestBody UserAccount user) {
         return ResponseEntity.ok(userService.createUser(user));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     public UserAccount getUser(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
     public UserAccount updateStatus(@PathVariable Long id,
                                     @RequestParam String status) {
         return userService.updateUserStatus(id, status);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     public List<UserAccount> getAllUsers() {
         return userService.getAllUsers();
     }
