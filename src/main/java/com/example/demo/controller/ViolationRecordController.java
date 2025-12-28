@@ -5,7 +5,6 @@ import com.example.demo.service.ViolationRecordService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -21,35 +20,30 @@ public class ViolationRecordController {
 
     // POST /api/violations
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ViolationRecord> log(@RequestBody ViolationRecord record) {
         return ResponseEntity.ok(violationService.logViolation(record));
     }
 
     // GET /api/violations/user/{userId}
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     public ResponseEntity<List<ViolationRecord>> byUser(@PathVariable Long userId) {
         return ResponseEntity.ok(violationService.getViolationsByUser(userId));
     }
 
     // PUT /api/violations/{id}/resolve
     @PutMapping("/{id}/resolve")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ViolationRecord> resolve(@PathVariable Long id) {
         return ResponseEntity.ok(violationService.markResolved(id));
     }
 
     // GET /api/violations/unresolved
     @GetMapping("/unresolved")
-    @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     public ResponseEntity<List<ViolationRecord>> unresolved() {
         return ResponseEntity.ok(violationService.getUnresolvedViolations());
     }
 
     // GET /api/violations
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN','AUDITOR')")
     public ResponseEntity<List<ViolationRecord>> all() {
         return ResponseEntity.ok(violationService.getAllViolations());
     }
